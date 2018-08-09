@@ -1,0 +1,51 @@
+{% extends "clouderp/base.html" %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}
+		{% if not form.instance.pk %}
+		Create Ledger
+		{% else %}
+		Update Ledger
+		{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div class="content-wrapper">
+	<div class="container">
+
+		<section class="content-header">
+			<div class="col-md-12 col-md-offset-2">
+				<h1>
+					{% if not form.instance.pk %}
+					<strong>Create Ledger</strong>
+					{% else %}
+					<strong>Update Ledger</strong>
+					{% endif %}
+				</h1>
+			</div>
+		</section>
+
+
+
+		<div class="row">
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 col-md-offset-2">
+				<div class="box box-info">
+					<br>
+					<form method="POST">
+    					{% csrf_token %}
+    					<br>{{ form|crispy }}<br>
+    				<br><input type="submit" class='btn btn-primary' value="Submit"><br>
+
+  					</form>
+  					<br>
+				
+				</div>
+			
+			</div>
+		
+		</div>
+	</div>
+</div>
+{% endblock %}

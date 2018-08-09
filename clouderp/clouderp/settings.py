@@ -14,7 +14,8 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+TEMPLATE_DIR = os.path.join(BASE_DIR,'templates')
+MEDIA_DIR = os.path.join(BASE_DIR,'media' )
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
@@ -28,6 +29,14 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY ='954744097986-2c65ubrgiggh2nbb532es23go3a30s8c.apps.googleusercontent.com'  #Paste CLient Key
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'TBPj7U1_ieD5Ge8YKslwqeFj'
+
+SOCIAL_AUTH_FACEBOOK_KEY = '837109483127908'
+SOCIAL_AUTH_FACEBOOK_SECRET = '82c10c3f0e510e88aa285bccb9f69b6a'
+
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -37,7 +46,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crispy_forms',
+    'social_django',
+    'bootstrap3',
+    'accounts',
+    "sslserver",
+    'Double_entryy',
+    'accountings',
+    'double_entry',
+    'company',
+    'transaction',
 ]
+
+SITE_ID = 1
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -54,7 +76,7 @@ ROOT_URLCONF = 'clouderp.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [TEMPLATE_DIR,],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -66,6 +88,15 @@ TEMPLATES = [
         },
     },
 ]
+
+AUTHENTICATION_BACKENDS = (
+ 'social_core.backends.open_id.OpenIdAuth',  # for Google authentication
+ 'social_core.backends.google.GoogleOpenId',  # for Google authentication
+ 'social_core.backends.google.GoogleOAuth2',  # for Google authentication
+ 'social_core.backends.facebook.FacebookOAuth2',  # for Facebook authentication
+ 
+ 'django.contrib.auth.backends.ModelBackend',
+)
 
 WSGI_APPLICATION = 'clouderp.wsgi.application'
 
@@ -84,12 +115,23 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 
+
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.Argon2PasswordHasher',
+    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
+    'django.contrib.auth.hashers.BCryptPasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+]
+
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS':{'min_length':9}
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -117,4 +159,19 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+MEDIA_ROOT = MEDIA_DIR
+MEDIA_URL = '/media/'
+
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+LOGIN_REDIRECT_URL = "test"
+LOGOUT_REDIRECT_URL = "home"
+
+
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025

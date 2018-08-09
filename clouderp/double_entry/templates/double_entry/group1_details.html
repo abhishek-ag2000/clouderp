@@ -1,0 +1,50 @@
+{% extends "clouderp/base.html" %}
+
+
+{% block title %}Groups{% endblock %}
+
+{% block content %}
+
+<div class="content-wrapper">
+	<div class="container">
+
+		<section class="content-header">
+			<div class="col-md-12 col-md-offset-2">
+				<h1>
+					<strong>Group Display</strong>
+				</h1>
+			</div>
+		</section>
+
+
+		<div class="row">
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				<div class="box box-info">
+					<h2> <small>Group Name</small> : {{ group1_details.group_Name }}</h2>
+					<h2> <small>Under</small> : {{ group1_details.Master }}<h2>
+					
+					
+					<h3> <small>Nature_of_group</small> : {{ group1_details.Nature_of_group1 }}</h3>
+					<h3> <small>Balance Nature</small> : {{ group1_details.balance_nature }}</h3>
+					<h3> <small>Group_behaves_like_a_Sub_Ledger?</small> {{ group1_details.Group_behaves_like_a_Sub_Ledger}}</h3>
+					<h3> <small>Nett_Debit_or_Credit_Balances_for_Reporting?</small> {{ group1_details.Nett_Debit_or_Credit_Balances_for_Reporting}}</h3>
+
+
+					<br>
+					<div class="container">
+    					<p><a class='btn btn-warning' href="{% url 'double_entry:groupupdate' pk=group1_details.pk %}">Update Group</a></p>
+
+  					</div>
+
+  					<div class="container">
+  						<p><a class='btn btn-danger' href="{% url 'double_entry:groupdelete' pk=group1_details.pk %}">Delete Group</a></p>
+  						
+  					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>	
+
+{% endblock %}
