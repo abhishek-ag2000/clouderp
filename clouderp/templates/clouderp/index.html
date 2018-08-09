@@ -8,7 +8,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
         
-        <title>SCAN MY GST</title>
+        <title>predictbooks</title>
         <meta name="description" content="">
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
@@ -34,7 +34,7 @@
         <div class="row">
             <div id="head1">
                 <div class="col-md-5">           
-                        <span class="fa" id="mailID"><i class="fa fa-envelope-o"></i>info@business_technology.com</span>
+                        <span class="fa" id="mailID"><i class="fa fa-envelope-o"></i>info@predictbooks.com</span>
                         <span class="fa" id="phone">
                             <i class="fa fa-phone"></i>
                             +28 356 859 4857
@@ -51,9 +51,9 @@
                         </div>                      
                 </div> 
                 <div class="col-md-3 socials">
-                    <a href="#">
+                    <!-- <a href="#">
                         <i class="fa fa-dribbble socials-link"></i>
-                    </a>
+                    </a> -->
                     <a href="#">
                         <i class="fa fa-twitter socials-link"></i>
                     </a>
@@ -74,11 +74,11 @@
        <!--  <div class="flexslider"> -->
             <ul class="slides">
                 <li>
-                    <img src="{% static 'clouderp/s_business/example/slide_1.jpg' %}" alt=""/>
+                    <img src="{% static 'clouderp/s_business/example/background10.jpg' %}" alt=""/>
                     <div class="slide_description_wrapper">
                         <div class="slide_description">
-                            <h3 data-animation="slideUp">SCAN MY BILLS</h3>
-                            <h2 data-animation="slideUp">Clean Design</h2>                            
+                            <h3 data-animation="slideUp">Predict Books</h3>
+                            <h2 data-animation="slideUp">the technology you business deserves</h2>                            
                             <p data-animation="slideUp">                               
                                 <a class="theme_btn" href="{% url 'accounts:login' %}">Login</a>
                                 <a class="theme_btn" href="{% url 'accounts:signup' %}">Register</a>
@@ -121,15 +121,15 @@
                             <li class="">
                                 <a href="#about">About Us</a>
                             </li>
-                            <li class="">
+                            <!-- <li class="">
                                 <a href="#team">Team</a>
-                             </li>  
+                             </li>  --> 
                              <li class="">
-                                <a href="#service">Service</a>
+                                <a href="#service">Services</a>
                              </li>  
-                              <li class="">
+                              <!-- <li class="">
                                 <a href="#portfolio">Gallery</a>
-                             </li>         
+                             </li>    -->      
                              <li class="">
                                 <a href="#post-blogs">News</a>
                              </li>           
@@ -143,13 +143,44 @@
         </div>
     </header>
 
-
- <section id="about" class="">
+<section class="welcome-box">
+    <div class="container">
+      <div class="row ">
+            <div class="col-sm-6 col-sm-offset-3">   
+             <h3 class="head-title text-center to_animate" data-animation="slideDown">ALL POWER OF ACOUNTING IN YOUR SMART PHONE!</h3>
+              <strong><p class="head-desc text-center to_animate" data-animation="fadeInUp">Download the app now for hassle free business solutions!!</p></strong>
+                <hr class="title-border">
+            </div>
+        </div>
+        <div class="row">            
+            <div class="col-sm-7 to_animate" data-animation="fadeInLeft"> 
+             <div class="slide_description_wrapper">               
+                  <h3>Why Choose Us</h3>
+                    <strong>
+                    <p>We are a growing network accountants, lawyers ,professionals and developers working together to give your business the edge it needs with technology in accounting, compliances, management and consultancy.
+                    <br><br>
+                    Technology has a role to play with the rollout of a new tax structure - GST in India so we aim to replace all manual solutions of recording, invoicing, and e-filings with ground breaking image recognition technology backed by team of professionals and technical service providers.
+                    <br><br>
+                    We aim to improve all business processes for our clients using mobile technology and easily compy with all government compliances for the ease doing of business.
+                    </p> 
+                    </strong>   
+                  
+              </div>    
+            </div>
+            <div class="col-sm-5 to_animate" data-animation="fadeInRight">
+                <div class="slide_image_wrapper">
+                    <img src="{% static 'clouderp/s_business/example/bootstrap.png' %}" alt="">
+                </div>                              
+            </div>
+        </div>
+    </div>
+</section>
+ <section id="about" class="grey_section">
   <div class="container">    
      <div class="row ">
       <div class="col-sm-6 col-sm-offset-3">   
 	     <h3 class="head-title text-center to_animate" data-animation="slideDown">About Us</h3>  	      
-	      <p class="head-desc text-center to_animate" data-animation="fadeInUp">Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+	      <p class="head-desc text-center to_animate" data-animation="fadeInUp"><strong>India's First Image recognition based Accounting Software !!</strong></p>
           <hr class="title-border">
       </div>
 	</div> 
@@ -203,75 +234,32 @@
           <span data-percent="75" class="chart">
             <span class="percent"></span>
           </span>
-          <h4 class="text-center">Graphic Design</h4>         
+          <h4 class="text-center">Chartered Accountants</h4>         
         </div>
         <div class="col-sm-3 to_animate" data-animation="fadeInLeft">
           <span data-percent="62" class="chart">
             <span class="percent"></span>
           </span>
-          <h4 class="text-center">Web Development</h4>          
+          <h4 class="text-center">Lawyers</h4>          
         </div>
         <div class="col-sm-3 to_animate" data-animation="fadeInRight">
           <span data-percent="57" class="chart">
             <span class="percent"></span>
           </span>
-          <h4 class="text-center">Identity</h4>         
+          <h4 class="text-center">Company Secretaries</h4>         
         </div>
         <div class="col-sm-3 to_animate" data-animation="fadeInRight">
           <span data-percent="87" class="chart">
             <span class="percent"></span>
           </span>
-          <h4 class="text-center">CUSTOMER SUPPORT</h4>         
+          <h4 class="text-center">GST Practitioners</h4>         
         </div>
 
       </div>
     </div>
   </section>  
    
- <section class="welcome-box">
-    <div class="container">
-      <div class="row ">
-            <div class="col-sm-6 col-sm-offset-3">   
-             <h3 class="head-title text-center to_animate" data-animation="slideDown">Welcom to our portal</h3>
-              <p class="head-desc text-center to_animate" data-animation="fadeInUp">Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
-                <hr class="title-border">
-            </div>
-        </div>
-        <div class="row">            
-            <div class="col-sm-7 to_animate" data-animation="fadeInLeft"> 
-             <div class="slide_description_wrapper">               
-                  <h3>Why Choose Us</h3>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, debitis, nam, iste, maxime officiis saepe esse facere aspernatur dolore nisi libero ut pariatur modi expedita voluptas impedit odit eum reprehenderit. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, debitis, nam, iste, maxime officiis saepe esse facere aspernatur dolore nisi libero ut pariatur modi expedita voluptas impedit odit eum reprehenderit.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, debitis, nam, iste, maxime officiis saepe esse facere aspernatur dolore nisi libero ut pariatur modi expedita voluptas impedit odit eum reprehenderit. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>    
-                  <ul>
-                      <li>                          
-                          HTML5 and CSS3
-                      </li>
-                      <li>                        
-                          Bootstrap 3
-                      </li>
-                      <li>                          
-                          Grid System and Responsive Design
-                      </li>
-                      <li>                          
-                          Parallax One Page Template
-                      </li>
-                      <li>                          
-                          SEO Optimized
-                      </li>
-                      <li>                         
-                          Google Fonts Support
-                      </li>
-                  </ul>
-              </div>    
-            </div>
-            <div class="col-sm-5 to_animate" data-animation="fadeInRight">
-                <div class="slide_image_wrapper">
-                    <img src="{% static 'clouderp/s_business/example/welcom_slide.jpg' %}" alt="">
-                </div>                              
-            </div>
-        </div>
-    </div>
-</section>   
+    
 
 
  <section id="offer" class="">
@@ -279,7 +267,7 @@
           <div class="row ">
             <div class="col-sm-6 col-sm-offset-3">   
              <h3 class="head-title text-center to_animate" data-animation="slideDown">What We Offer</h3>
-              <p class="head-desc text-center to_animate" data-animation="fadeInUp">Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+              <strong><p class="head-desc text-center to_animate" data-animation="fadeInUp">24/7 Support team of Professionals to assist your needs !</p></strong>
                 <hr class="title-border">
             </div>
          </div>
@@ -297,7 +285,7 @@
               </div>
 
               <div class="figcaption">
-                  <h4>Design & Development</h4>
+                  <h4>Accountancy</h4>
                   <h5>There are many versions of lorem ipsum available</h5>
               </div>
           </article>
@@ -314,7 +302,7 @@
               </div>
 
               <div class="figcaption">
-                  <h4>Marketing</h4>
+                  <h4>Legal & Litigation</h4>
                   <h5>There are many versions of lorem ipsum available</h5>
               </div>
           </article>
@@ -331,7 +319,7 @@
               </div>
 
               <div class="figcaption">
-                  <h4>24/7 Support</h4>
+                  <h4>Consultancy</h4>
                   <h5>There are many versions of lorem ipsum available</h5>
               </div>
           </article>
@@ -347,7 +335,7 @@
                   <i class="sprite-Lupa_icon"></i>
               </div>
               <div class="figcaption">
-                  <h4>Social Media</h4>
+                  <h4>Financial Techology</h4>
                   <h5>There are many versions of lorem ipsum available</h5>
               </div>
           </article>
@@ -359,7 +347,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12 text-center">
-                <h3 class="parallax-title text-center to_animate" data-animation="slideDown">SOME INTERESTING FACTS ABOUT US</h3>       
+                <h3 class="parallax-title text-center to_animate" data-animation="slideDown">Analytics to date</h3>       
                 <hr class="parallax-border to_animate" data-animation="fadeInUp"> 
 
             </div>
@@ -371,7 +359,7 @@
             <div class="icons_introimg image-icon">
               <i class="fa fa-smile-o"></i>
             </div>
-            <h3>Happy Clients</h3>
+            <h3>Business Users</h3>
             <h2 class="counter" data-from="0" data-to="1350" data-speed="2500"></h2>          
           </div>
         </div>
@@ -381,7 +369,7 @@
             <div class="icons_introimg image-icon">
               <i class="fa fa-rocket"></i>
             </div>
-            <h3>Projects made</h3>
+            <h3>Professionals </h3>
             <h2 class="counter" data-from="0" data-to="650" data-speed="3500"></h2>           
           </div>
         </div>
@@ -392,7 +380,7 @@
             <div class="icons_introimg image-icon">
               <i class="fa fa-trophy"></i>
             </div>
-            <h3>Awards Won</h3>
+            <h3>Motnhly Invoices Scanned</h3>
             <h2 class="counter" data-from="0" data-to="780" data-speed="3500"></h2>          
           </div>
         </div>
@@ -402,7 +390,7 @@
             <div class="icons_introimg image-icon">
               <i class="fa fa-pencil"></i>
             </div>
-            <h3>Briefs Wrote</h3>
+            <h3>Consultancies provided</h3>
             <h2 class="counter" data-from="0" data-to="1400" data-speed="2100"></h2>          
           </div>
         </div>
@@ -416,7 +404,7 @@
         <div class="row ">
             <div class="col-sm-6 col-sm-offset-3">   
              <h3 class="head-title text-center to_animate" data-animation="slideDown">Pricing Table</h3>
-              <p class="head-desc text-center to_animate" data-animation="fadeInUp">Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+              <p class="head-desc text-center to_animate" data-animation="fadeInUp">Our plans include</p>
                 <hr class="title-border">
             </div>
          </div>
@@ -425,64 +413,67 @@
                 <div class="col-sm-6 col-md-3 pricing-table text-center to_animate" data-animation="fadeIn">
                     <div class="single-table" >
                         <h2>Starter</h2>                           
-                        <p class="price"><span class="dollar-icon">$</span><span>19</span></p>
+                        <p class="price"><span class="dollar-icon"></span><span>Free</span></p>
                         <ul>
-                            <li>5 Domain Names</li>
-                            <li>1GB Dedicated Ram</li>
-                            <li>5 Sub Domain</li>
-                            <li>10 Addon Domain</li>
-                            <li>24/7 Support</li>
+                            <li>1 Company unit</li>
+                            <li>1 year free Bill Scanner App</li>
+                            <li>3 month Return filing</li>
+                            <li>200 bills per month</li>
+                            <li>-------</li>
+                            <li>-------</li>
                         </ul>
-                        <a class="btn-signup" href="#">Order now</a>
+                        <a class="btn-signup" href="#">Request Trial</a>
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-3 pricing-table text-center to_animate" data-animation="fadeIn">
                     <div class="single-table" >
                         <h2>Business</h2>                           
-                         <p class="price"><span class="dollar-icon">$</span><span>129</span></p>
+                         <p class="price"><span class="dollar-icon">₹​</span><span>8000</span></p>
                         <ul>
-                            <li>5 Domain Names</li>
-                            <li>1GB Dedicated Ram</li>
-                            <li>5 Sub Domain</li>
-                            <li>10 Addon Domain</li>
+                            <li>Unlimited Company unit</li>
+                            <li>Unlimited Bill Scanner App</li>
+                            <li>Annual Return filing </li>
+                            <li>Unlimited bills per month</li>
+                            <li></li>
+                            <li>-------</li>
                             <li>24/7 Support</li>
                         </ul>
-                        <a class="btn-signup" href="#">Order now</a>
+                        <a class="btn-signup" href="#">Request Trial</a>
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-3 pricing-table text-center to_animate" data-animation="fadeIn">
                     <div class="single-table" >
-                        <h2>Basic</h2>                           
-                         <p class="price"><span class="dollar-icon">$</span><span>49</span></p>
+                        <h2>Professional</h2>                           
+                         <p class="price"><span class="dollar-icon">₹​</span><span>10000</span></p>
                         <ul>
-                            <li>5 Domain Names</li>
+                            <li>Unlimited Company unit</li>
                             <li>1GB Dedicated Ram</li>
                             <li>5 Sub Domain</li>
                             <li>10 Addon Domain</li>
                             <li>24/7 Support</li>
                         </ul>
-                        <a class="btn-signup" href="#">Order now</a>
+                        <a class="btn-signup" href="#">Request Trial</a>
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-3 pricing-table text-center to_animate" data-animation="fadeIn">
                    <div class="single-table" >
-                        <h2>Ultra</h2>                           
-                          <p class="price"><span class="dollar-icon">$</span><span>199</span></p>
+                        <h2>Hybrid</h2>                           
+                          <p class="price"><span class="dollar-icon">₹​</span><span>15000</span></p>
                         <ul>
-                            <li>5 Domain Names</li>
+                            <li>Unlimited Company unit</li>
                             <li>1GB Dedicated Ram</li>
                             <li>5 Sub Domain</li>
                             <li>10 Addon Domain</li>
                             <li>24/7 Support</li>
                         </ul>
-                        <a class="btn-signup" href="#">Order now</a>
+                        <a class="btn-signup" href="#">Request Trial</a>
                     </div>
                 </div>
             </div>
         
   </div>
 </section> 
-
+<!-- 
 <section id="team" class="grey_section">
         <div class="container">
           <div class="row ">
@@ -531,9 +522,9 @@
                 </div>
             </div>
         </div>
-    </section> 
+    </section>  -->
 
-
+<!-- 
   <section id="portfolio" class="fullwidth_portfolio">
     <div class="container">      
        <div class="row ">
@@ -678,7 +669,7 @@
         </li>
       </ul>
   </div>  
-</section> 
+</section>  -->
 
 <section id="post-blogs">
       <div class="container">
