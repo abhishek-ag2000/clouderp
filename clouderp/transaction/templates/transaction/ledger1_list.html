@@ -1,0 +1,41 @@
+{% extends "clouderp/base.html" %}
+
+
+{% block title %}Ledgers{% endblock %}
+
+{% block content %}
+
+<div class="content-wrapper">
+	<div class="container">
+
+		<section class="content-header">
+			<div class="col-md-12 col-md-offset-3">
+				<h1>
+					<strong>List Of Ledgers</strong>
+				</h1>
+			</div>
+		</section>
+
+		<div class="row">
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 col-md-offset-2">
+				<div class="box box-info">
+					<center><ol>
+						{% for ledger1 in ledger1_list %}
+							<h2><li><a href="{{ledger1.id}}">{{ledger1.name}}</a>
+								
+							
+
+						{% endfor %}
+					</ol></center>
+				
+				</div>
+			
+			</div>
+		
+		</div>
+		
+	</div>
+	
+</div>
+
+{% endblock %}

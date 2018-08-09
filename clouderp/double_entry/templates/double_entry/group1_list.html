@@ -1,0 +1,41 @@
+{% extends "clouderp/base.html" %}
+
+
+{% block title %}Groups{% endblock %}
+
+{% block content %}
+
+<div class="content-wrapper">
+	<div class="container">
+
+		<section class="content-header">
+			<div class="col-md-12 col-md-offset-2">
+				<h1>
+					<strong>List Of Groups</strong>
+				</h1>
+			</div>
+		</section>
+
+		<div class="row">
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 col-md-offset-2">
+				<div class="box box-info">
+					<center><ol>
+						{% for group1 in group1_list %}
+							<h2><li><a href="{{group1.id}}">{{group1.group_Name}}</a>
+								
+							
+
+						{% endfor %}
+					</ol></center>
+				
+				</div>
+			
+			</div>
+		
+		</div>
+		
+	</div>
+	
+</div>
+
+{% endblock %}
