@@ -40,22 +40,29 @@ SOCIAL_AUTH_FACEBOOK_SECRET = '82c10c3f0e510e88aa285bccb9f69b6a'
 # Application definition
 
 INSTALLED_APPS = [
+########## Third Party Apps ###########
+
+    'social_django',
+    'bootstrap3',
+    "sslserver",
+    'crispy_forms',
+    'bootstrap_datepicker_plus',
+    'mathfilters',
+
+######### Django Inbuild Apps ########
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'crispy_forms',
-    'social_django',
-    'bootstrap3',
+
+######### My Apps ##############  
+  
     'accounts',
-    "sslserver",
-    'Double_entryy',
-    'accountings',
-    'double_entry',
     'company',
-    'transaction',
+    'accounting_double_entry',
 ]
 
 SITE_ID = 1

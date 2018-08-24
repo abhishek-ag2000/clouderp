@@ -28,6 +28,7 @@ urlpatterns = [
     url(r"^accounts/", include("django.contrib.auth.urls")),
     url(r'^auth/', include('social_django.urls', namespace='social')),
     url(r"^company/", include("company.urls", namespace="company")),
-    url(r"^double_entry/", include("double_entry.urls", namespace="double_entry")),
-    url(r"^transaction/", include("transaction.urls", namespace="ledger")),
+    url(r"^accounting_double_entry/", include("accounting_double_entry.urls", namespace="accounting_double_entry")),
+
+
 ] 
