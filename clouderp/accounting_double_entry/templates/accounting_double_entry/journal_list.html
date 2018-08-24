@@ -1,0 +1,74 @@
+{% extends "clouderp/base.html" %}
+
+
+{% block title %}Journals{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+	<div class="container">
+
+		<section class="content-header">
+			<div class="col-md-12 col-md-offset-2">
+				<h1>
+					<strong>List Of All Journal Vouchers</strong>
+				</h1>
+			</div>
+		</section>
+
+
+
+
+		<div class="row">
+			<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+				<style type="text/css">
+					.table-bordered td, .table-bordered th{
+                    border-color: #bfbfbf !important;
+                    
+                         }
+				</style>
+				<div class="box box-info">
+				{% if journal_list %}
+
+					<table class="table table-bordered">
+						<tr>
+							<td>
+								<table class="table table-hover">
+									<tr>
+										<th><center>Date</center></th>
+										<th><center>Particulars</center></th>
+										<th></th>
+										<th><center>Voucher Type</center></th>
+										<th><center>Voucher No</center></th>
+										<th><center>Debit Amount</center></th>
+										<th><center>Credit Amount</center></th>
+									</tr>
+									{% for journal in journal_list %}
+										<tr>
+										
+												<td><center><a href="{{ journal.id }}">{{journal.Date}}</a></center></td>
+												<td><center><a href="{{ journal.id }}">{{journal.Particulars}}</a></center></td>
+												<td><center></center></td>
+												<td><center>Journal</center></td>
+												<td><center><a href="{{ journal.id }}">{{journal.id}}</a></center></td>
+												<td><center><a href="{{ journal.id }}">{{journal.Debit}}</a></center></td>
+												<td><center><a href="{{ journal.id }}">{{journal.Credit}}</a></center></td>
+										
+										</tr>
+									{% endfor %}
+								</table>
+							</td>
+						</tr>
+					</table>
+				{% else %}
+					<span class="alert alert-danger">
+                    No journal found 
+
+  	                </span>
+				{% endif %}    
+				</div>
+			</div>
+		</div>			
+
+	</div>
+</div>
+ {% endblock %}

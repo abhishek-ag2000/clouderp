@@ -49,7 +49,7 @@
 	
 	<header class="main-header">
     <!-- Logo -->
-    <a href="base.html" class="logo">
+    <a href="{% url 'company:list' %}" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>P</b>b</span>
       <!-- logo for regular state and mobile devices -->
@@ -265,7 +265,8 @@
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <img src="{% static 'clouderp/dist/img/user2new.jpg' %}" class="user-image" alt="User Image">
-              <span class="hidden-xs">User Name</span>
+              <span class="hidden-xs">{{ user.get_username }}</span>
+              <!-- https://stackoverflow.com/questions/16906515/how-can-i-get-the-username-of-the-logged-in-user-in-django -->
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
@@ -273,7 +274,7 @@
                 <img src="{% static 'clouderp/dist/img/user2new.jpg' %}" class="img-circle" alt="User Image">
 
                 <p>
-                  User Name - Business Subscription
+                  {{ user.get_username }} - Business Subscription
                   <small>Member since Nov. 2018</small>
                 </p>
               </li>
@@ -349,7 +350,7 @@
       <!--   <li><a href="{% url 'company:Dashboard' 1 %}"><i class="fa fa-book"></i> <span>Dashboard</span></a></li>
          -->
 
-        <li><a href="#"><i class="fa fa-book"></i> <span>Dashboard</span></a></li>
+        <li><a href="{% url 'company:list' %}"><i class="fa fa-book"></i> <span>Dashboard</span></a></li>
 
         <li class="treeview">
           <a href="#">
@@ -367,9 +368,9 @@
                 </span>
               </a>
               <ul class="treeview-menu">
-                <li><a href="{% url 'double_entry:groupcreate' %}"><i class="fa fa-circle-o"></i> Create</a></li>
+                <li><a href="{% url 'accounting_double_entry:groupcreate' %}"><i class="fa fa-circle-o"></i> Create</a></li>
                 
-                  <li><a href="{% url 'double_entry:grouplist' %}"><i class="fa fa-circle-o"></i> Display</a></li>
+                  <li><a href="{% url 'accounting_double_entry:grouplist' %}"><i class="fa fa-circle-o"></i> Display</a></li>
                   <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Alter</a></li> -->
                    
               </ul>
@@ -383,8 +384,8 @@
               </a>
               <ul class="treeview-menu">
                
-                  <li><a href="{% url 'ledger:transactioncreate' %}"><i class="fa fa-circle-o"></i> Create</a></li>
-                  <li><a href="#"><i class="fa fa-circle-o"></i> Display</a></li>
+                 <li><a href="{% url 'accounting_double_entry:create' %}"><i class="fa fa-circle-o"></i> Create</a></li>
+                   <li><a href="{% url 'accounting_double_entry:list' %}"><i class="fa fa-circle-o"></i> Display</a></li>
                   <li><a href="#"><i class="fa fa-circle-o"></i> Alter</a></li>
                    
               </ul>
@@ -397,9 +398,9 @@
                 </span>
               </a>
               <ul class="treeview-menu">
-                <li><a href="{% url 'ledger:ledgercreate' %}"><i class="fa fa-circle-o"></i> Create</a></li>
+                <li><a href="{% url 'accounting_double_entry:ledgercreate' %}"><i class="fa fa-circle-o"></i> Create</a></li>
                 
-                  <li><a href="{% url 'ledger:ledgerlist' %}"><i class="fa fa-circle-o"></i> Display</a></li>
+                <li><a href="{% url 'accounting_double_entry:ledgerlist' %}"><i class="fa fa-circle-o"></i> Display</a></li>
                   <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Alter</a></li> -->
                    
               </ul>

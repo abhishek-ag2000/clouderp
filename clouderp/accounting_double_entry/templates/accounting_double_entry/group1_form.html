@@ -1,0 +1,113 @@
+{% extends "clouderp/base.html" %}
+
+{% block title %}
+		{% if not form.instance.pk %}
+		Create Group
+		{% else %}
+		Update Group
+		{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div class="content-wrapper">
+	
+
+		<section class="content-header">
+			<div class="col-md-12">
+				<h1>
+					{% if not form.instance.pk %}
+					<strong>Create Group</strong>
+					{% else %}
+					<strong>Update Group</strong>
+					{% endif %}
+				</h1>
+			</div>
+		</section>
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <!-- Horizontal Form -->
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">Create group Form</h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form method="POST" class="form-horizontal">
+            {% csrf_token %}
+              <div class="box-body">
+
+                <div class="form-group">
+                  <label for="input" class="col-sm-2 control-label">Group name</label>
+
+                  <div class="col-sm-10">
+                    {{ form.group_Name }}
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="input" class="col-sm-2 control-label">Master</label>
+
+                  <div class="col-sm-10">
+                    {{ form.Master }}
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="input" class="col-sm-2 control-label">Nature of group</label>
+
+                  <div class="col-sm-10">
+                     {{ form.Nature_of_group1 }}
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="input" class="col-sm-2 control-label">Balance nature</label>
+
+                  <div class="col-sm-10">
+                     {{ form.balance_nature}}
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="input" class="col-sm-2 control-label">Group behaves like a Sub Ledger?</label>
+
+                  <div class="col-sm-10">
+                     {{ form.Group_behaves_like_a_Sub_Ledger }}
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="input" class="col-sm-2 control-label">Net Debit or Credit Balances for Reporting?</label>
+
+                  <div class="col-sm-10">
+                     {{ form.Nett_Debit_or_Credit_Balances_for_Reporting }}
+                  </div>
+                </div>
+
+                
+              </div>
+              <!-- /.box-body -->
+              <div class="box-footer">
+                <button class="btn btn-default">Cancel</button>
+                {% if not form.instance.pk %}
+                <button type="submit" class="btn btn-info pull-right" value="Submit">Create</button>
+                {% else %}
+                <button type="submit" class="btn btn-info pull-right" value="Submit">Update</button>
+                {% endif %}
+              </div>
+              <!-- /.box-footer -->
+            </form>
+          </div>
+
+
+
+
+
+
+
+
+		
+	
+</div>
+{% endblock %}

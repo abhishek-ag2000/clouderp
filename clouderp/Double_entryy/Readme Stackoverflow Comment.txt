@@ -1,1 +1,0 @@
-https://stackoverflow.com/questions/2494343/database-schema-design-for-a-double-entry-accounting-system

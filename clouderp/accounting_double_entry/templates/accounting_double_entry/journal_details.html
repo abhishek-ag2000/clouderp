@@ -1,0 +1,113 @@
+{% extends "clouderp/base.html" %}
+
+
+{% block title %}Journals{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+	<div class="container">
+
+		<section class="content-header">
+			<div class="col-md-12 col-md-offset-4">
+				<h1>
+					<strong>Journals</strong>
+				</h1>
+			</div>
+		</section>
+
+
+
+
+		<div class="row">
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				<div class="box box-info">
+				<style type="text/css">
+					.table-bordered td, .table-bordered th{
+                    border-color: #bfbfbf !important;
+                    
+                         }
+				</style>
+
+				
+				<div class="box-body table-responsive no-padding">
+					<table class="table table-bordered">
+						<tr>
+							<td>
+								<table class="table table-hover">
+									<tr>
+										<th></th>
+										
+										<th><center></center></th>
+										<th><center>Particulars</center></th>
+										<th><center>Lf</center></th>
+										<th><center>Debit</center></th>
+									</tr>
+										<tr>
+										
+											<th><center><strong>By</strong></center></th>
+											
+											<td><center></center></td>
+											<td><center>{{journal_details.Particulars}}</center></td>
+											<td><center>{{journal_details.id}}</center></td>
+											<td><center>{{journal_details.Debit}}</center></td>
+										
+										</tr>
+							
+							</td>
+						</tr>
+					</table>
+			</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				<div class="box box-info">
+				<style type="text/css">
+					.table-bordered td, .table-bordered th{
+                    border-color: #bfbfbf !important;
+                    
+                         }
+				</style>
+				
+				<div class="box-body table-responsive no-padding">
+					<table class="table table-bordered">
+						<tr>
+							<td>
+								<table class="table table-hover">
+									<tr>
+										<th></th>
+										
+										<th><center></center></th>
+										<th><center>Particulars</center></th>
+										<th><center></center></th>
+										<th><center>Credit</center></th>
+									</tr>
+									<tr>
+										<th><center><strong>To</strong></center></th>
+										
+										<td><center></center></td>
+										<td><center>{{journal_details.Particulars_Credit}}</center></td>
+										<th><center></center></th>
+										<td><center>{{journal_details.Credit}}</center></td>
+									</tr>
+									
+								</table>
+							</td>
+						</tr>
+					</table>
+				</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="container">
+    					<p><a class='btn btn-warning' href="{% url 'accounting_double_entry:update' pk=journal_details.pk %}">Update Journal</a> <a class='btn btn-danger' href="{% url 'accounting_double_entry:delete' pk=journal_details.pk %}">Delete Journal</a></p>
+
+  		</div>
+
+
+	</div>
+</div>
+{% endblock %}
