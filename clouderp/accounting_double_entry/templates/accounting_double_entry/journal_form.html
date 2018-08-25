@@ -37,6 +37,11 @@
 
         {% csrf_token %}
 
+        <label>Date:</label>
+        {{ form.Date }}
+
+        <br>
+        <br>
 
 
 
@@ -128,7 +133,11 @@
         {{ form.non_field_errors }}
 </div>
 
-        <br><input type="submit" class='btn btn-primary' value="Submit"><br>
+        {% if not form.instance.pk %}
+            <button type="submit" class="btn btn-info pull-left" value="Submit">Create</button>
+        {% else %}
+            <button type="submit" class="btn btn-info pull-left" value="Submit">Update</button>
+         {% endif %}
     </form>
     </div>
 </div>
