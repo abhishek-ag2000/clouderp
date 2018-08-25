@@ -4,7 +4,7 @@ from django.views.generic import (ListView,DetailView,
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from accounting_double_entry.models import group1,ledger1,journal
-from accounting_double_entry.forms import journalForm,group1Forms
+from accounting_double_entry.forms import journalForm,group1Form,Ledgerform
 
 
 # Create your views here.
@@ -23,13 +23,13 @@ class group1DetailView(LoginRequiredMixin,DetailView):
 
 
 class group1CreateView(LoginRequiredMixin,CreateView):
-	fields = "__all__"
-	model = group1
+	form_class  = group1Form
+	template_name = "accounting_double_entry/group1_form.html"
 
 class group1UpdateView(LoginRequiredMixin,UpdateView):
-	fields = "__all__"
 	model = group1
-	form = group1Forms
+	form_class  = group1Form
+	template_name = "accounting_double_entry/group1_form.html"
 
 class group1DeleteView(LoginRequiredMixin,DeleteView):
 	model = group1
@@ -55,12 +55,13 @@ class ledger1DetailView(LoginRequiredMixin,DetailView):
 		return context
 
 class ledger1CreateView(LoginRequiredMixin,CreateView):
-	fields = "__all__"
-	model = ledger1
+	form_class = Ledgerform
+	template_name = "accounting_double_entry/ledger1_form.html"
 
 class ledger1UpdateView(LoginRequiredMixin,UpdateView):
-	fields = "__all__"
 	model = ledger1
+	form_class = Ledgerform
+	template_name = "accounting_double_entry/ledger1_form.html"
 
 class ledger1DeleteView(LoginRequiredMixin,DeleteView):
 	model = ledger1
@@ -82,14 +83,12 @@ class journalDetailView(DetailView):
 	template_name = 'accounting_double_entry/journal_details.html'
 
 class journalCreateView(CreateView):
-	fields = "__all__"
 	model = journal
-	form = journalForm
+	form_class  = journalForm
 
 class journalUpdateView(UpdateView):
-	fields = "__all__"
 	model = journal
-	form = journalForm
+	form_class  = journalForm
 
 class journalDeleteView(DeleteView):
 	model = journal

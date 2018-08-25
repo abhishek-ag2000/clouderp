@@ -9,7 +9,7 @@ from django.dispatch import receiver
 
 
 class group1(models.Model):
-	group_Name = models.CharField(max_length=32,unique=True)
+	group_Name = models.CharField(max_length=32,unique=True,error_messages={'unique':"This Group Name has already been registered"})
 	Name = (
 		('Primary','Primary'),
 		('Fixed_Asset','Fixed_Asset'),
@@ -164,6 +164,7 @@ class ledger1(models.Model):
 		
 
 class journal(models.Model):
+	Date = models.DateField()
 	Particulars = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='Debitledgers')
 	Particulars_Credit = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='Creditledgers')
 	Debit = models.DecimalField(max_digits=10,decimal_places=2)

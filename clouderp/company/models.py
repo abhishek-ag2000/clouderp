@@ -14,8 +14,17 @@ User = get_user_model()
 
 class company(models.Model):
 	Name = models.CharField(max_length=50,blank=False)
-	User_Email = models.EmailField()
-	Company_Email = models.EmailField()
+	types = (   ('Individual','Individual'),
+				('HUF','HUF'),
+				('Partnership','Partnership'),
+				('Trust','Trust'),
+				('Private Company','Private Company'),
+				('Public Company','Public Company'),
+				('LLP','LLP'),
+				#('',''),
+			)
+	Type_of_company = models.CharField(max_length=32,choices=types,default='Individual')
+	Shared_Users = models.CharField(max_length=32,default="Current User only") # company data sharing
 	Address = models.TextField()
 	Country = models.CharField(max_length=32,default='India')
 	State_Name = (
