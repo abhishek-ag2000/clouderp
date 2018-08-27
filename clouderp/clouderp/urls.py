@@ -15,10 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.conf.urls import url,include
-from django.urls import path
+from django.urls import path,re_path
 from django.views.generic import RedirectView
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from . import views
+# for blog
+from django.conf import settings
+
 
 urlpatterns = [
     url(r"^$", views.HomePage.as_view(), name="home"),
@@ -29,6 +32,20 @@ urlpatterns = [
     url(r'^auth/', include('social_django.urls', namespace='social')),
     url(r"^company/", include("company.urls", namespace="company")),
     url(r"^accounting_double_entry/", include("accounting_double_entry.urls", namespace="accounting_double_entry")),
-
+    # for blog app - puput
+    path(r'', include('puput.urls')),
 
 ] 
+
+# for blog puput - standalone app installation not via wagtail
+if settings.DEBUG:
+    import os
+    from django.conf.urls.static import static
+    from django.views.generic.base import RedirectView
+    from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
+    urlpatterns += staticfiles_urlpatterns() # tell gunicorn where static files are in dev mode
+    urlpatterns += static(settings.MEDIA_URL + 'images/', document_root=os.path.join(settings.MEDIA_ROOT, 'images'))
+    urlpatterns += [
+        url(r'^favicon\.ico$', RedirectView.as_view(url=settings.STATIC_URL + 'myapp/images/favicon.ico')),
+    ]
