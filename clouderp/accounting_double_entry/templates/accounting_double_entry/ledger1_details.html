@@ -84,7 +84,7 @@
 												
 												<th><center>{{ journal.Date}}</center></th>
 												<th><center>To</center></th>
-												<th><center>{{ journal.Particulars }}</center></th>
+												<th><center>{{ journal.To }}</center></th>
 												<th><center>{{ journal.id }}</center></th>
 												<th><center>{{journal.Debit}}</center></th>
 												
@@ -115,7 +115,7 @@
 												
 												<th><center>{{ journal.Date}}</center></th>
 												<th><center>By</center></th>
-												<th><center>{{ journal.Particulars_Credit }}</center></th>
+												<th><center>{{ journal.By }}</center></th>
 												<th><center>{{ journal.id }}</center></th>
 												<th><center>{{journal.Debit}}</center></th>
 												
@@ -138,7 +138,7 @@
 												<th><center>Closing Balance</center></th>
 
 												<th><center></center></th>
-												<th><center>{{journal_list|running_total |add:ledger1_details.Opening_Balance|sub:journal_list|running_total_credit}}</center></th>
+												<th><center></center></th>
 									
 											</tr>
 									
@@ -149,14 +149,15 @@
 												<th><center>Total:</center></th>
 												<th><center></center></th>
 												
-												<th><center>{{  journal_list|running_total |add:ledger1_details.Opening_Balance }}</center></th>
+												<th><center>{{ journal_list|running_total|add:ledger1_details.Opening_Balance }}</center></th>
 												
 												<th><center>-</center></th>
 												<th><center>-</center></th>
 												<th><center>Total:</center></th>
 												<th><center>-</center></th>
-												<th><center>{{ journal_list|running_total_credit |add:ledger1_details.Opening_Balance }}</center></th>
+												<th><center>{{ journal_list|running_total_credit }}</center></th>
 											</tr>
+
 
 
 											

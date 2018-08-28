@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from accounting_double_entry.models import group1,ledger1,journal
 from accounting_double_entry.forms import journalForm,group1Form,Ledgerform
+from django.db.models import Sum
 
 
 # Create your views here.
@@ -50,7 +51,7 @@ class ledger1DetailView(LoginRequiredMixin,DetailView):
 	template_name = 'accounting_double_entry/ledger1_details.html'
 
 	def get_context_data(self, **kwargs):
-		context = super(ledger1DetailView, self).get_context_data(**kwargs)
+		context = super(ledger1DetailView, self).get_context_data(**kwargs) 
 		context['journal_list'] = journal.objects.all()
 		return context
 

@@ -8,6 +8,7 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 
 
+
 class group1(models.Model):
 	group_Name = models.CharField(max_length=32,unique=True,error_messages={'unique':"This Group Name has already been registered"})
 	Name = (
@@ -108,6 +109,9 @@ def update_user_balance_nature(sender,instance,*args,**kwargs):
 	balance_nature = balance_master(instance.Master)
 	instance.balance_nature = balance_nature
 
+
+
+
 	
 
 class ledger1(models.Model):
@@ -165,14 +169,16 @@ class ledger1(models.Model):
 
 class journal(models.Model):
 	Date = models.DateField()
-	Particulars = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='Debitledgers')
-	Particulars_Credit = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='Creditledgers')
-	Debit = models.DecimalField(max_digits=10,decimal_places=2)
+	By = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='Debitledgers')
+	To = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='Creditledgers')
+	Debit = models.DecimalField(max_digits=10,decimal_places=2,)
 	Credit = models.DecimalField(max_digits=10,decimal_places=2)
+	total_debit = models.DecimalField(max_digits=10,decimal_places=2)
+	total_credit = models.DecimalField(max_digits=10,decimal_places=2)
 
 
 	def __str__(self):
-		return str(self.Particulars)
+		return str(self.By)
 
 	def get_absolute_url(self):
 		return reverse("accounting_double_entry:detail", kwargs={'pk':self.pk})
@@ -180,7 +186,7 @@ class journal(models.Model):
 	def clean(self):
 		if self.Debit != self.Credit:
 			raise ValidationError('Debit Amount Should Be Equal To Credit Amount')
-		elif self.Particulars == self.Particulars_Credit:
+		elif self.To == self.By:
 			raise ValidationError('Paricular Entry Cannot be same')
 
 

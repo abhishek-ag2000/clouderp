@@ -64,7 +64,7 @@ class journalForm(forms.ModelForm):
 
 	class Meta:
 		model = journal
-		fields = ('Date', 'Particulars','Particulars_Credit','Debit','Credit')
+		fields = ('Date', 'By','To','Debit','Credit')
 		widgets = {
             'Date': DateInput(),
         }
@@ -73,8 +73,8 @@ class journalForm(forms.ModelForm):
 
 		def clean(self):
 			cleaned_data = super(journalForm, self).clean()  #simpleisbetterthancomplex.com/article/2017/08/19/how-to-render-django-form-manually.html
-			Particulars_Credit = cleaned_data.get('Particulars_Credit')
-			Particulars = cleaned_data.get('Particulars')
+			To = cleaned_data.get('To')
+			By = cleaned_data.get('By')
 
 			
 
