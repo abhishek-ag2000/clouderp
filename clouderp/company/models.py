@@ -24,6 +24,19 @@ class company(models.Model):
 				#('',''),
 			)
 	Type_of_company = models.CharField(max_length=32,choices=types,default='Individual')
+
+	Business_nature_Service_Provider = models.BooleanField(default='False')
+	Business_nature_Retail = models.BooleanField(default='False')
+	Business_nature_Wholesale = models.BooleanField(default='False')
+	Business_nature_Works_Contract = models.BooleanField(default='False')
+	Business_nature_Leasing = models.BooleanField(default='False')
+	Business_nature_Factory_Manufacturing = models.BooleanField(default='False')
+	Business_nature_Import = models.BooleanField(default='False')
+	Business_nature_Bonded_Warehouse = models.BooleanField(default='False')
+	Business_nature_Bonded_Warehouse = models.BooleanField(default='False')
+	Business_nature_Other = models.BooleanField(default='True')
+	Please_specify = models.CharField(max_length=32)
+
 	Shared_Users = models.CharField(max_length=32,default="Current User only") # company data sharing
 	Address = models.TextField()
 	Country = models.CharField(max_length=32,default='India')
