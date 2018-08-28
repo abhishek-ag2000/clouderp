@@ -157,7 +157,7 @@ class ledger1(models.Model):
 	Pin_Code = models.BigIntegerField()
 	PanIt_No = models.CharField(max_length=100,blank=True)
 	GST_No = models.CharField(max_length=100,blank=True)
-	# Closing_Balance = models.FloatField(blank=True, default=0.0)
+	Closing_Balance = models.DecimalField(max_digits=10,decimal_places=2)
 
 	
 	def __str__(self):

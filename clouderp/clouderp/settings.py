@@ -17,6 +17,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR,'templates')
 MEDIA_DIR = os.path.join(BASE_DIR,'media' )
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
@@ -49,6 +51,27 @@ INSTALLED_APPS = [
     'bootstrap_datepicker_plus',
     'mathfilters',
 
+################################### blog
+    'wagtail.core',
+    'wagtail.admin',
+    'wagtail.documents',
+    'wagtail.snippets',
+    'wagtail.users',
+    'wagtail.images',
+    'wagtail.embeds',
+    'wagtail.search',
+    'wagtail.sites',
+    'wagtail.contrib.redirects',
+    'wagtail.contrib.forms',
+    'wagtail.contrib.sitemaps',
+    'wagtail.contrib.routable_page',
+    'taggit',
+    'modelcluster',
+    'django_social_share',
+    'puput',
+
+
+
 ######### Django Inbuild Apps ########
 
     'django.contrib.admin',
@@ -76,6 +99,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'wagtail.core.middleware.SiteMiddleware',
+    'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
 
 ROOT_URLCONF = 'clouderp.urls'
@@ -91,6 +117,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
             ],
         },
     },
@@ -182,3 +209,5 @@ LOGOUT_REDIRECT_URL = "home"
 
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 1025
+
+WAGTAIL_SITE_NAME = 'Puput blog'
