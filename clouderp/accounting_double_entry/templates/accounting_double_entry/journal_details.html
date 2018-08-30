@@ -4,7 +4,208 @@
 {% block title %}Journals{% endblock %}
 
 {% block content %}
+
 <div class="content-wrapper">
+ <section class="content-header">
+        <!-- <div class="col-md-12 col-md-offset-4"> -->
+          <h1>
+            <strong>Company : {{company_details.Name}}</strong>
+          </h1>
+                <ol class="breadcrumb">
+                       <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                       <!-- <li><a href="#">Company list</a></li> -->
+                     <li class="">Company Details</li>
+                     <li class="active">Create Journal</li>
+            </ol>
+        <!-- </div> -->
+      </section>
+
+  <section class="content">
+      <div class="callout callout-warning">
+        <h4>Welcome!</h4>
+        Welcome to predict books your personal AI powered business engine!
+        <!-- <a href="http://getbootstrap.com/javascript/#modals">Bootstrap documentation</a> -->
+      </div>
+
+<div class="row">
+      <div class="col-xs-12">
+          <div class="box box-default">
+          <div class="box-body">
+
+      <a href="{% url 'company:list' %}" class="btn btn-success" role="button">Select Company </a>
+              <a href="{% url 'company:create' %}" class="btn btn-warning" role="button">Create Company details</a>
+              <a href="#" class="btn btn-danger" role="button">Delete Company</a>
+
+        
+        
+        
+        </div>
+      
+      </div>
+    
+    </div>
+
+</div>
+
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <!-- Horizontal Form -->
+          <div class="box box-info">
+            <div class="box-header with-border">
+            
+              <h3 class="box-title"><b>Journal Details</b></h3>
+           
+            </div>
+
+    
+
+
+
+
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="box box-info">
+                    <style type="text/css">
+
+                    .table-bordered td, .table-bordered th{
+                        border-color: #bfbfbf !important;
+                    
+                         }
+                    </style>
+
+                    <div class="box-body table-responsive no-padding">
+                        <table class="table table-bordered">
+
+                            <tr>
+                                <td>
+                                   <table class="table table-hover">
+									<tr>
+										<th></th>
+										
+										<th><center>Date</center></th>
+										<th><center>Particulars</center></th>
+										<th><center>Lf</center></th>
+										<th><center>Debit</center></th>
+									</tr>
+										<tr>
+										
+											<th><center><strong>By</strong></center></th>
+											
+											<td><center>{{journal_details.Date}}</center></td>
+											<td><center>{{journal_details.By}}</center></td>
+											<td><center>{{journal_details.id}}</center></td>
+											<td><center>{{journal_details.Debit}}</center></td>
+										
+										</tr>
+							
+							</td>
+						</tr>
+					</table>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                </div>
+                
+            </div>
+            
+        </div>
+
+                <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="box box-info">
+                    <style type="text/css">
+
+                    .table-bordered td, .table-bordered th{
+                        border-color: #bfbfbf !important;
+                    
+                         }
+                    </style>
+
+                    <div class="box-body table-responsive no-padding">
+                        <table class="table table-bordered">
+
+                            <tr>
+                                <td>
+                                    <table class="table table-hover">
+									<tr>
+										<th></th>
+										
+										<th><center>Date</center></th>
+										<th><center>Particulars</center></th>
+										<th><center></center></th>
+										<th><center>Credit</center></th>
+									</tr>
+									<tr>
+										<th><center><strong>To</strong></center></th>
+										
+										<td><center>{{journal_details.Date}}</center></td>
+										<td><center>{{journal_details.To}}</center></td>
+										<th><center></center></th>
+										<td><center>{{journal_details.Credit}}</center></td>
+									</tr>
+									
+								</table>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                </div>
+                
+            </div>
+            
+        </div>
+
+
+        <div class="box-footer">
+               
+               <p><a class='btn btn-warning' href="{% url 'accounting_double_entry:update' pk=journal_details.pk %}">Update Ledger</a> <a class='btn btn-danger pull-right' href="{% url 'accounting_double_entry:delete' pk=journal_details.pk %}">Delete Ledger</a></p> 
+        </div>
+    
+    
+
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <div class="content-wrapper">
 	<div class="container">
 
 		<section class="content-header">
@@ -47,7 +248,7 @@
 											<th><center><strong>By</strong></center></th>
 											
 											<td><center>{{journal_details.Date}}</center></td>
-											<td><center>{{journal_details.Particulars}}</center></td>
+											<td><center>{{journal_details.By}}</center></td>
 											<td><center>{{journal_details.id}}</center></td>
 											<td><center>{{journal_details.Debit}}</center></td>
 										
@@ -88,7 +289,7 @@
 										<th><center><strong>To</strong></center></th>
 										
 										<td><center>{{journal_details.Date}}</center></td>
-										<td><center>{{journal_details.Particulars_Credit}}</center></td>
+										<td><center>{{journal_details.To}}</center></td>
 										<th><center></center></th>
 										<td><center>{{journal_details.Credit}}</center></td>
 									</tr>
@@ -102,12 +303,14 @@
 			</div>
 		</div>
 
-		<div class="container">
-    					<p><a class='btn btn-warning' href="{% url 'accounting_double_entry:update' pk=journal_details.pk %}">Update Journal</a> <a class='btn btn-danger' href="{% url 'accounting_double_entry:delete' pk=journal_details.pk %}">Delete Journal</a></p>
+		<div class="box-footer">
+    					<p><a class='btn btn-warning ' href="{% url 'accounting_double_entry:update' pk=journal_details.pk %}">Update Journal</a> <a class='btn btn-danger pull-right' href="{% url 'accounting_double_entry:delete' pk=journal_details.pk %}">Delete Journal</a></p>
 
-  		</div>
+    	</div>
+
+  		
 
 
 	</div>
-</div>
+</div> -->
 {% endblock %}

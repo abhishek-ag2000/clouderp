@@ -3,6 +3,7 @@ from django.urls import reverse_lazy,reverse
 from django.views.generic import TemplateView,CreateView
 from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
 from django.shortcuts import render, redirect
+from django.contrib.auth import update_session_auth_hash
 
 
 from . import forms
@@ -29,7 +30,7 @@ def change_password(request):
         if form.is_valid():
             form.save()
             update_session_auth_hash(request, form.user)
-            return redirect(reverse('accounts:Dashboard'))
+            return redirect(reverse('company:Dashboard'))
         else:
             return redirect(reverse('accounts:change-password'))
     else:

@@ -6,6 +6,8 @@ from django.urls import reverse
 from django.core.exceptions import ValidationError
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
+from django.db.models import Sum
+
 
 
 class group1(models.Model):
@@ -108,6 +110,9 @@ def update_user_balance_nature(sender,instance,*args,**kwargs):
 	balance_nature = balance_master(instance.Master)
 	instance.balance_nature = balance_nature
 
+
+
+
 	
 
 class ledger1(models.Model):
@@ -153,7 +158,7 @@ class ledger1(models.Model):
 	Pin_Code = models.BigIntegerField()
 	PanIt_No = models.CharField(max_length=100,blank=True)
 	GST_No = models.CharField(max_length=100,blank=True)
-	# Closing_Balance = models.FloatField(blank=True, default=0.0)
+	Closing_Balance = models.DecimalField(max_digits=10,decimal_places=2)
 
 	
 	def __str__(self):
@@ -161,18 +166,22 @@ class ledger1(models.Model):
 
 	def get_absolute_url(self):
 		return reverse("accounting_double_entry:ledgerdetail", kwargs={'pk':self.pk})
+
+
 		
 
 class journal(models.Model):
 	Date = models.DateField()
-	Particulars = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='Debitledgers')
-	Particulars_Credit = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='Creditledgers')
-	Debit = models.DecimalField(max_digits=10,decimal_places=2)
+	By = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='Debitledgers')
+	To = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='Creditledgers')
+	Debit = models.DecimalField(max_digits=10,decimal_places=2,)
 	Credit = models.DecimalField(max_digits=10,decimal_places=2)
+	Total_Debit = models.DecimalField(max_digits=10,decimal_places=2)
+	Total_Credit = models.DecimalField(max_digits=10,decimal_places=2)
 
 
 	def __str__(self):
-		return str(self.Particulars)
+		return str(self.By)
 
 	def get_absolute_url(self):
 		return reverse("accounting_double_entry:detail", kwargs={'pk':self.pk})
@@ -180,8 +189,17 @@ class journal(models.Model):
 	def clean(self):
 		if self.Debit != self.Credit:
 			raise ValidationError('Debit Amount Should Be Equal To Credit Amount')
-		elif self.Particulars == self.Particulars_Credit:
+		elif self.To == self.By:
 			raise ValidationError('Paricular Entry Cannot be same')
+
+
+class c_balance(models.Model):
+	Date = models.DateField()
+	ledger = models.ForeignKey(ledger1,on_delete=models.CASCADE)
+	Closing_Balance = models.DecimalField(max_digits=10,decimal_places=2)
+
+	def __str__(self):
+		return str(self.ledger)
 
 
 

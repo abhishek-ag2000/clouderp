@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 
 from company.models import company,companyowner
+from company.forms import companyform
 # Create your views here.
 
 
@@ -21,12 +22,14 @@ class companyDetailView(LoginRequiredMixin,DetailView):
 
 
 class companyCreateView(LoginRequiredMixin,CreateView):
-	fields = "__all__"
-	model = company
+	form_class  = companyform
+	template_name = "company/company_form.html"
+
 
 class companyUpdateView(LoginRequiredMixin,UpdateView):
-	fields = "__all__"
 	model = company
+	form_class  = companyform
+	template_name = "company/company_form.html"
 
 class companyDeleteView(LoginRequiredMixin,DeleteView):
 	model = company

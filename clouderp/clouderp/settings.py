@@ -17,9 +17,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR,'templates')
 MEDIA_DIR = os.path.join(BASE_DIR,'media' )
 
-# for wagtail
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
@@ -53,7 +51,7 @@ INSTALLED_APPS = [
     'bootstrap_datepicker_plus',
     'mathfilters',
 
-# for blog see link - https://puput.readthedocs.io/en/latest/setup.html#standalone-blog-app
+################################### blog
     'wagtail.core',
     'wagtail.admin',
     'wagtail.documents',
@@ -71,7 +69,8 @@ INSTALLED_APPS = [
     'modelcluster',
     'django_social_share',
     'puput',
-    
+
+
 
 ######### Django Inbuild Apps ########
 
@@ -101,7 +100,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-# adding wagtail for blog 
     'wagtail.core.middleware.SiteMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
