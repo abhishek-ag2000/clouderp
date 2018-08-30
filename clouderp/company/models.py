@@ -33,9 +33,8 @@ class company(models.Model):
 	Business_nature_Factory_Manufacturing = models.BooleanField(default='False')
 	Business_nature_Import = models.BooleanField(default='False')
 	Business_nature_Bonded_Warehouse = models.BooleanField(default='False')
-	Business_nature_Bonded_Warehouse = models.BooleanField(default='False')
 	Business_nature_Other = models.BooleanField(default='True')
-	Please_specify = models.CharField(max_length=32)
+	Please_specify = models.CharField(max_length=32,blank='True')
 
 	Shared_Users = models.CharField(max_length=32,default="Current User only") # company data sharing
 	Address = models.TextField()

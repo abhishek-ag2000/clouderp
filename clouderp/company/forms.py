@@ -16,6 +16,17 @@ class companyform(forms.ModelForm):
 		super(companyform, self).__init__(*args, **kwargs)
 		self.fields['Name'].widget.attrs = {'class': 'form-control',}
 		self.fields['Type_of_company'].widget.attrs = {'class': 'form-control',}
+		# self.fields['Business_nature_Service_Provider'].widget.attrs = {'class': 'form-control',}
+		# self.fields['Business_nature_Retail'].widget.attrs = {'class': 'form-control',}
+		# self.fields['Business_nature_Wholesale'].widget.attrs = {'class': 'form-control',}
+		# self.fields['Business_nature_Works_Contract'].widget.attrs = {'class': 'form-control',}
+		# self.fields['Business_nature_Leasing'].widget.attrs = {'class': 'form-control',}
+		# self.fields['Business_nature_Factory_Manufacturing'].widget.attrs = {'class': 'form-control',}
+		# self.fields['Business_nature_Import'].widget.attrs = {'class': 'form-control',}
+		# self.fields['Business_nature_Bonded_Warehouse'].widget.attrs = {'class': 'form-control',}
+		# self.fields['Business_nature_Other'].widget.attrs = {'class': 'form-control',}
+		# self.fields['Please_specify'].widget.attrs = {'class': 'form-control',}
+		self.fields['Books_Begining_From'].widget.attrs = {'class': 'form-control',}
 		self.fields['Shared_Users'].widget.attrs = {'class': 'form-control',}
 		self.fields['Address'].widget.attrs = {'class': 'form-control',}
 		self.fields['Country'].widget.attrs = {'class': 'form-control',}
@@ -29,7 +40,13 @@ class companyform(forms.ModelForm):
 
 	class Meta:
 		model = company
-		fields = ('Name', 'Type_of_company','Shared_Users','Address','Country','State','Pincode','Telephone_No','Mobile_No','Financial_Year_From','Books_Begining_From')
+		fields = ('Name', 'Type_of_company','Business_nature_Service_Provider','Business_nature_Retail',
+			'Business_nature_Wholesale','Business_nature_Works_Contract','Business_nature_Leasing','Business_nature_Factory_Manufacturing',
+			'Business_nature_Import','Business_nature_Bonded_Warehouse',
+			'Business_nature_Other',
+			'Please_specify',
+			'Shared_Users','Address','Country','State','Pincode','Telephone_No','Mobile_No',
+			'Financial_Year_From','Books_Begining_From')
 		widgets = {
             'Financial_Year_From': DateInput(),
             'Books_Begining_From': DateInput(),

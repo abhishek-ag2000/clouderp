@@ -72,7 +72,7 @@
 	 <section class="content-header">
         <!-- <div class="col-md-12 col-md-offset-4"> -->
           <h1>
-            <strong>Company : {{company_details.Name}}</strong>
+            <strong>New Company Creation</strong>
           </h1>
                 <ol class="breadcrumb">
                        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -109,9 +109,9 @@
     </div>
 
 </div>
-	<div class="container">
-<section class="content-header">
-	<div class="col-md-12 col-md-offset-2">
+	<!-- <div class="container"> -->
+<!-- <section class="content-header"> -->
+	<!-- <div class="col-md-12 col-md-offset-2">
 		<h1>
 			{% if not form.instance.pk %}
 				<strong>Create Your Company Here</strong>
@@ -119,10 +119,10 @@
 				<strong>Update Your Company Here</strong>
 			{% endif %}
 		</h1>
-	</div>
-</section>
+	</div> -->
+<!-- </section>
 
-
+<section> -->
 		<div class="row">
 			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 				<div class="box box-info">
@@ -158,7 +158,35 @@
                       
                     			</div>
     						</div>
+                <div class="form-group">
+                          <label for="input" class="col-sm-2 control-label">Business Nature: </label>
+                         
+                          <div class="col-sm-10">
+                           <ul> 
+                              <li>
+                              <div class="col-sm-4">
+                              Business_nature_Service_Provider - 
+                              </div>
+                              <div class="col-sm-6">
+                              {{ form.Business_nature_Service_Provider }}
+                              </div>
+                              </li>
+                              
+                              
+                              <li>Business_nature_Retail - {{ form.Business_nature_Retail }}</li>
+                              <li>Business_nature_Wholesale - {{ form.Business_nature_Wholesale }}</li>
+                              <li>Business_nature_Works_Contract - {{ form.Business_nature_Works_Contract }}</li>
+                              <li>Business_nature_Leasing - {{ form.Business_nature_Leasing }}</li>
+                              <li>Business_nature_Factory_Manufacturing - {{ form.Business_nature_Factory_Manufacturing }}</li>
+                              <li>Business_nature_Bonded_Warehouse - {{ form.Business_nature_Bonded_Warehouse }}</li>
+                              <li>Business_nature_Other - {{ form.Business_nature_Other }}</li>
+                              <li>Please_specify - {{ form.Please_specify }}</li>
 
+                          </ul>
+                            </div>
+                
+                  
+                          </div>
     						<div class="form-group">
                   				<label for="input" class="col-sm-2 control-label">Shared_Users</label>
                   
@@ -271,16 +299,15 @@
 
 
   					</form>
-  					<br>
+  					
 				
 				</div>
-			
 			</div>
-		
 		</div>
-	</div>
-</div>
 
+		</section>
+	
+</div>
 
 
 {% endblock %}
