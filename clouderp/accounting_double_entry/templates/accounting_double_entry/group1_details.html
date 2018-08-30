@@ -53,9 +53,44 @@
 				<div class="box box-info">
 					<div class="box-header with-border">
         			
-          				<h3 class="box-title"><b>Group Details</b></h3>
+          				<h2 class="box-title"><b>Group Details</b></h2>
         
-        			</div>
+        	</div>
+
+          <div class="box-body table-responsive no-padding">
+            <table class="table table-striped">
+              <tr>
+                <th>Group Name</th>
+                <th>{{ group1_details.group_Name }}</th>
+              </tr>
+
+              <tr>
+                <th>Under</th>
+                <th>{{ group1_details.Master }}</th>
+              </tr>
+
+              <tr>
+                <th>Nature_of_group</th>
+                <th>{{ group1_details.Nature_of_group1 }}</th>
+              </tr>
+
+               <tr>
+                <th>Balance Nature</th>
+                <th>{{ group1_details.balance_nature }}</th>
+              </tr>
+
+              <tr>
+                <th>Group_behaves_like_a_Sub_Ledger?</th>
+                <th>{{ group1_details.Group_behaves_like_a_Sub_Ledger}}</th>
+              </tr>
+
+              <tr>
+                <th>Nett_Debit_or_Credit_Balances_for_Reporting?</th>
+                <th>{{ group1_details.Nett_Debit_or_Credit_Balances_for_Reporting}}</th>
+              </tr>
+            </table>
+          </div>
+
 
 
               
