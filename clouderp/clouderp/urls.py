@@ -15,29 +15,28 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.conf.urls import url,include
-from django.urls import path,re_path
+from django.urls import path
 from django.views.generic import RedirectView
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from . import views
-# for blog
-from django.conf import settings
 
+from django.conf import settings
 
 urlpatterns = [
     url(r"^$", views.HomePage.as_view(), name="home"),
     url(r"^test/$", views.TestPage.as_view(), name="test"),
+    url(r"^blog/$", views.BlogPage.as_view(), name="blog"),
     path('admin/', admin.site.urls),
     url(r"^accounts/", include("accounts.urls", namespace="accounts")),
     url(r"^accounts/", include("django.contrib.auth.urls")),
     url(r'^auth/', include('social_django.urls', namespace='social')),
     url(r"^company/", include("company.urls", namespace="company")),
     url(r"^accounting_double_entry/", include("accounting_double_entry.urls", namespace="accounting_double_entry")),
-    # for blog app - puput
-    path(r'', include('puput.urls')),
 
+    path(r'', include('puput.urls')),
 ] 
 
-# for blog puput - standalone app installation not via wagtail
+
 if settings.DEBUG:
     import os
     from django.conf.urls.static import static

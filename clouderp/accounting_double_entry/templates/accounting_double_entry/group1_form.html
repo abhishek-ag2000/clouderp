@@ -58,7 +58,11 @@
           <!-- Horizontal Form -->
           <div class="box box-info">
             <div class="box-header with-border">
-              <h3 class="box-title">Create group Form</h3>
+            {% if not form.instance.pk %}
+              <h3 class="box-title">Create Group</h3>
+            {% else %}
+              <h3 class="box-title">Update Group</h3>
+            {% endif %}
             </div>
             <!-- /.box-header -->
             <!-- form start -->

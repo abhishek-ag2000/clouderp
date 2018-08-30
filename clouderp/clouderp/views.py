@@ -11,6 +11,11 @@ class HomePage(TemplateView):
 	template_name = "clouderp/index.html"
 
 
+class BlogPage(TemplateView):
+	template_name = "puput/blog.html"
+
+
+
 	def get(self, request, *args, **kwargs):
 		if request.user.is_authenticated:
 			return HttpResponseRedirect(reverse("test"))

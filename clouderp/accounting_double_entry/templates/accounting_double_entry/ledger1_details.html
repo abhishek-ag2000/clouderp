@@ -8,14 +8,47 @@
 {% block content %}
 
 <div class="content-wrapper">
-	<div class="container">
-		<section class="content-header">
-			<div class="col-md-12 col-md-offset-4">
-				<h1>
-					<strong>Ledger Display</strong>
-				</h1>
-			</div>
-		</section>
+	 <section class="content-header">
+        <!-- <div class="col-md-12 col-md-offset-4"> -->
+          <h1>
+            <strong>Company : {{company_details.Name}}</strong>
+          </h1>
+                <ol class="breadcrumb">
+                       <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                       <!-- <li><a href="#">Company list</a></li> -->
+                     <li class="">Company list</li>
+                     <li class="active">Create Ledger</li>
+            </ol>
+           
+        <!-- </div> -->
+      </section>
+
+  <section class="content">
+      <div class="callout callout-warning">
+        <h4>Welcome!</h4>
+        Welcome to predict books your personal AI powered business engine!
+        <!-- <a href="http://getbootstrap.com/javascript/#modals">Bootstrap documentation</a> -->
+      </div>
+
+<div class="row">
+      <div class="col-xs-12">
+          <div class="box box-default">
+          <div class="box-body">
+
+      <a href="{% url 'company:list' %}" class="btn btn-success" role="button">Select Company </a>
+              <a href="{% url 'company:create' %}" class="btn btn-warning" role="button">Create Company details</a>
+              <a href="#" class="btn btn-danger" role="button">Delete Company</a>
+
+        
+        
+        
+        </div>
+      
+      </div>
+    
+    </div>
+
+</div>
 
 		<div class="row">
 			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -26,6 +59,11 @@
                          }
 				</style>
 				<div class="box box-info">
+					 <div class="box-header with-border">
+        			
+          				<h3 class="box-title"><b>Ledger Details</b></h3>
+        
+        			</div>
 					<table class="table table-bordered">
 						<tr>
 							<td>
@@ -76,7 +114,7 @@
 									</tr>										
 								
 									
-									{% for journal in ledger1_details.Creditledgers.all %}
+									{% for journal in ledger1_details.Debitledgers.all %}
 										
 
 											
@@ -84,7 +122,7 @@
 												
 												<th><center>{{ journal.Date}}</center></th>
 												<th><center>To</center></th>
-												<th><center>{{ journal.Particulars }}</center></th>
+												<th><center>{{ journal.To }}</center></th>
 												<th><center>{{ journal.id }}</center></th>
 												<th><center>{{journal.Debit}}</center></th>
 												
@@ -101,7 +139,7 @@
 										
 									{% endfor %}
 
-									{% for journal in ledger1_details.Debitledgers.all %}
+									{% for journal in ledger1_details.Creditledgers.all %}
 										
 
 											
@@ -115,9 +153,9 @@
 												
 												<th><center>{{ journal.Date}}</center></th>
 												<th><center>By</center></th>
-												<th><center>{{ journal.Particulars_Credit }}</center></th>
+												<th><center>{{ journal.By }}</center></th>
 												<th><center>{{ journal.id }}</center></th>
-												<th><center>{{journal.Debit}}</center></th>
+												<th><center>{{journal.Credit}}</center></th>
 												
 										
 										
@@ -138,7 +176,7 @@
 												<th><center>Closing Balance</center></th>
 
 												<th><center></center></th>
-												<th><center>{{journal_list|running_total |add:ledger1_details.Opening_Balance|sub:journal_list|running_total_credit}}</center></th>
+												<th><center>{{ledger1_details.Closing_Balance}}</center></th>
 									
 											</tr>
 									
@@ -149,14 +187,15 @@
 												<th><center>Total:</center></th>
 												<th><center></center></th>
 												
-												<th><center>{{  journal_list|running_total |add:ledger1_details.Opening_Balance }}</center></th>
+												<th><center>{{ journal_list|running_total|add:ledger1_details.Opening_Balance }}</center></th>
 												
 												<th><center>-</center></th>
 												<th><center>-</center></th>
 												<th><center>Total:</center></th>
 												<th><center>-</center></th>
-												<th><center>{{ journal_list|running_total_credit |add:ledger1_details.Opening_Balance }}</center></th>
+												<th><center>{{ running_total_credit }}</center></th>
 											</tr>
+
 
 
 											
@@ -181,8 +220,8 @@
 						
 
 						<br>
-					<div class="container">
-    					<p><a class='btn btn-warning' href="{% url 'accounting_double_entry:ledgerupdate' pk=ledger1_details.pk %}">Update Ledger</a> <a class='btn btn-danger' href="{% url 'accounting_double_entry:ledgerdelete' pk=ledger1_details.pk %}">Delete Ledger</a></p>
+					<div class="box-footer">
+    					<p><a class='btn btn-warning' href="{% url 'accounting_double_entry:ledgerupdate' pk=ledger1_details.pk %}">Update Ledger</a> <a class='btn btn-danger pull-right' href="{% url 'accounting_double_entry:ledgerdelete' pk=ledger1_details.pk %}">Delete Ledger</a></p>
 
   					</div>
 
@@ -195,6 +234,6 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</section>
 </div>
 {% endblock %}

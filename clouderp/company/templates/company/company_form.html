@@ -1,8 +1,14 @@
 {% extends "clouderp/base.html" %}
-{% load crispy_forms_tags %}
 
+{% block title %}
+		{% if not form.instance.pk %}
+		Create Company
+		{% else %}
+		Update Company
+		{% endif %}
+{% endblock %}
 
- {% block main-sidebar %}
+{% block main-sidebar %}
  <section class="sidebar">
     
       <!-- Sidebar user panel -->
@@ -24,7 +30,7 @@
       <!--   <li><a href="{% url 'company:Dashboard' 1 %}"><i class="fa fa-book"></i> <span>Dashboard</span></a></li>
          -->
 
-        <li><a href="#"><i class="fa fa-book"></i> <span>Dashboard</span></a></li>
+        <li><a href="{% url 'company:list' %}"><i class="fa fa-book"></i> <span>Dashboard</span></a></li>
 
         
         
@@ -54,62 +60,215 @@
       
     </section>
 
-
  {% endblock %}
+
+
+
 
 
 
 {% block content %}
 <div class="content-wrapper">
-	<section class="content-header">
-				<!-- <div class="col-md-12 col-md-offset-4"> -->
-					<h1>
-						<strong>Company Creation</strong>
-					</h1>
-								<ol class="breadcrumb">
-			       					 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-			       					 <!-- <li><a href="#">Company list</a></li> -->
-			     				   <li class="active">Company Creation</li>
-			      </ol>
-				<!-- </div> -->
-			</section>
+	 <section class="content-header">
+        <!-- <div class="col-md-12 col-md-offset-4"> -->
+          <h1>
+            <strong>Company : {{company_details.Name}}</strong>
+          </h1>
+                <ol class="breadcrumb">
+                       <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                       <!-- <li><a href="#">Company list</a></li> -->
+                     <li class="">Company Create</li>
+                     
+            </ol>
+        <!-- </div> -->
+      </section>
 
-	<section class="content">
-      <div class="callout callout-info">
+  <section class="content">
+      <div class="callout callout-warning">
         <h4>Welcome!</h4>
         Welcome to predict books your personal AI powered business engine!
         <!-- <a href="http://getbootstrap.com/javascript/#modals">Bootstrap documentation</a> -->
       </div>
 
-		<div class="row">
-			<div class="col-xs-12">
+<div class="row">
+      <div class="col-xs-12">
           <div class="box box-default">
-					<div class="box-body">
+          <div class="box-body">
 
-			<a href="{% url 'company:list' %}" class="btn btn-success" role="button">Select Company </a>
+      <a href="{% url 'company:list' %}" class="btn btn-success" role="button">Select Company </a>
               <a href="{% url 'company:create' %}" class="btn btn-warning" role="button">Create Company details</a>
               <a href="#" class="btn btn-danger" role="button">Delete Company</a>
 
-				
-				
-				
-				</div>
-			
-			</div>
-		
-		</div>
+        
+        
+        
+        </div>
+      
+      </div>
+    
+    </div>
 
 </div>
+	<div class="container">
+<section class="content-header">
+	<div class="col-md-12 col-md-offset-2">
+		<h1>
+			{% if not form.instance.pk %}
+				<strong>Create Your Company Here</strong>
+			{% else %}
+				<strong>Update Your Company Here</strong>
+			{% endif %}
+		</h1>
+	</div>
+</section>
 
 
 		<div class="row">
-			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 col-md-offset-1">
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 				<div class="box box-info">
-					<br>
-					<form method="POST">
+					<div class="box-header with-border">
+						{% if not form.instance.pk %}
+              				<h3 class="box-title">Create Company</h3>
+              			{% else %}
+              				<h3 class="box-title">Update Company</h3>
+              			{% endif %}
+            		</div>
+					<form method="POST" class="form-horizontal">
     					{% csrf_token %}
-    					<br>{{ form|crispy }}<br>
-    				<br><input type="submit" class='btn btn-primary' value="Submit"><br>
+
+    					<div class="box-body">
+    						<div class="form-group">
+                  				<label for="input" class="col-sm-2 control-label">Company Name</label>
+                  
+                    			<div class="col-sm-10">
+                          
+                        			
+                       				{{ form.Name }}
+                      
+                    			</div>
+    						</div>
+
+    						<div class="form-group">
+                  				<label for="input" class="col-sm-2 control-label">Type_of_company</label>
+                  
+                    			<div class="col-sm-10">
+                          
+                        			
+                       				{{ form.Type_of_company }}
+                      
+                    			</div>
+    						</div>
+
+    						<div class="form-group">
+                  				<label for="input" class="col-sm-2 control-label">Shared_Users</label>
+                  
+                    			<div class="col-sm-10">
+                          
+                        			
+                       				{{ form.Shared_Users }}
+                      
+                    			</div>
+    						</div>
+
+    						<div class="form-group">
+                  				<label for="input" class="col-sm-2 control-label">Company Address</label>
+                  
+                    			<div class="col-sm-10">
+                          
+                        			
+                       				{{ form.Address }}
+                      
+                    			</div>
+    						</div>
+
+    						<div class="form-group">
+                  				<label for="input" class="col-sm-2 control-label">Country</label>
+                  
+                    			<div class="col-sm-10">
+                          
+                        			
+                       				{{ form.Country }}
+                      
+                    			</div>
+    						</div>
+
+    						<div class="form-group">
+                  				<label for="input" class="col-sm-2 control-label">State</label>
+                  
+                    			<div class="col-sm-10">
+                          
+                        			
+                       				{{ form.State }}
+                      
+                    			</div>
+    						</div>
+
+    						<div class="form-group">
+                  				<label for="input" class="col-sm-2 control-label">Pincode</label>
+                  
+                    			<div class="col-sm-10">
+                          
+                        			
+                       				{{ form.Pincode }}
+                      
+                    			</div>
+    						</div>
+
+    						<div class="form-group">
+                  				<label for="input" class="col-sm-2 control-label">Telephone_No</label>
+                  
+                    			<div class="col-sm-10">
+                          
+                        			
+                       				{{ form.Telephone_No }}
+                      
+                    			</div>
+    						</div>
+
+    						<div class="form-group">
+                  				<label for="input" class="col-sm-2 control-label">Mobile_No</label>
+                  
+                    			<div class="col-sm-10">
+                          
+                        			
+                       				{{ form.Mobile_No }}
+                      
+                    			</div>
+    						</div>
+
+    						<div class="form-group">
+                  				<label for="input" class="col-sm-2 control-label">Financial_Year_From</label>
+                  
+                    			<div class="col-sm-10">
+                          
+                        			
+                       				{{ form.Financial_Year_From }}
+                      
+                    			</div>
+    						</div>
+
+    						<div class="form-group">
+                  				<label for="input" class="col-sm-2 control-label">Books_Begining_From</label>
+                  
+                    			<div class="col-sm-10">
+                          
+                        			
+                       				{{ form.Books_Begining_From }}
+                      
+                    			</div>
+    						</div>
+    					</div>
+                  <div class="box-footer">
+                <button class="btn btn-default">Cancel</button>
+                {% if not form.instance.pk %}
+                <button type="submit" class="btn btn-info pull-right" value="Submit">Create Company</button>
+                {% else %}
+                <button type="submit" class="btn btn-info pull-right" value="Submit">Update Company</button>
+                {% endif %}
+
+                
+             </div>
+
 
   					</form>
   					<br>
@@ -119,7 +278,7 @@
 			</div>
 		
 		</div>
-	
+	</div>
 </div>
 
 
