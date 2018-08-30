@@ -1,5 +1,7 @@
 {% extends "clouderp/base.html" %}
 
+{% block title%}Company List{% endblock %}
+
 
  {% block main-sidebar %}
  <section class="sidebar">
@@ -20,10 +22,11 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
        <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MAIN NAVIGATION</li>
+        
       <!--   <li><a href="{% url 'company:Dashboard' 1 %}"><i class="fa fa-book"></i> <span>Dashboard</span></a></li>
          -->
 
-        <li><a href="#"><i class="fa fa-book"></i> <span>Dashboard</span></a></li>
+        <li><a href="{% url 'company:list' %}"><i class="fa fa-book"></i> <span>Dashboard</span></a></li>
 
         
         

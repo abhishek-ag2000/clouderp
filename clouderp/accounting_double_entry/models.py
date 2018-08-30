@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.core.exceptions import ValidationError
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
+from django.db.models import Sum
 
 
 
@@ -165,6 +166,8 @@ class ledger1(models.Model):
 
 	def get_absolute_url(self):
 		return reverse("accounting_double_entry:ledgerdetail", kwargs={'pk':self.pk})
+
+
 		
 
 class journal(models.Model):
@@ -173,8 +176,8 @@ class journal(models.Model):
 	To = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='Creditledgers')
 	Debit = models.DecimalField(max_digits=10,decimal_places=2,)
 	Credit = models.DecimalField(max_digits=10,decimal_places=2)
-	total_debit = models.DecimalField(max_digits=10,decimal_places=2)
-	total_credit = models.DecimalField(max_digits=10,decimal_places=2)
+	Total_Debit = models.DecimalField(max_digits=10,decimal_places=2)
+	Total_Credit = models.DecimalField(max_digits=10,decimal_places=2)
 
 
 	def __str__(self):
@@ -188,6 +191,15 @@ class journal(models.Model):
 			raise ValidationError('Debit Amount Should Be Equal To Credit Amount')
 		elif self.To == self.By:
 			raise ValidationError('Paricular Entry Cannot be same')
+
+
+class c_balance(models.Model):
+	Date = models.DateField()
+	ledger = models.ForeignKey(ledger1,on_delete=models.CASCADE)
+	Closing_Balance = models.DecimalField(max_digits=10,decimal_places=2)
+
+	def __str__(self):
+		return str(self.ledger)
 
 
 

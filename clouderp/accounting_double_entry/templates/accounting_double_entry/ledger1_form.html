@@ -1,5 +1,5 @@
 {% extends "clouderp/base.html" %}
-{% load crispy_forms_tags %}
+
 
 
 {% block title %}
@@ -25,7 +25,7 @@
                      <li class="">Company list</li>
                      <li class="active">Create Ledger</li>
             </ol>
-            </ol>
+           
         <!-- </div> -->
       </section>
 
@@ -60,18 +60,23 @@
 
 
 
-		<div class="row">
+	
 			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <div class="box box-info">
+      <div class="box-header with-border">
+        {% if not form.instance.pk %}
+          <h3 class="box-title">Create Ledger</h3>
+        {% else %}
+          <h3 class="box-title">Update Ledger</h3>
+        {% endif %}
+        </div>
 				<form method="POST" class="form-horizontal">
     					{% csrf_token %}
     					
-		<div class="box box-info">
-      <div class="box-header with-border">
-              <h3 class="box-title">Ledger Details</h3>
-            </div>
+	
             
 						
-
+      <div class="box-body">
 				<div class="form-group">
                   <label for="input" class="col-sm-2 control-label">Creation Date</label>
                   
@@ -120,14 +125,16 @@
 
 
 
-    					
+    					</div>
          	
-        </div>
+        
 
-      
+        <div class="box-body">
        		<div class="box-header with-border">
               <h3 class="box-title">Mailing Details</h3>
             </div>
+            <br>
+
 						
 
 				<div class="form-group">
@@ -198,13 +205,13 @@
                 </div>
 
 
-
+              </div>
 
     		      	
-        </div>
+        
 
               <div class="box-footer">
-
+                <button class="btn btn-default btn-lg">Cancel</button>
               		{% if not form.instance.pk %}
                 		<button type="submit" class="btn btn-info btn-lg pull-right" value="Submit">Create Ledger</button>
                 	{% else %}
@@ -214,6 +221,8 @@
 
                 </div>
               	</form>
+
+            </div>
 
 
   </section>

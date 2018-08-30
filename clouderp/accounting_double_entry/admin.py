@@ -1,20 +1,19 @@
 from django.contrib import admin
 from accounting_double_entry.models import group1,ledger1,journal
-from accounting_double_entry.forms import journalForm
+
 # Register your models here.
 
 
 class journaltransactionsdebit(admin.TabularInline):
 	model = journal
-	form = journalForm
 	fk_name = 'By'
-	exclude = ['Credit']
+	exclude = ['Debit', 'Total_Debit', 'Total_Credit']
+	
 
 class journaltransactionscredit(admin.TabularInline):
 	model = journal
-	form = journalForm
 	fk_name = 'To'
-	exclude = ['Debit']
+	exclude = ['Credit', 'Total_Credit', 'Total_Debit']
 	
 
 
