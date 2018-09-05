@@ -1,16 +1,15 @@
 from django.db import models
 from datetime import datetime
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save,post_save
 from django.dispatch import receiver
 from django.urls import reverse
 from django.core.exceptions import ValidationError
-from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.db.models import Sum
 
-
-
 class group1(models.Model):
+	# user specific - will be visible and usable to all your companies
+	# error_messages={'unique':"This Group Name has already been registered"}
 	group_Name = models.CharField(max_length=32,unique=True,error_messages={'unique':"This Group Name has already been registered"})
 	Name = (
 		('Primary','Primary'),
@@ -158,7 +157,9 @@ class ledger1(models.Model):
 	Pin_Code = models.BigIntegerField()
 	PanIt_No = models.CharField(max_length=100,blank=True)
 	GST_No = models.CharField(max_length=100,blank=True)
-	Closing_Balance = models.DecimalField(max_digits=10,decimal_places=2)
+	Total_Debit = models.DecimalField(max_digits=10,decimal_places=2)
+
+
 
 	
 	def __str__(self):
@@ -169,15 +170,12 @@ class ledger1(models.Model):
 
 
 		
-
 class journal(models.Model):
 	Date = models.DateField()
 	By = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='Debitledgers')
 	To = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='Creditledgers')
 	Debit = models.DecimalField(max_digits=10,decimal_places=2,)
 	Credit = models.DecimalField(max_digits=10,decimal_places=2)
-	Total_Debit = models.DecimalField(max_digits=10,decimal_places=2)
-	Total_Credit = models.DecimalField(max_digits=10,decimal_places=2)
 
 
 	def __str__(self):
@@ -193,13 +191,25 @@ class journal(models.Model):
 			raise ValidationError('Paricular Entry Cannot be same')
 
 
-class c_balance(models.Model):
-	Date = models.DateField()
-	ledger = models.ForeignKey(ledger1,on_delete=models.CASCADE)
-	Closing_Balance = models.DecimalField(max_digits=10,decimal_places=2)
+lspre = ledger1.objects.all()
+jpre = journal.objects.all()
 
-	def __str__(self):
-		return str(self.ledger)
+def total_debit(lspre,jpre):
+	for w in lspre:
+		sum1 = 0
+		sum2 = 0
+		for i in jpre:
+			if (i.By == w.name):
+				sum1 += i.Debit
+				sum2 = sum1 + w.Opening_Balance
+		return sum2
+
+@receiver(pre_save, sender=ledger1)
+def update_total_debit(sender,instance,*args,**kwargs):
+	Total_Debit = total_debit(lspre,jpre)
+	instance.Total_Debit = Total_Debit
+
+
 
 
 

@@ -1,19 +1,19 @@
 {% extends "clouderp/base.html" %}
 
 
-{% block title %}Delete Groups{% endblock %}
+{% block title %}Delete Journal{% endblock %}
 
 {% block content %}
 
 <div class="content-wrapper">
-	<div class="container">
-		<section class="content-header">
-			<div class="col-md-12">
-			<h1>
-			<strong>Delete {{group1.group_Name }}?</strong>
-			</h1>
-			</div>
-		</section>
+  <div class="container">
+    <section class="content-header">
+      <div class="col-md-12">
+      <h1>
+      <strong>Delete {{group1.group_Name  }}?</strong>
+      </h1>
+      </div>
+    </section>
 
 <form method="post">
   {% csrf_token %}
@@ -21,7 +21,17 @@
   <a href="{% url 'accounting_double_entry:groupdetail' pk=group1.pk %}">Cancel</a>
 
 </form>
-	</div>
-</div>
+  </div>
+
+
+
+
+
+
+
 
 {% endblock %}
+
+
+
+

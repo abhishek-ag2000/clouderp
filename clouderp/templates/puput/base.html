@@ -34,6 +34,8 @@
         <!-- Font Awesome -->
         <link rel="stylesheet" href="{% static 'clouderp/bower_components/font-awesome/css/font-awesome.min.css' %}">
 
+
+
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
 
         <!-- Ionicons -->
@@ -49,6 +51,8 @@
 
 
         <!-- {# Custom CSS#} -->
+         <link rel="stylesheet" href="{% static 'clouderp/css/blog.css' %}">
+
         <link rel="stylesheet" href="{% static 'clouderp/css/master.css' %}">
         <!-- {# Theme CSS#} -->
         <link rel="stylesheet" href="{% static 'clouderp/css/theme.min.css' %}">
@@ -58,7 +62,7 @@
 
          <link rel="stylesheet" href="{% static 'clouderp/css/select2.min.css' %}">        
 
-
+         <link rel="stylesheet" href="{% static 'bootstrap/css/card.css' %}"> 
 
 
         <link rel='stylesheet' href="{% static 'puput/css/bootstrap.min.css' %}" type='text/css'/>
@@ -601,18 +605,99 @@
 
 </aside>
 
-{% block blog_header %}
+
 <div class="content-wrapper">
 
-{% endblock blog_header %}
+
 {% wagtailuserbar %}
 <div class="container container-blog">
-    <div class="row">
-        <div class="col-sm-8 col-md-9">
-            {% block content %}{% endblock content %}
-            {% block extra_content %}{% endblock extra_content %}
-        </div>
 
+
+
+    
+  <div class="row">
+
+       <div class="col-sm-8 col-md-9">
+                        <div class="blog-grids">
+                            <div class="grid">
+                                <div class="entry-media">
+                                    <img src="http://www.csshint.com/wp-content/uploads/2017/09/beautiful-buttons-effect.jpg" alt="">
+                                </div>
+                                <div class="entry-body">
+                                    <span class="cat">inspiration</span>
+                                    <h3><a href="#">Beautiful css3 buttons with hover effects</a></h3>
+                                    <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut..</p>
+                                    <div class="read-more-date">
+                                        <a href="#">Read More..</a>
+                                        <span class="date">3 Hours ago</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="grid">
+                                <div class="entry-media">
+                                    <img src="http://www.csshint.com/wp-content/uploads/2017/05/business-card-1.jpg" alt="">
+                                </div>
+                                <div class="entry-body">
+                                    <span class="cat">photoshop</span>
+                                    <h3><a href="#">40+ Best Free Modern Business Card PSD Templates</a></h3>
+                                    <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut..</p>
+                                    <div class="read-more-date">
+                                        <a href="#">Read More..</a>
+                                        <span class="date">3 Hours ago</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="grid">
+                                <div class="entry-media">
+                                    <img src="http://www.csshint.com/wp-content/uploads/2017/05/blog-theme.jpg" alt="">
+                                </div>
+                                <div class="entry-body">
+                                    <span class="cat">Wordpress</span>
+                                    <h3><a href="#">34+ Beautiful Free WordPress Blog Themes</a></h3>
+                                    <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut..</p>
+                                    <div class="read-more-date">
+                                        <a href="#">Read More..</a>
+                                        <span class="date">3 Hours ago</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                              <div class="grid">
+                                <div class="entry-media">
+                                    <img src="http://www.csshint.com/wp-content/uploads/2017/05/blog-theme.jpg" alt="">
+                                </div>
+                                <div class="entry-body">
+                                    <span class="cat">Wordpress</span>
+                                    <h3><a href="#">34+ Beautiful Free WordPress Blog Themes</a></h3>
+                                    <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut..</p>
+                                    <div class="read-more-date">
+                                        <a href="#">Read More..</a>
+                                        <span class="date">3 Hours ago</span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="grid">
+                                <div class="entry-media">
+                                    <img src="http://www.csshint.com/wp-content/uploads/2017/05/blog-theme.jpg" alt="">
+                                </div>
+                                <div class="entry-body">
+                                    <span class="cat">Wordpress</span>
+                                    <h3><a href="#">34+ Beautiful Free WordPress Blog Themes</a></h3>
+                                    <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut..</p>
+                                    <div class="read-more-date">
+                                        <a href="#">Read More..</a>
+                                        <span class="date">3 Hours ago</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+          </div>
+
+            
+           
+     
         <div class="col-sm-4 col-md-3">
             <div class="blog_sidebar">
                 <div class="rss-sitemap">
@@ -620,16 +705,42 @@
                          <i class="fa fa-rss-square"></i> <span>{% trans 'Feed RSS' %}</span>
                     </a>
                 </div>
-                <form name="search_form" class="search_form" method="get" action="{% routablepageurl blog_page 'entries_search' %}">
-                    <div class="input-group">
-                         <input type="search" name="q" placeholder="{% trans 'Search' %}">
-                         <span class="input-group-btn">
-                            <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
-                         </span>
-                    </div>
-                </form>
 
-                {% if blog_page.display_last_entries %}
+          <div class="card">
+            <h5 class="card-header">Search</h5>
+            <div class="card-body">
+              <form name="search_form" class="search_form" method="get" action="{% routablepageurl blog_page 'entries_search' %}">
+              <div class="input-group">
+                 <input type="search" name="q" placeholder="{% trans 'Search' %}">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+                </span>
+              </div>
+            </form>
+            </div>
+          </div>
+
+
+          <!-- <div class="card">
+            <h5 class="card-header">{% trans 'Categories' %}</h5>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-6">
+                {% if blog_page.display_categories %}
+
+                
+                  <ul class="sidebar">                    
+                    {% categories_list %}
+
+                  </ul>
+                {% endif %}
+                </div>
+                
+              </div>
+            </div>
+          </div>
+ -->
+                <!-- {% if blog_page.display_last_entries %}
                     <ul class="sidebar">
                         <h3>{% trans 'Last Entries' %}</h3>
                         {% recent_entries blog_page.num_last_entries %}
@@ -640,7 +751,7 @@
                         <h4>{% trans 'Popular Entries' %}</h4>
                         {% popular_entries blog_page.num_popular_entries %}
                     </ul>
-                {% endif %}
+                {% endif %} -->
                 {% if blog_page.display_categories %}
                 <h3>{% trans 'Categories' %}</h3>
                     <ul class="sidebar">
@@ -662,9 +773,24 @@
                 {% endif %}
             </div>
         </div>
+
+       
     </div>
-</div>
-<div class="footer">
+  </div>
+
+
+
+ 
+                     
+  
+
+
+
+
+
+   
+
+<!-- <div class="footer">
 
     <div class="footer_bottom">
         <div class="copy">
@@ -675,7 +801,7 @@
             </p>
         </div>
     </div>
-</div>
+</div> -->
 </div>
 
 <div class="control-sidebar-bg"></div>

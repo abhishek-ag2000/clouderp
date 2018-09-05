@@ -66,9 +66,9 @@
                 </div>
               </div>
             </div>
-            <!-- /.box-header -->
+            
             <div class="box-body table-responsive no-padding">
-              <table class="table table-hover">
+               <table id="example2" class="table table-bordered table-hover">
 
                 <tr>
                   <th>Sl no</th>
@@ -86,10 +86,41 @@
                   <td><a href="{{group1.id}}">{{group1.balance_nature}}</a></td>
                 </tr>
                 {% endfor %}
+
+              </div>
+            </table>
+
+                <div class="box-footer">
+
+
+                  {% if is_paginated %}
+                    <ul class="pagination pull-right">
+                      {% if page_obj.has_previous %}
+                        <li><a href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                      {% else %}
+                        <li class="disabled"><span>Previous</span></li>
+                      {% endif %}
+                      {% for i in paginator.page_range %}
+                        {% if page_obj.number == i %}
+                          <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                        {% else %}
+                          <li><a href="?page={{ i }}">{{ i }}</a></li>
+                        {% endif %}
+                      {% endfor %}
+                      {% if page_obj.has_next %}
+                        <li><a href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                      {% else %}
+                        <li class="disabled"><span>Next</span></li>
+                      {% endif %}
+                    </ul>
+                  {% endif %}
+                </div>
                
+
+              <!--  ############## https://simpleisbetterthancomplex.com/tutorial/2016/08/03/how-to-paginate-with-django.html############### -->
                
-              </table>
-            </div>
+              
+            
            
           </div>
           
