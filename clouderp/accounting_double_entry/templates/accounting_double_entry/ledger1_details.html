@@ -38,16 +38,55 @@
       <a href="{% url 'company:list' %}" class="btn btn-success" role="button">Select Company </a>
               <a href="{% url 'company:create' %}" class="btn btn-warning" role="button">Create Company details</a>
               <a href="#" class="btn btn-danger" role="button">Delete Company</a>
-
-        
-        
-        
+                  
         </div>
       
       </div>
     
     </div>
+ 	<div class="col-xs-12">
 
+          <div class="box box-default">
+          <div class="box-body">
+              	
+           <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Select ledger</label>
+                <select class="form-control select2" style="width: 100%;">
+                  <option selected="selected">Alabama</option>
+                  <option>Alaska</option>
+                  <option>California</option>
+                  <option>Delaware</option>
+                  <option>Tennessee</option>
+                  <option>Texas</option>
+                  <option>Washington</option>
+                </select>
+              </div>
+              </div>
+
+              <div class="col-md-6">
+              <div class="form-group">
+                <label>Date range:</label>
+
+                <div class="input-group">
+                  <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                  </div>
+                  <input type="text" class="form-control pull-right" id="reservation">
+                </div>
+                <!-- /.input group -->
+              </div>
+           </div>
+
+
+		        <!-- <a href="#" class="btn btn-success" role="button">Select ledger </a> -->
+		       
+       </div>
+      </div>
+      </div>
+    
+    </div>
 </div>
 
 		<div class="row">
@@ -59,11 +98,11 @@
                          }
 				</style>
 				<div class="box box-info">
-					 <div class="box-header with-border">
+					 <!-- <div class="box-header with-border">
         			
           				<h3 class="box-title"><b>Ledger Details</b></h3>
         
-        			</div>
+        			</div> -->
 					<table class="table table-bordered">
 						<tr>
 							<td>
@@ -232,8 +271,8 @@
 
 
 				</div>
-			</div>
-		</div>
+			
 	</section>
 </div>
+
 {% endblock %}
