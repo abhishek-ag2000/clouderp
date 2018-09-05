@@ -7,18 +7,10 @@ from django.db.models.signals import post_save
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
-#user_type = User.get_type()
 
 # from django import template
 # register = template.Library()
 
-
-# type of user catogory
-#class userType():
-	# date range - date accounting strted , app buyed - with strting date and vaild upto
-	# payment history - date of payment, amt
-	# type - choice field
-	# app access - free accounting - 2 company 2 sharing
 
 class company(models.Model):
 	Name = models.CharField(max_length=50,blank=False)
@@ -106,23 +98,8 @@ class companyowner(models.Model):
 		unique_together = ['Company', 'user']
 
 
-# for shared user only via permisiion by owner - free account 1 sharing, paid account -5 sharing, unlimited sharing plan
-#class company_shared_users(models.Model):
-#	Company = models.ForeignKey(company,related_name="Company_Name",on_delete=models.CASCADE)
-	# based on user type - free - only 1,paid - upto 5,xcorporate - unlimited or 10
-#	if(userType == 'BASIC')
-#		shared_user_email = models.EmailField()
-	#presave signal  will be to verify user input email to any existing users email and add him to the shared_user_1
-	#Shared_user_1 = singal data (user)
-#	elif(userType == 'BUSINESS')
-#		shared_user_email1 = models.EmailField()
-#		shared_user_email2 = models.EmailField()
-#		shared_user_email3 = models.EmailField()
-#		shared_user_email4 = models.EmailField()
-#		shared_user_email5 = models.EmailField()
 
-	#presave signal  will be to verify user input email to any existing users email and add him to the shared_user_1
-	#Shared_user_1 = singal data (user)
+
 
 # def create_company(sender, **kwargs):
 # 	if kwargs['created']:

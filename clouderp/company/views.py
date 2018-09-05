@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 
 from company.models import company,companyowner
 from company.forms import companyform
-
+# Create your views here.
 
 
 class companyListView(LoginRequiredMixin,ListView):

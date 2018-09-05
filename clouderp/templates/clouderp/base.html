@@ -737,47 +737,6 @@
     {% endblock %}
   </aside>
 
-{% if messages %}
-        <div class="modal fade" id="modal-default">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span></button>
-                
-              </div>
-              <div class="modal-body">
-                {% for message in messages %}
-                  {{ message }}
-                {% endfor %}                
-              </div>
-             
-            </div>
-            <!-- /.modal-content -->
-          </div>
-          <!-- /.modal-dialog -->
-        </div>
-{% endif %}
-
-
-        <div id="form-modal" class="modal fade">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">Modal title</h4>
-                    </div>
-                    <div id="form-modal-body" class="modal-body">
-                        <p>One fine body&hellip;</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div>
-
-
 
 
 <div id="content">
@@ -809,7 +768,7 @@
 <div class="control-sidebar-bg"></div>
 
 <!-- ./wrapper -->
-{% block javascripts %}
+
 <!-- jQuery 3 -->
 <script src="{% static 'clouderp/bower_components/jquery/dist/jquery.min.js' %}"></script>
 <!-- Bootstrap 3.3.7 -->
@@ -820,8 +779,6 @@
 
 <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <!-- Slimscroll -->
 <script src="{% static 'clouderp/bower_components/jquery-slimscroll/jquery.slimscroll.min.js' %}"></script>
@@ -831,18 +788,8 @@
 <script src="{% static 'clouderp/bower_components/chart.js/Chart.js' %}"></script>
 <!-- AdminLTE App -->
 <script src="{% static 'clouderp/js/main.min.js' %}"></script>
-<script src="{% static 'clouderp/dist/js/adminlte.min.js' %}"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{% static 'clouderp/js/demo.js' %}"></script>
-<script src="{% static 'clouderp/dist/js/demo.js' %}"></script>
-<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
-
-
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-        
-
-
 <script src="{% static 'clouderp/js/select2.min.js' %}"></script>
 
 <script type="text/javascript">
@@ -936,42 +883,6 @@
       responsive              : true
     }
 </script>
-
-
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-        <script>
-            var formAjaxSubmit = function(form, modal) {
-                $(form).submit(function (e) {
-                    e.preventDefault();
-                    $.ajax({
-                        type: $(this).attr('method'),
-                        url: $(this).attr('action'),
-                        data: $(this).serialize(),
-                        success: function (xhr, ajaxOptions, thrownError) {
-                            if ( $(xhr).find('.has-error').length > 0 ) {
-                                $(modal).find('.modal-body').html(xhr);
-                                formAjaxSubmit(form, modal);
-                            } else {
-                                $(modal).modal('toggle');
-                            }
-                        },
-                        error: function (xhr, ajaxOptions, thrownError) {
-                        }
-                    });
-                });
-            }
-            $('#comment-button').click(function() {
-                $('#form-modal-body').load('accounting_double_entry/groupcreate/', function () {
-                    $('#form-modal').modal('toggle');
-                    formAjaxSubmit('#form-modal-body form', '#form-modal');
-                });
-            });
-        </script>
-
-
-
-{% endblock %}
 
     </div>
 
