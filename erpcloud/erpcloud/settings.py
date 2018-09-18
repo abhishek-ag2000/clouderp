@@ -42,12 +42,15 @@ SOCIAL_AUTH_FACEBOOK_SECRET = '82c10c3f0e510e88aa285bccb9f69b6a'
 INSTALLED_APPS = [
 ########## Third Party Apps ###########
 
-    'social_django',
-    'bootstrap3',
-    "sslserver",
-    'crispy_forms',
-    'bootstrap_datepicker_plus',
-    'mathfilters',
+    'social_django',                            #pip install social-auth-app-django
+    'bootstrap3',                               #pip install django-bootstrap3
+    "sslserver",                                #pip install django-sslserver
+    'crispy_forms',                             #pip install --upgrade django-crispy-forms
+    'bootstrap_datepicker_plus',                #pip install django-bootstrap-datepicker-plus
+    'mathfilters',                              #pip install django-mathfilters
+    'pagedown',                                 #pip install django-pagedown                               
+    'ckeditor',                                 #pip install django-ckeditor
+    'ckeditor_uploader',                        #pip install django-ckeditor
 
 ################################### blog
     'wagtail.core',
@@ -84,8 +87,29 @@ INSTALLED_APPS = [
     'accounts',
     'company',
     'accounting_double_entry',
+    'todogst',
+    'userprofile',
+    'blog',
 
 ]
+
+CKEDITOR_UPLOAD_PATH = "uploads/"
+
+CKEDITOR_CONFIGS = {
+    'special': {
+        'toolbar': 'Special',
+        'toolbar_Special': [
+            ['Styles', 'Format', 'Bold', 'Italic', 'Underline', 'Strike', 'SpellChecker', 'Undo'],
+            ['Link', 'Unlink', 'Anchor'],
+            ['Image', 'Flash', 'Table', 'HorizontalRule'],
+            ['TextColor', 'BGColor'],
+            ['Smiley', 'SpecialChar'], ['Source'],
+        ],
+    }
+}
+
+
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # During development only
 
@@ -208,10 +232,13 @@ USE_TZ = True
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-MEDIA_ROOT = MEDIA_DIR
+
+
 MEDIA_URL = '/media/'
+MEDIA_ROOT = MEDIA_DIR
+
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'

@@ -19,8 +19,10 @@ from django.urls import path
 from django.views.generic import RedirectView
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from . import views
-
+from django.conf.urls.static import static
 from django.conf import settings
+
+
 
 urlpatterns = [
     url(r"^$", views.HomePage.as_view(), name="home"),
@@ -30,9 +32,12 @@ urlpatterns = [
     url(r'^auth/', include('social_django.urls', namespace='social')),
     url(r"^company/", include("company.urls", namespace="company")),
     url(r"^accounting_double_entry/", include("accounting_double_entry.urls", namespace="accounting_double_entry")),
-
+    url(r"^todo/", include("todogst.urls", namespace="todogst")),
+    url(r"^profile/", include("userprofile.urls", namespace="userprofile")),
+    url(r"^blog/", include("blog.urls", namespace="blog")),
     path(r'', include('puput.urls')),
-] 
+    path('ckeditor/', include('ckeditor_uploader.urls')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
 if settings.DEBUG:

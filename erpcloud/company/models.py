@@ -26,6 +26,15 @@ class company(models.Model):
 				('LLP','LLP'),
 				#('',''),
 			)
+	Business_nature_Service_Provider = models.BooleanField(default=False)
+	Business_nature_Retail = models.BooleanField(default=False)
+	Business_nature_Wholesale = models.BooleanField(default=False)
+	Business_nature_Works_Contract  = models.BooleanField(default=False)
+	Business_nature_Leasing = models.BooleanField(default=False)
+	Business_nature_Factory_Manufacturing = models.BooleanField(default=False)
+	Business_nature_Bonded_Warehouse = models.BooleanField(default=False)
+	Business_nature_Other = models.BooleanField(default=False)
+	Please_specify = models.BooleanField(default=False)
 	Type_of_company = models.CharField(max_length=32,choices=types,default='Individual')
 	Shared_Users = models.CharField(max_length=32,default="Current User only") # company data sharing
 	Address = models.TextField()
@@ -78,14 +87,11 @@ class company(models.Model):
 	def get_absolute_url(self):
 		return reverse("company:Dashboard",kwargs={'pk':self.pk})
 
-
-	def save_model(self, request, obj, form, change):    #https://books.agiliq.com/projects/django-admin-cookbook/en/latest/current_user.html
-		if not obj.pk:
-			obj.User = request.user
-		super().save_model(request, obj, form, change)
-
 	class Meta:
 		ordering = ["Name"]
+
+
+
 
 
 

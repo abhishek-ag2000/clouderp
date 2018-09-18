@@ -6,11 +6,14 @@ from django.urls import reverse_lazy
 
 from company.models import company
 from company.forms import companyform
+from django.shortcuts import redirect
+from todogst.models import Todo
 # Create your views here.
 
 
 class companyListView(LoginRequiredMixin,ListView):
 	model = company
+	paginate_by = 10
 
 	def get_queryset(self):
 		return company.objects.filter(User=self.request.user)
@@ -19,6 +22,11 @@ class companyDetailView(LoginRequiredMixin,DetailView):
 	context_object_name = 'company_details'
 	model = company
 	template_name = 'company/Dashboard.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(companyDetailView, self).get_context_data(**kwargs)
+		context['todo_list'] = Todo.objects.all()
+		return context
 
 
 class companyCreateView(LoginRequiredMixin,CreateView):
@@ -38,3 +46,5 @@ class companyUpdateView(LoginRequiredMixin,UpdateView):
 class companyDeleteView(LoginRequiredMixin,DeleteView):
 	model = company
 	success_url = reverse_lazy("company:list")
+
+

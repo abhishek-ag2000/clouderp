@@ -32,12 +32,12 @@
 
 <style type="text/css">
 
-  .full{
+  .login-page{
   background: url('../../static/accounts/img/bg1.jpg') no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    background-size: cover;
-    -o-background-size: cover;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;
    
 
 
@@ -47,10 +47,13 @@
 <div class="container-fluid full">
 <body class="hold-transition login-page">
 <div class="login-box">
+
   <div class="login-logo">
     <a href="{% url 'accounts:login' %}"><b>LOG IN</b></a>
   </div>
+
   <!-- /.login-logo -->
+
   <div class="login-box-body">
    
 
@@ -60,10 +63,10 @@
       {% bootstrap_form form %}
       
       <div class="row">
-        <div class="col-xs-8">
+        <div class="col-md-8">
           <div class="checkbox icheck">
             <label>
-              <input type="checkbox"> Remember Me</a>
+              <input type="checkbox"> Remember Me
             </label>
           </div>
         </div>
