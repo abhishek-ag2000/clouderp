@@ -46,7 +46,6 @@
 {% block head_extra %} 
 
 {% endblock head_extra %}
-
 <body class="hold-transition skin-blue sidebar-mini">
 {% block main-header %}
 <div class="wrapper">
@@ -269,7 +268,7 @@
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              	{% if user.profile.image %}
+                {% if user.profile.image %}
                   <img class="user-image" src="{{ user.profile.image.url }}/" alt="User profile picture">
                 {% else %}
                     <img class="user-image" src="{% static 'userprofile/download (1).jpg' %}">
@@ -307,7 +306,7 @@
                 
               </li> -->
               <!-- Menu Footer-->
-              <li class="user-footer">
+                <li class="user-footer">
                 <div class="pull-left">
                   <a href="#" class="btn btn-default btn-flat">Profile</a>
                 </div>
@@ -558,6 +557,7 @@
     <!-- /.sidebar -->
     {% endblock %}
   </aside>
+
 
 <aside class="control-sidebar control-sidebar-dark">
 {% block control-sidebar%}
