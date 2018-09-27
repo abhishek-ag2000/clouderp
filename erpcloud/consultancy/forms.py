@@ -11,7 +11,7 @@ class consultancyform(forms.ModelForm):
 
 	class Meta:
 		model = consultancy
-		fields = ('Questions',)
+		fields = ['Questions',]
 		
 
 	def clean(self):
@@ -22,14 +22,12 @@ class Answerform(forms.ModelForm):
 
 	def __init__(self, *args, **kwargs):
 		super(Answerform, self).__init__(*args, **kwargs)
-		self.fields['text'].widget.attrs = {'class': 'form-control input-sm'}
+		self.fields['text'].widget.attrs = {'class': 'form-control'}
 
 	class Meta:
 		model = Answer
-		fields = ('text',)
+		fields = ['text',]
 
-	def clean(self):
-		cleaned_data = super(Answerform, self).clean()
-		Questions = cleaned_data.get('text')
+
 
 

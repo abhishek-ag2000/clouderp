@@ -100,7 +100,7 @@
 <form method="post">
   {% csrf_token %}
   <input type="submit" class="btn btn-danger" value="Delete">
-  <a href="{% url 'accounting_double_entry:groupdetail' pk=consultancy.pk %}">Cancel</a>
+  <a href="{% url 'consultancy:consultancydetail' pk=consultancy.pk %}">Cancel</a>
 
 </form>
 								

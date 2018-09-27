@@ -30,7 +30,7 @@
 
 
  <div class="head">
-		<div class="container">
+    <div class="container">
         <div class="row">
             <div id="head1">
                 <div class="col-md-5">           
@@ -180,13 +180,13 @@
   <div class="container">    
      <div class="row ">
       <div class="col-sm-6 col-sm-offset-3">   
-	     <h3 class="head-title text-center to_animate" data-animation="slideDown">About Us</h3>  	      
-	      <p class="head-desc text-center to_animate" data-animation="fadeInUp"><strong>India's First Image recognition based Accounting Software !!</strong></p>
+       <h3 class="head-title text-center to_animate" data-animation="slideDown">About Us</h3>         
+        <p class="head-desc text-center to_animate" data-animation="fadeInUp"><strong>India's First Image recognition based Accounting Software !!</strong></p>
           <hr class="title-border">
       </div>
-	</div> 
+  </div> 
 
-	<div class="row">        
+  <div class="row">        
     <div class="col-md-3 col-sm-6 title-item">     
         <div class="rt-icon-pen2 icon_title">          
         </div>
@@ -732,6 +732,7 @@
   </div>
 </section> 
 
+
 <section id="post-blogs" class="darkgrey_section">
       <div class="container">
         <div class="row ">
@@ -784,28 +785,28 @@
           </article>
         {% endfor %}
 
-                <div class="text-center">
-                  {% if users.has_other_pages %}
-                    <ul class="pagination">
-                      {% if users.has_previous %}
-                        <li><a href="?page={{ users.previous_page_number }}">&laquo;</a></li>
-                      {% else %}
-                        <li class="disabled"><span>&laquo;</span></li>
-                      {% endif %}
-                      {% for i in users.paginator.page_range %}
-                        {% if users.number == i %}
-                          <li class="active"><span>{{ i }} <span class="sr-only"></span></span></li>
+              <div class="text-center">
+                  {% if is_paginated %}
+                      <ul class="pagination">
+                       {% if page_obj.has_previous %}
+                          <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
                         {% else %}
-                          <li><a href="?page={{ i }}">{{ i }}</a></li>
+                          <li class="disabled"><span>&laquo;</span></li>
                         {% endif %}
-                      {% endfor %}
-                      {% if users.has_next %}
-                        <li><a href="?page={{ users.next_page_number }}">&raquo;</a></li>
-                      {% else %}
-                        <li class="disabled"><span>&raquo;</span></li>
-                      {% endif %}
+                        {% for i in paginator.page_range %}
+                            {% if page_obj.number == i %}
+                               <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                            {% else %}
+                                <li><a href="?page={{ i }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if page_obj.has_next %}
+                            <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+                        {% else %}
+                            <li class="disabled"><span>&raquo;</span></li>
+                        {% endif %}
                     </ul>
-                  {% endif %}
+                {% endif %}
                   </div>
 
  

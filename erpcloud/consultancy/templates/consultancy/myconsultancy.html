@@ -1,7 +1,7 @@
 {% extends "clouderp/base.html" %}
 {% load staticfiles %}
 
-{% block title%}Your Question{% endblock %}
+{% block title%}Consultancy Forum{% endblock %}
 
 
  {% block main-sidebar %}
@@ -47,9 +47,7 @@
 
         <li class="header">PLUGINS</li>
         <li><a href="{% url 'blog:allbloglist' %}"><i class="fa fa-circle-o text-red"></i> <span>Read Blogs & Articles</span></a></li>
-
         <li><a href="{% url 'consultancy:consultancylist' %}"><i class="fa fa-circle-o text-red"></i> <span>Consultancy Forum</span></a></li>
-        <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Subscribe Newsletter</span></a></li>
         <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Bills to Scanner App</span></a></li>
         <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Automated Return Filing</span></a></li>
         <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Find Professional</span></a></li>
@@ -71,7 +69,7 @@
 			<section class="content-header">
 				<!-- <div class="col-md-12 col-md-offset-4"> -->
 					<h1>
-						<strong>Query Details</strong>
+						<strong>Consultancy Forum</strong>
 					</h1>
 								<ol class="breadcrumb">
 			       					 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -88,7 +86,7 @@
         <!-- <a href="http://getbootstrap.com/javascript/#modals">Bootstrap documentation</a> -->
       </div>
 
-  <div class="row">
+<div class="row">
       <div class="col-xs-12">
           <div class="box box-default">
           <div class="box-body">
@@ -117,128 +115,70 @@
 
 </div>
 
-
-
 <div class="row">
- <div class="col-md-9">
-          <!-- Box Comment -->
-          <div class="box box-widget">
-            <div class="box-header with-border">
-              <div class="user-block">
-                {% if user.profile.image %}
-                    <img class="img-circle img-sm" src="{{ user.profile.image.url }}/" alt="">
+  <div class="col-md-9">
+    <ul class="timeline">
+      
+
+      {% for consultancy in consultancy_list %}
+            <li class="time-label">
+                <span class="bg-red">
+                    {{ consultancy.Date|date }}
+                </span>
+            </li>
+
+            <li>
+              <i class="fa fa-envelope bg-blue"></i>
+
+              <div class="timeline-item">
+                <span class="time"><i class="fa fa-clock-o"></i> {{ consultancy.Date|timesince }}</span>
+
+                {% if consultancy.User.user.profile.image %}
+                    <img class="img-circle img-sm" src="{{ consultancy.User.oser.profile.image.url }}/" alt="">
                 {% else %}
                     <img class="img-circle img-sm" src="{% static 'userprofile/download (1).jpg' %}">
                 {% endif %}
-                <span class="username"><a href="#">{{ consultancy_details.User }}</a></span>
-                <span class="description">Shared publicly - {{ consultancy_details.Date|date:"H:i" }}{{ consultancy_details.Date|timesince }} ago</span>
-              </div>
-              <!-- /.user-block -->
-              <div class="box-tools">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-              </div>
-              <!-- /.box-tools -->
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-              <!-- post text -->
-              <p><strong>{{ consultancy_details.Questions }}</strong></p>
 
+                <h3 class="timeline-header"><a href="#">{{ consultancy.User }}</a></h3>
 
-
-            <hr>
-
-
-            {% if consultancy_details.User == request.user %}
-               <p><a class='btn btn-warning' href="{% url 'consultancy:consultancyupdate' pk=consultancy_details.pk %}">Update</a> <a class='btn btn-danger pull-right' href="{% url 'consultancy:consultancydelete' pk=consultancy_details.pk %}">Delete</a></p> 
-            {% endif %}
-            
-
-
-
-              <!-- Attachment -->
-
-
-              <!-- Social sharing buttons -->
-
-          <form action="{% url 'consultancy:like_question' %}" method="post">
-            {% csrf_token %}
-
-            {% if is_liked %}
-                <button type="submit" name="consultancy_details_id" value="{{ consultancy_details.id}}" class='btn btn-info btn-sm'>
-                    
-
-                     Following   
-                </button>
-            {% else %}
-                  <button type="submit" name="consultancy_details_id" value="{{ consultancy_details.id}}" class='btn btn-default btn-sm'>
-                    
-
-                    Follow   
-                  </button>
-            {% endif %}
-
-          </form>
-             
-              <span class="pull-right text-muted">{{ total_like }} follow - {{ comments.count }} Solution{{ comments|pluralize }}</span>
-            </div>
-            <!-- /.box-body -->
-            <div class="box-footer box-comments">
-              <div class="box-comment">
-                {% for answer in comments %}
-                <!-- User image -->
-                {% if user.profile.image %}
-                    <img class="img-circle img-sm" src="{{ user.profile.image.url }}/" alt="">
-                {% else %}
-                    <img class="img-circle img-sm" src="{% static 'userprofile/download (1).jpg' %}">
-                {% endif %}
-                    <div class="comment-text">
-                          <span class="username">
-                            {{ answer.User }}
-                            <span class="text-muted pull-right">{{ answer.Date|date:"H:i" }}{{ answer.Date|timesince }} ago</span>
-                          </span><!-- /.username -->
-                      {{ answer.text }}
-                    </div>
-
-                    {% if not forloop.last %}
-                      <hr>
-                    {% endif %}
-
-
-                <!-- /.comment-text -->
-                {% endfor %}
-              </div>
-              <!-- /.box-comment -->
-             
-              <!-- /.box-comment -->
-            </div>
-            <!-- /.box-footer -->
-            <div class="box-footer">
-
-              <form method="post">
-                {% csrf_token %}
-
-                
-                
-                
-
-                  {{ Answer_form.text}}
-                 
-                    <input type="submit" class="btn btn-info pull-right" value="Submit"> 
+                <div class="timeline-body">
+                 {{ consultancy.Questions }}
+                </div>
+                <div class="timeline-footer">
+                  <a href="{{ consultancy.id }}" class="btn btn-primary btn-sm">See Solutions</a>
                   
-              
-              </form>
-            </div>
-            <!-- /.box-footer -->
-          </div>
-          <!-- /.box -->
-        </div>
-        <!-- /.col -->
+                </div>
+              </div>
+            </li>
+      {% endfor %}
+    </ul>
+  </div>
 
+                    <div class="text-center">
+                  {% if is_paginated %}
+                      <ul class="pagination">
+                       {% if page_obj.has_previous %}
+                          <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+                        {% else %}
+                          <li class="disabled"><span>&laquo;</span></li>
+                        {% endif %}
+                        {% for i in paginator.page_range %}
+                            {% if page_obj.number == i %}
+                               <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                            {% else %}
+                                <li><a href="?page={{ i }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if page_obj.has_next %}
+                            <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+                        {% else %}
+                            <li class="disabled"><span>&raquo;</span></li>
+                        {% endif %}
+                    </ul>
+                  {% endif %}
+                  </div>
 
-                <div class="col-md-3">
+        <div class="col-md-3">
         <div class="box box-widget widget-user-2">
             <div class="widget-user-header bg-aqua-active"">
               <h3 class="widget-user-username">Search</h3>
@@ -308,6 +248,8 @@
             </div>
 
           </div>
+
+
 </div>
 
 

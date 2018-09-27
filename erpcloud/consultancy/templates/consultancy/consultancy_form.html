@@ -53,6 +53,9 @@
 
         <li class="header">PLUGINS</li>
         <li><a href="{% url 'blog:allbloglist' %}"><i class="fa fa-circle-o text-red"></i> <span>Read Blogs & Articles</span></a></li>
+
+        <li><a href="{% url 'consultancy:consultancylist' %}"><i class="fa fa-circle-o text-red"></i> <span>Consultancy Forum</span></a></li>
+        
         <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Subscribe Newsletter</span></a></li>
         <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Bills to Scanner App</span></a></li>
         <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Automated Return Filing</span></a></li>
@@ -91,6 +94,35 @@
         Welcome to predict books your personal AI powered business engine!
         <!-- <a href="http://getbootstrap.com/javascript/#modals">Bootstrap documentation</a> -->
       </div>
+
+<div class="row">
+      <div class="col-xs-12">
+          <div class="box box-default">
+          <div class="box-body">
+
+            
+
+            <a href="{% url 'consultancy:consultancylist' %}" class="btn btn-success" role="button">Show Queries</a>
+
+
+            
+                  
+          <div class='pull-right'>
+            <a href="{% url 'consultancy:myquestions' %}" class="btn btn-info" role="button">Show my Queries</a>
+            <a href="{% url 'consultancy:consultancycreate' %}" class="btn btn-warning" role="button">Ask Query</a>
+              
+
+          </div>
+        
+        
+        
+        </div>
+      
+      </div>
+    
+    </div>
+
+</div>
 
 <div class="row">
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
