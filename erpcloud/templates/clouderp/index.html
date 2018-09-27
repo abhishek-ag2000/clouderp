@@ -737,22 +737,38 @@
       <div class="container">
         <div class="row ">
             <div class="col-sm-6 col-sm-offset-3">   
-             <h3 class="head-title text-center to_animate" data-animation="slideDown">Latest News</h3>
-              <p class="head-desc text-center to_animate" data-animation="fadeInUp">Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+             <h3 class="head-title text-center to_animate" data-animation="slideDown">Blogs</h3>
+              <p class="head-desc text-center to_animate" data-animation="fadeInUp">Read Blogs here</p>
                 <hr class="title-border">
             </div>
        </div>
+
+       <style type="text/css">
+         .blogimg {
+                width: 706px;
+                height: 427px;
+         }
+       </style>
+       {% for blog in blog_list %}
           <article class="col-lg-6 col-md-6">
               <div class="blog-posts"> <!--individual blog posts-->
                   <figure class="effect-milo">
                       <div class="date">
-                          <h3>15</h3>
-                          <h6>March</h6>
+                          <h3>{{ blog.Date|date:'d'}}</h3>
+                          <h6>{{ blog.Date|date:'M'}}</h6>
+                          
                       </div>                      
-                      <img src="{% static 'clouderp/s_business/example/blog1.jpg' %}" alt="" class="">
+                      {% if blog.Blog_image %}
+                          <img src="{{ blog.Blog_image.url }}/" alt="" class="blogimg">
+                      {% endif %}
                       <div class="likes-n-comments text-center">
-                          <p class="likes">65 LIKES | 13 COMMENTS</p>
-                          <a href="#" class="more-btn btn">READ MORE</a>
+                        {% for Blog_title,likes in likes %}
+                          {% if Blog_title == blog.Blog_title %}
+                            <p class="likes">{{ likes }} likes</p>
+                          {% endif %}
+                        {% endfor %}
+
+                          <a href="blog/{{ blog.id}}" class="more-btn btn">READ MORE</a>
                       </div>
                   </figure>
 
@@ -761,90 +777,43 @@
                           <i class="fa fa-bars"></i>    
                       </div>
                       <div class="blog-post-title">
-                          <h3>Blog post title</h3>
-                          <h6>Lorem ipsum dolor</h6>
+                          <h3><a href="blog/{{ blog.id}}">{{ blog.Blog_title|safe|truncatewords:"5"}}</a></h3>
+                          <h6>{{ blog.Description|safe|truncatewords:"9"|linebreaks}}</h6>
                       </div>
                   </div>
               </div>
           </article>
+        {% endfor %}
 
-          <article class="col-lg-6 col-md-6">
-              <div class="blog-posts"> <!--individual blog posts-->
-                  <figure class="effect-milo">
-                      <div class="date">
-                          <h3>23</h3>
-                          <h6>April</h6>
-                      </div>                     
-                      <img src="{% static 'clouderp/s_business/example/blog2.jpg'%}" alt="" class="">
-                      <div class="likes-n-comments text-center">
-                          <p class="likes">151 LIKES | 52 COMMENTS</p>
-                          <a href="#" class="more-btn btn">READ MORE</a>
-                      </div>
-                  </figure>
-
-                  <div class="blog-post-heading">
-                      <div class="blog-post-type">
-                          <i class="fa fa-play"></i>    
-                      </div>
-                      <div class="blog-post-title">
-                          <h3>Blog post title</h3>
-                          <h6>Lorem ipsum dolor</h6>
-                      </div>
+                <div class="text-center">
+                  {% if users.has_other_pages %}
+                    <ul class="pagination">
+                      {% if users.has_previous %}
+                        <li><a href="?page={{ users.previous_page_number }}">&laquo;</a></li>
+                      {% else %}
+                        <li class="disabled"><span>&laquo;</span></li>
+                      {% endif %}
+                      {% for i in users.paginator.page_range %}
+                        {% if users.number == i %}
+                          <li class="active"><span>{{ i }} <span class="sr-only"></span></span></li>
+                        {% else %}
+                          <li><a href="?page={{ i }}">{{ i }}</a></li>
+                        {% endif %}
+                      {% endfor %}
+                      {% if users.has_next %}
+                        <li><a href="?page={{ users.next_page_number }}">&raquo;</a></li>
+                      {% else %}
+                        <li class="disabled"><span>&raquo;</span></li>
+                      {% endif %}
+                    </ul>
+                  {% endif %}
                   </div>
-              </div>
-          </article>
 
-          <article class="col-lg-6 col-md-6">
-              <div class="blog-posts"> <!--individual blog posts-->
-                  <figure class="effect-milo">
-                      <div class="date">
-                          <h3>17</h3>
-                          <h6>May</h6>
-                      </div>                     
-                      <img src="{% static 'clouderp/s_business/example/blog3.jpg' %}" alt="" class="">
-                      <div class="likes-n-comments text-center">
-                          <p class="likes">82 LIKES | 52 COMMENTS</p>
-                          <a href="#" class="more-btn btn">READ MORE</a>
-                      </div>
-                  </figure>
+ 
 
-                  <div class="blog-post-heading">
-                      <div class="blog-post-type">
-                          <i class="fa fa-music"></i>    
-                      </div>
-                      <div class="blog-post-title">
-                          <h3>Blog post title</h3>
-                          <h6>Lorem ipsum dolor</h6>
-                      </div>
-                  </div>
-              </div>
-          </article>
 
-          <article class="col-lg-6 col-md-6">
-              <div class="blog-posts"> <!--individual blog posts-->
-                  <figure class="effect-milo">
-                      <div class="date">
-                          <h3>30</h3>
-                          <h6>June</h6>
-                      </div>                     
-                      <img src="{% static 'clouderp/s_business/example/blog4.jpg' %}" alt="" class="">
-                      <div class="likes-n-comments text-center">
-                          <p class="likes">63 LIKES | 49 COMMENTS</p>
-                          <a href="#" class="more-btn btn">READ MORE</a>
-                      </div>
-                  </figure>
 
-                  <div class="blog-post-heading">
-                      <div class="blog-post-type">
-                          <i class="fa fa-link"></i>    
-                      </div>
-                      <div class="blog-post-title">
-                          <h3>Blog post title</h3>
-                          <h6>Lorem ipsum dolor</h6>
-                      </div>
-                  </div>
-              </div>
-          </article>
+
       </div>
   </section> 
 

@@ -3,9 +3,14 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
+from PIL import Image
+from io import BytesIO
+from django.core.files.uploadedfile import InMemoryUploadedFile
+import sys
 # Create your models here.
 
 class Profile(models.Model):
+	Date = models.DateTimeField(auto_now_add=True)
 	Full_Name = models.CharField(max_length=32,blank=True)
 	Name = models.OneToOneField(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
 	E_mail = models.EmailField(max_length=70,blank=True)
@@ -58,6 +63,15 @@ class Profile(models.Model):
 
 	def get_absolute_url(self):
 		return reverse("userprofile:profiledetail")
+
+	def save(self, *args, **kwargs):
+		imageTemproary = Image.open(self.image)
+		outputIoStream = BytesIO()
+		imageTemproaryResized = imageTemproary.resize( (128,128) ) 
+		imageTemproaryResized.save(outputIoStream , format='JPEG', quality=150)
+		outputIoStream.seek(0)
+		self.image = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" %self.image.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
+		super(Profile, self).save(*args, **kwargs)
 
 
 	

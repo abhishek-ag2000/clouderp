@@ -14,19 +14,11 @@ def index(request):
 
     form = TodoForm()
 
-    paginator = Paginator(todo_list, 5)
-    page = request.GET.get('page')
-    try:
-        posts = paginator.page(page)
-    except PageNotAnInteger:
-        posts = paginator.page(1)
-    except EmptyPage:
-        posts = paginator.page(paginator.num_pages)
-
-
     context = {'todo_list' : todo_list, 'form' : form}
 
     return render(request, 'todogst/index.html', context)
+
+    
 
 @login_required
 @require_POST

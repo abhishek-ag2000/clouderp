@@ -1,5 +1,4 @@
 {% extends "clouderp/base.html" %}
-{% load staticfiles %}
 
 {% block title %}
 		{% if not form.instance.pk %}
@@ -24,7 +23,12 @@
       <section class="content-header">
         <!-- <div class="col-md-12 col-md-offset-4"> -->
           <h1>
-            <strong>Create Your Blog</strong>
+            <strong>    {% if not form.instance.pk %}
+                             Create Your Blog
+                        {% else %}
+                            Update Your Blog
+                        {% endif %}
+            </strong>
           </h1>
                 <ol class="breadcrumb">
                        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -50,7 +54,21 @@
           <div class="box box-default">
           <div class="box-body">
 
+            
+                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">View Posts By
+                    <span class="fa fa-caret-down"></span></button>
+                  <ul class="dropdown-menu">
+                    <li><a href="{% url 'blog:latestbloglist' %}">Most Recent</a></li>
+                    <li><a href="{% url 'blog:viewbloglist' %}">Most Popular</a></li>
+                    <li><a href="{% url 'blog:likebloglist' %}">Most Helpful</a></li>
+                    
+                    
+                  </ul>
+
             <a href="{% url 'blog:allbloglist' %}" class="btn btn-success" role="button">Show all Posts</a>
+
+
+
           <div class='pull-right'>
             <a href="{% url 'blog:bloglist' %}" class="btn btn-info" role="button">Show my Posts</a>
             <a href="{% url 'blog:blogcreate' %}" class="btn btn-warning" role="button">Create Post</a>

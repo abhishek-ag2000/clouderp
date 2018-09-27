@@ -1,5 +1,7 @@
 from django import forms
 from accounting_double_entry.models import journal,group1,ledger1
+from django_select2.forms import ModelSelect2Widget
+
 
 
 
@@ -7,9 +9,9 @@ class group1Form(forms.ModelForm):
 
 	def __init__(self, *args, **kwargs):
 		super(group1Form, self).__init__(*args, **kwargs)
-		self.fields['Master'].widget.attrs = {'class': 'form-control',}
-		self.fields['Nature_of_group1'].widget.attrs = {'class': 'form-control',}
-		self.fields['balance_nature'].widget.attrs = {'class': 'form-control',}
+		self.fields['Master'].widget.attrs = {'class': 'form-control select2',}
+		self.fields['Nature_of_group1'].widget.attrs = {'class': 'form-control select2',}
+		self.fields['balance_nature'].widget.attrs = {'class': 'form-control select2',}
 
 
 	class Meta:
@@ -31,9 +33,13 @@ class group1Form(forms.ModelForm):
 class DateInput(forms.DateInput):
     input_type = 'date'
 
+class Mywidget(ModelSelect2Widget):
+	search_fields = [
+		'group1_Name__icontains'
+	]
+
 
 class Ledgerform(forms.ModelForm):
-
 
 	class Meta:
 		model = ledger1
@@ -46,7 +52,7 @@ class Ledgerform(forms.ModelForm):
 		super(Ledgerform, self).__init__(*args, **kwargs)
 		self.fields['Creation_Date'].widget.attrs = {'class': 'form-control',}
 		self.fields['name'].widget.attrs = {'class': 'form-control',}
-		self.fields['group1_Name'].widget.attrs = {'class': 'form-control',}
+		self.fields['group1_Name'].widget.attrs = {'class': 'form-control select2', 'placeholder':"Select Group",}
 		self.fields['Opening_Balance'].widget.attrs = {'class': 'form-control',}
 		self.fields['User_Name'].widget.attrs = {'class': 'form-control',}
 		self.fields['Address'].widget.attrs = {'class': 'form-control',}
@@ -69,12 +75,16 @@ class journalForm(forms.ModelForm):
             'Date': DateInput(),
         }
 
+		def __init__(self, *args, **kwargs):
+			super(journalForm, self).__init__(*args, **kwargs)
+			self.fields['Debit'].widget.attrs = {'class': 'form-control',}
+			self.fields['Credit'].widget.attrs = {'class': 'form-control',}
+			self.fields['To'].widget.attrs = {'class': 'form-control select2',}
+			self.fields['By'].widget.attrs = {'class': 'form-control select2',}
 
 
-		def clean(self):
-			cleaned_data = super(journalForm, self).clean()  #simpleisbetterthancomplex.com/article/2017/08/19/how-to-render-django-form-manually.html
-			To = cleaned_data.get('To')
-			By = cleaned_data.get('By')
+
+
 
 			
 

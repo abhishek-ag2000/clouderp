@@ -226,9 +226,9 @@
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 {% if profile_details.image %}
-                  <img class="profile-user-img img-responsive img-circle" src="{{ profile_details.image.url }}/" alt="User profile picture">
+                  <img class="user-image" src="{{ profile_details.image.url }}/" alt="User profile picture">
                 {% else %}
-                    <img class="profile-user-img img-responsive img-circle" src="{% static 'userprofile/download(1).jpg' %}" alt="User profile picture">
+                    <img class="user-image" src="{% static 'userprofile/download (1).jpg' %}">
                 {% endif %}
               <span class="hidden-xs">{{ user.get_username }}</span>
               <!-- https://stackoverflow.com/questions/16906515/how-can-i-get-the-username-of-the-logged-in-user-in-django -->
@@ -239,12 +239,11 @@
                 {% if profile_details.image %}
                   <img class="profile-user-img img-responsive img-circle" src="{{ profile_details.image.url }}/" alt="User profile picture">
                 {% else %}
-                    <img class="profile-user-img img-responsive img-circle" src="{% static 'userprofile/download(1).jpg' %}" alt="User profile picture">
+                    <img class="profile-user-img  img-circle" src="{% static 'userprofile/download (1).jpg' %}">
                 {% endif %}
-
                 <p>
                   {{ user.get_username }} - Business Subscription
-                  <small>Member since Nov. 2018</small>
+                  <small>Member since {{ profile_details.Date|date:"M Y" }}</small>
                 </p>
               </li>
               <!-- Menu Body -->
@@ -330,7 +329,7 @@
         <li><a href="{% url 'userprofile:profiledetail' %}"><i class="fa fa-book"></i> <span>Profile Settings</span></a></li>
 
         <li class="header">PLUGINS</li>
-        <li><a href="{% url 'blog:bloglist' %}"><i class="fa fa-circle-o text-red"></i> <span>Read Blogs & Articles</span></a></li>
+        <li><a href="{% url 'blog:allbloglist' %}"><i class="fa fa-circle-o text-red"></i> <span>Read Blogs & Articles</span></a></li>
         <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Subscribe Newsletter</span></a></li>
         <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Bills to Scanner App</span></a></li>
         <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Automated Return Filing</span></a></li>
@@ -376,7 +375,6 @@
 
       <a href="{% url 'company:list' %}" class="btn btn-success" role="button">Select Company </a>
               <a href="{% url 'company:create' %}" class="btn btn-warning" role="button">Create Company details</a>
-              <a href="#" class="btn btn-danger" role="button">Delete Company</a>
 
         
         
@@ -400,7 +398,7 @@
                 {% if profile_details.image %}
                   <img class="profile-user-img img-responsive img-circle" src="{{ profile_details.image.url }}/" alt="User profile picture">
                 {% else %}
-                    <img class="profile-user-img  img-circle" src="{% static 'userprofile/download (1).jpg' %}">
+                    <img class="profile-user-img img-responsive img-circle" src="{% static 'userprofile/download (1).jpg' %}">
                 {% endif %}
               <h3 class="profile-username text-center">{{profile_details.Full_Name}}</h3>
 
@@ -478,7 +476,7 @@
                 {% if profile_details.image %}
                   <img class="profile-user-img img-responsive img-circle" src="{{ profile_details.image.url }}/" alt="User profile picture">
                 {% else %}
-                    <img class="profile-user-img img-responsive img-circle" src="{% static 'userprofile/download(1).jpg' %}" >
+                    <img class="profile-user-img  img-circle" src="{% static 'userprofile/download (1).jpg' %}">
                 {% endif %}
                         <span class="username">
                           <a href="#">Jonathan Burke Jr.</a>
@@ -513,7 +511,7 @@
                 {% if profile_details.image %}
                   <img class="profile-user-img img-responsive img-circle" src="{{ profile_details.image.url }}/" alt="User profile picture">
                 {% else %}
-                    <img class="profile-user-img img-responsive img-circle" src="{% static 'userprofile/download(1).jpg' %}">
+                    <img class="profile-user-img  img-circle" src="{% static 'userprofile/download (1).jpg' %}">
                 {% endif %}
                         <span class="username">
                           <a href="#">Sarah Ross</a>
@@ -549,7 +547,7 @@
                 {% if profile_details.image %}
                   <img class="profile-user-img img-responsive img-circle" src="{{ profile_details.image.url }}/" alt="User profile picture">
                 {% else %}
-                    <img class="profile-user-img img-responsive img-circle" src="{% static 'userprofile/download(1).jpg' %}">
+                    <img class="profile-user-img  img-circle" src="{% static 'userprofile/download (1).jpg' %}">
                 {% endif %}
                         <span class="username">
                           <a href="#">Adam Jones</a>

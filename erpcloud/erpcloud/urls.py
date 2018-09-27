@@ -20,6 +20,7 @@ from django.views.generic import RedirectView
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from . import views
 from django.conf.urls.static import static
+from django.conf.urls import handler404, handler500
 from django.conf import settings
 
 
@@ -35,19 +36,14 @@ urlpatterns = [
     url(r"^todo/", include("todogst.urls", namespace="todogst")),
     url(r"^profile/", include("userprofile.urls", namespace="userprofile")),
     url(r"^blog/", include("blog.urls", namespace="blog")),
-    path(r'', include('puput.urls')),
+    url(r'^select2/', include('django_select2.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
+    url(r"^consultancy/", include("consultancy.urls", namespace="consultancy")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
-if settings.DEBUG:
-    import os
-    from django.conf.urls.static import static
-    from django.views.generic.base import RedirectView
-    from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+handler404 = 'erpcloud.views.custom_404'
+handler500 = 'erpcloud.views.custom_500'
 
-    urlpatterns += staticfiles_urlpatterns() # tell gunicorn where static files are in dev mode
-    urlpatterns += static(settings.MEDIA_URL + 'images/', document_root=os.path.join(settings.MEDIA_ROOT, 'images'))
-    urlpatterns += [
-        url(r'^favicon\.ico$', RedirectView.as_view(url=settings.STATIC_URL + 'myapp/images/favicon.ico')),
-    ]
+
+

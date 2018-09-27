@@ -1,0 +1,502 @@
+[26/Sep/2018 12:30:18] ERROR [django.request:118] Internal Server Error: /companygjkj
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\core\handlers\exception.py", line 35, in inner
+    response = get_response(request)
+  File "C:\Users\HP\myEnv\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "C:\Users\HP\myEnv\lib\site-packages\django\urls\resolvers.py", line 527, in resolve
+    raise Resolver404({'tried': tried, 'path': new_path})
+django.urls.exceptions.Resolver404: {'tried': [[<URLPattern '^$' [name='home']>], [<URLResolver <URLPattern list> (admin:admin) 'admin/'>], [<URLResolver <module 'accounts.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\accounts\\urls.py'> (accounts:accounts) '^accounts/'>], [<URLResolver <module 'django.contrib.auth.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\django\\contrib\\auth\\urls.py'> (None:None) '^accounts/'>], [<URLResolver <module 'social_django.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\social_django\\urls.py'> (social:social) '^auth/'>], [<URLResolver <module 'company.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\company\\urls.py'> (company:company) '^company/'>], [<URLResolver <module 'accounting_double_entry.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\accounting_double_entry\\urls.py'> (accounting_double_entry:accounting_double_entry) '^accounting_double_entry/'>], [<URLResolver <module 'todogst.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\todogst\\urls.py'> (todogst:todogst) '^todo/'>], [<URLResolver <module 'userprofile.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\userprofile\\urls.py'> (userprofile:userprofile) '^profile/'>], [<URLResolver <module 'blog.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\blog\\urls.py'> (blog:blog) '^blog/'>], [<URLResolver <module 'django_select2.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\django_select2\\urls.py'> (None:None) '^select2/'>], [<URLResolver <module 'ckeditor_uploader.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\ckeditor_uploader\\urls.py'> (None:None) 'ckeditor/'>]], 'path': 'companygjkj'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\core\handlers\exception.py", line 98, in get_exception_response
+    callback, param_dict = resolver.resolve_error_handler(status_code)
+  File "C:\Users\HP\myEnv\lib\site-packages\django\urls\resolvers.py", line 559, in resolve_error_handler
+    return get_callable(callback), {}
+  File "C:\Users\HP\myEnv\lib\site-packages\django\urls\utils.py", line 28, in get_callable
+    mod = import_module(mod_name)
+  File "C:\Users\HP\myEnv\lib\importlib\__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 994, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 971, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 953, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'views'
+[26/Sep/2018 12:30:18] ERROR [django.server:124] "GET /companygjkj HTTP/1.1" 500 27
+[26/Sep/2018 12:30:20] ERROR [django.request:118] Internal Server Error: /companygjkj
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\core\handlers\exception.py", line 35, in inner
+    response = get_response(request)
+  File "C:\Users\HP\myEnv\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "C:\Users\HP\myEnv\lib\site-packages\django\urls\resolvers.py", line 527, in resolve
+    raise Resolver404({'tried': tried, 'path': new_path})
+django.urls.exceptions.Resolver404: {'tried': [[<URLPattern '^$' [name='home']>], [<URLResolver <URLPattern list> (admin:admin) 'admin/'>], [<URLResolver <module 'accounts.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\accounts\\urls.py'> (accounts:accounts) '^accounts/'>], [<URLResolver <module 'django.contrib.auth.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\django\\contrib\\auth\\urls.py'> (None:None) '^accounts/'>], [<URLResolver <module 'social_django.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\social_django\\urls.py'> (social:social) '^auth/'>], [<URLResolver <module 'company.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\company\\urls.py'> (company:company) '^company/'>], [<URLResolver <module 'accounting_double_entry.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\accounting_double_entry\\urls.py'> (accounting_double_entry:accounting_double_entry) '^accounting_double_entry/'>], [<URLResolver <module 'todogst.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\todogst\\urls.py'> (todogst:todogst) '^todo/'>], [<URLResolver <module 'userprofile.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\userprofile\\urls.py'> (userprofile:userprofile) '^profile/'>], [<URLResolver <module 'blog.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\blog\\urls.py'> (blog:blog) '^blog/'>], [<URLResolver <module 'django_select2.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\django_select2\\urls.py'> (None:None) '^select2/'>], [<URLResolver <module 'ckeditor_uploader.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\ckeditor_uploader\\urls.py'> (None:None) 'ckeditor/'>]], 'path': 'companygjkj'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\core\handlers\exception.py", line 98, in get_exception_response
+    callback, param_dict = resolver.resolve_error_handler(status_code)
+  File "C:\Users\HP\myEnv\lib\site-packages\django\urls\resolvers.py", line 559, in resolve_error_handler
+    return get_callable(callback), {}
+  File "C:\Users\HP\myEnv\lib\site-packages\django\urls\utils.py", line 28, in get_callable
+    mod = import_module(mod_name)
+  File "C:\Users\HP\myEnv\lib\importlib\__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 994, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 971, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 953, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'views'
+[26/Sep/2018 12:30:20] ERROR [django.server:124] "GET /companygjkj HTTP/1.1" 500 27
+[26/Sep/2018 12:30:45] ERROR [django.request:118] Internal Server Error: /companygjkj
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\core\handlers\exception.py", line 35, in inner
+    response = get_response(request)
+  File "C:\Users\HP\myEnv\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "C:\Users\HP\myEnv\lib\site-packages\django\urls\resolvers.py", line 527, in resolve
+    raise Resolver404({'tried': tried, 'path': new_path})
+django.urls.exceptions.Resolver404: {'tried': [[<URLPattern '^$' [name='home']>], [<URLResolver <URLPattern list> (admin:admin) 'admin/'>], [<URLResolver <module 'accounts.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\accounts\\urls.py'> (accounts:accounts) '^accounts/'>], [<URLResolver <module 'django.contrib.auth.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\django\\contrib\\auth\\urls.py'> (None:None) '^accounts/'>], [<URLResolver <module 'social_django.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\social_django\\urls.py'> (social:social) '^auth/'>], [<URLResolver <module 'company.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\company\\urls.py'> (company:company) '^company/'>], [<URLResolver <module 'accounting_double_entry.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\accounting_double_entry\\urls.py'> (accounting_double_entry:accounting_double_entry) '^accounting_double_entry/'>], [<URLResolver <module 'todogst.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\todogst\\urls.py'> (todogst:todogst) '^todo/'>], [<URLResolver <module 'userprofile.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\userprofile\\urls.py'> (userprofile:userprofile) '^profile/'>], [<URLResolver <module 'blog.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\blog\\urls.py'> (blog:blog) '^blog/'>], [<URLResolver <module 'django_select2.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\django_select2\\urls.py'> (None:None) '^select2/'>], [<URLResolver <module 'ckeditor_uploader.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\ckeditor_uploader\\urls.py'> (None:None) 'ckeditor/'>]], 'path': 'companygjkj'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\core\handlers\exception.py", line 98, in get_exception_response
+    callback, param_dict = resolver.resolve_error_handler(status_code)
+  File "C:\Users\HP\myEnv\lib\site-packages\django\urls\resolvers.py", line 559, in resolve_error_handler
+    return get_callable(callback), {}
+  File "C:\Users\HP\myEnv\lib\site-packages\django\urls\utils.py", line 28, in get_callable
+    mod = import_module(mod_name)
+  File "C:\Users\HP\myEnv\lib\importlib\__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 994, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 971, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 953, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'views'
+[26/Sep/2018 12:30:45] ERROR [django.server:124] "GET /companygjkj HTTP/1.1" 500 27
+[26/Sep/2018 12:31:11] DEBUG [django.db.backends:111] (0.003) 
+            SELECT name, type FROM sqlite_master
+            WHERE type in ('table', 'view') AND NOT name='sqlite_sequence'
+            ORDER BY name; args=None
+[26/Sep/2018 12:31:11] DEBUG [django.db.backends:111] (0.001) SELECT "django_migrations"."app", "django_migrations"."name" FROM "django_migrations"; args=()
+[26/Sep/2018 12:31:12] DEBUG [django.template:878] Exception while resolving variable 'name' in template 'unknown'.
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\core\handlers\exception.py", line 35, in inner
+    response = get_response(request)
+  File "C:\Users\HP\myEnv\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "C:\Users\HP\myEnv\lib\site-packages\django\urls\resolvers.py", line 527, in resolve
+    raise Resolver404({'tried': tried, 'path': new_path})
+django.urls.exceptions.Resolver404: {'tried': [[<URLPattern '^$' [name='home']>], [<URLResolver <URLPattern list> (admin:admin) 'admin/'>], [<URLResolver <module 'accounts.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\accounts\\urls.py'> (accounts:accounts) '^accounts/'>], [<URLResolver <module 'django.contrib.auth.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\django\\contrib\\auth\\urls.py'> (None:None) '^accounts/'>], [<URLResolver <module 'social_django.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\social_django\\urls.py'> (social:social) '^auth/'>], [<URLResolver <module 'company.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\company\\urls.py'> (company:company) '^company/'>], [<URLResolver <module 'accounting_double_entry.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\accounting_double_entry\\urls.py'> (accounting_double_entry:accounting_double_entry) '^accounting_double_entry/'>], [<URLResolver <module 'todogst.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\todogst\\urls.py'> (todogst:todogst) '^todo/'>], [<URLResolver <module 'userprofile.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\userprofile\\urls.py'> (userprofile:userprofile) '^profile/'>], [<URLResolver <module 'blog.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\blog\\urls.py'> (blog:blog) '^blog/'>], [<URLResolver <module 'django_select2.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\django_select2\\urls.py'> (None:None) '^select2/'>], [<URLResolver <module 'ckeditor_uploader.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\ckeditor_uploader\\urls.py'> (None:None) 'ckeditor/'>], [<URLPattern '^media\/(?P<path>.*)$'>]], 'path': 'companygjkj'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 835, in _resolve_lookup
+    current = current[bit]
+TypeError: 'URLResolver' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 843, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'URLResolver' object has no attribute 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 849, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 856, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [name] in <URLResolver <URLPattern list> (admin:admin) 'admin/'>
+[26/Sep/2018 12:31:12] DEBUG [django.template:878] Exception while resolving variable 'name' in template 'unknown'.
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\core\handlers\exception.py", line 35, in inner
+    response = get_response(request)
+  File "C:\Users\HP\myEnv\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "C:\Users\HP\myEnv\lib\site-packages\django\urls\resolvers.py", line 527, in resolve
+    raise Resolver404({'tried': tried, 'path': new_path})
+django.urls.exceptions.Resolver404: {'tried': [[<URLPattern '^$' [name='home']>], [<URLResolver <URLPattern list> (admin:admin) 'admin/'>], [<URLResolver <module 'accounts.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\accounts\\urls.py'> (accounts:accounts) '^accounts/'>], [<URLResolver <module 'django.contrib.auth.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\django\\contrib\\auth\\urls.py'> (None:None) '^accounts/'>], [<URLResolver <module 'social_django.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\social_django\\urls.py'> (social:social) '^auth/'>], [<URLResolver <module 'company.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\company\\urls.py'> (company:company) '^company/'>], [<URLResolver <module 'accounting_double_entry.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\accounting_double_entry\\urls.py'> (accounting_double_entry:accounting_double_entry) '^accounting_double_entry/'>], [<URLResolver <module 'todogst.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\todogst\\urls.py'> (todogst:todogst) '^todo/'>], [<URLResolver <module 'userprofile.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\userprofile\\urls.py'> (userprofile:userprofile) '^profile/'>], [<URLResolver <module 'blog.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\blog\\urls.py'> (blog:blog) '^blog/'>], [<URLResolver <module 'django_select2.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\django_select2\\urls.py'> (None:None) '^select2/'>], [<URLResolver <module 'ckeditor_uploader.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\ckeditor_uploader\\urls.py'> (None:None) 'ckeditor/'>], [<URLPattern '^media\/(?P<path>.*)$'>]], 'path': 'companygjkj'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 835, in _resolve_lookup
+    current = current[bit]
+TypeError: 'URLResolver' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 843, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'URLResolver' object has no attribute 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 849, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 856, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [name] in <URLResolver <module 'accounts.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\accounts\\urls.py'> (accounts:accounts) '^accounts/'>
+[26/Sep/2018 12:31:12] DEBUG [django.template:878] Exception while resolving variable 'name' in template 'unknown'.
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\core\handlers\exception.py", line 35, in inner
+    response = get_response(request)
+  File "C:\Users\HP\myEnv\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "C:\Users\HP\myEnv\lib\site-packages\django\urls\resolvers.py", line 527, in resolve
+    raise Resolver404({'tried': tried, 'path': new_path})
+django.urls.exceptions.Resolver404: {'tried': [[<URLPattern '^$' [name='home']>], [<URLResolver <URLPattern list> (admin:admin) 'admin/'>], [<URLResolver <module 'accounts.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\accounts\\urls.py'> (accounts:accounts) '^accounts/'>], [<URLResolver <module 'django.contrib.auth.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\django\\contrib\\auth\\urls.py'> (None:None) '^accounts/'>], [<URLResolver <module 'social_django.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\social_django\\urls.py'> (social:social) '^auth/'>], [<URLResolver <module 'company.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\company\\urls.py'> (company:company) '^company/'>], [<URLResolver <module 'accounting_double_entry.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\accounting_double_entry\\urls.py'> (accounting_double_entry:accounting_double_entry) '^accounting_double_entry/'>], [<URLResolver <module 'todogst.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\todogst\\urls.py'> (todogst:todogst) '^todo/'>], [<URLResolver <module 'userprofile.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\userprofile\\urls.py'> (userprofile:userprofile) '^profile/'>], [<URLResolver <module 'blog.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\blog\\urls.py'> (blog:blog) '^blog/'>], [<URLResolver <module 'django_select2.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\django_select2\\urls.py'> (None:None) '^select2/'>], [<URLResolver <module 'ckeditor_uploader.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\ckeditor_uploader\\urls.py'> (None:None) 'ckeditor/'>], [<URLPattern '^media\/(?P<path>.*)$'>]], 'path': 'companygjkj'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 835, in _resolve_lookup
+    current = current[bit]
+TypeError: 'URLResolver' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 843, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'URLResolver' object has no attribute 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 849, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 856, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [name] in <URLResolver <module 'django.contrib.auth.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\django\\contrib\\auth\\urls.py'> (None:None) '^accounts/'>
+[26/Sep/2018 12:31:12] DEBUG [django.template:878] Exception while resolving variable 'name' in template 'unknown'.
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\core\handlers\exception.py", line 35, in inner
+    response = get_response(request)
+  File "C:\Users\HP\myEnv\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "C:\Users\HP\myEnv\lib\site-packages\django\urls\resolvers.py", line 527, in resolve
+    raise Resolver404({'tried': tried, 'path': new_path})
+django.urls.exceptions.Resolver404: {'tried': [[<URLPattern '^$' [name='home']>], [<URLResolver <URLPattern list> (admin:admin) 'admin/'>], [<URLResolver <module 'accounts.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\accounts\\urls.py'> (accounts:accounts) '^accounts/'>], [<URLResolver <module 'django.contrib.auth.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\django\\contrib\\auth\\urls.py'> (None:None) '^accounts/'>], [<URLResolver <module 'social_django.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\social_django\\urls.py'> (social:social) '^auth/'>], [<URLResolver <module 'company.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\company\\urls.py'> (company:company) '^company/'>], [<URLResolver <module 'accounting_double_entry.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\accounting_double_entry\\urls.py'> (accounting_double_entry:accounting_double_entry) '^accounting_double_entry/'>], [<URLResolver <module 'todogst.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\todogst\\urls.py'> (todogst:todogst) '^todo/'>], [<URLResolver <module 'userprofile.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\userprofile\\urls.py'> (userprofile:userprofile) '^profile/'>], [<URLResolver <module 'blog.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\blog\\urls.py'> (blog:blog) '^blog/'>], [<URLResolver <module 'django_select2.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\django_select2\\urls.py'> (None:None) '^select2/'>], [<URLResolver <module 'ckeditor_uploader.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\ckeditor_uploader\\urls.py'> (None:None) 'ckeditor/'>], [<URLPattern '^media\/(?P<path>.*)$'>]], 'path': 'companygjkj'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 835, in _resolve_lookup
+    current = current[bit]
+TypeError: 'URLResolver' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 843, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'URLResolver' object has no attribute 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 849, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 856, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [name] in <URLResolver <module 'social_django.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\social_django\\urls.py'> (social:social) '^auth/'>
+[26/Sep/2018 12:31:12] DEBUG [django.template:878] Exception while resolving variable 'name' in template 'unknown'.
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\core\handlers\exception.py", line 35, in inner
+    response = get_response(request)
+  File "C:\Users\HP\myEnv\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "C:\Users\HP\myEnv\lib\site-packages\django\urls\resolvers.py", line 527, in resolve
+    raise Resolver404({'tried': tried, 'path': new_path})
+django.urls.exceptions.Resolver404: {'tried': [[<URLPattern '^$' [name='home']>], [<URLResolver <URLPattern list> (admin:admin) 'admin/'>], [<URLResolver <module 'accounts.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\accounts\\urls.py'> (accounts:accounts) '^accounts/'>], [<URLResolver <module 'django.contrib.auth.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\django\\contrib\\auth\\urls.py'> (None:None) '^accounts/'>], [<URLResolver <module 'social_django.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\social_django\\urls.py'> (social:social) '^auth/'>], [<URLResolver <module 'company.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\company\\urls.py'> (company:company) '^company/'>], [<URLResolver <module 'accounting_double_entry.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\accounting_double_entry\\urls.py'> (accounting_double_entry:accounting_double_entry) '^accounting_double_entry/'>], [<URLResolver <module 'todogst.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\todogst\\urls.py'> (todogst:todogst) '^todo/'>], [<URLResolver <module 'userprofile.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\userprofile\\urls.py'> (userprofile:userprofile) '^profile/'>], [<URLResolver <module 'blog.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\blog\\urls.py'> (blog:blog) '^blog/'>], [<URLResolver <module 'django_select2.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\django_select2\\urls.py'> (None:None) '^select2/'>], [<URLResolver <module 'ckeditor_uploader.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\ckeditor_uploader\\urls.py'> (None:None) 'ckeditor/'>], [<URLPattern '^media\/(?P<path>.*)$'>]], 'path': 'companygjkj'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 835, in _resolve_lookup
+    current = current[bit]
+TypeError: 'URLResolver' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 843, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'URLResolver' object has no attribute 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 849, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 856, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [name] in <URLResolver <module 'company.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\company\\urls.py'> (company:company) '^company/'>
+[26/Sep/2018 12:31:12] DEBUG [django.template:878] Exception while resolving variable 'name' in template 'unknown'.
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\core\handlers\exception.py", line 35, in inner
+    response = get_response(request)
+  File "C:\Users\HP\myEnv\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "C:\Users\HP\myEnv\lib\site-packages\django\urls\resolvers.py", line 527, in resolve
+    raise Resolver404({'tried': tried, 'path': new_path})
+django.urls.exceptions.Resolver404: {'tried': [[<URLPattern '^$' [name='home']>], [<URLResolver <URLPattern list> (admin:admin) 'admin/'>], [<URLResolver <module 'accounts.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\accounts\\urls.py'> (accounts:accounts) '^accounts/'>], [<URLResolver <module 'django.contrib.auth.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\django\\contrib\\auth\\urls.py'> (None:None) '^accounts/'>], [<URLResolver <module 'social_django.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\social_django\\urls.py'> (social:social) '^auth/'>], [<URLResolver <module 'company.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\company\\urls.py'> (company:company) '^company/'>], [<URLResolver <module 'accounting_double_entry.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\accounting_double_entry\\urls.py'> (accounting_double_entry:accounting_double_entry) '^accounting_double_entry/'>], [<URLResolver <module 'todogst.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\todogst\\urls.py'> (todogst:todogst) '^todo/'>], [<URLResolver <module 'userprofile.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\userprofile\\urls.py'> (userprofile:userprofile) '^profile/'>], [<URLResolver <module 'blog.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\blog\\urls.py'> (blog:blog) '^blog/'>], [<URLResolver <module 'django_select2.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\django_select2\\urls.py'> (None:None) '^select2/'>], [<URLResolver <module 'ckeditor_uploader.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\ckeditor_uploader\\urls.py'> (None:None) 'ckeditor/'>], [<URLPattern '^media\/(?P<path>.*)$'>]], 'path': 'companygjkj'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 835, in _resolve_lookup
+    current = current[bit]
+TypeError: 'URLResolver' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 843, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'URLResolver' object has no attribute 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 849, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 856, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [name] in <URLResolver <module 'accounting_double_entry.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\accounting_double_entry\\urls.py'> (accounting_double_entry:accounting_double_entry) '^accounting_double_entry/'>
+[26/Sep/2018 12:31:12] DEBUG [django.template:878] Exception while resolving variable 'name' in template 'unknown'.
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\core\handlers\exception.py", line 35, in inner
+    response = get_response(request)
+  File "C:\Users\HP\myEnv\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "C:\Users\HP\myEnv\lib\site-packages\django\urls\resolvers.py", line 527, in resolve
+    raise Resolver404({'tried': tried, 'path': new_path})
+django.urls.exceptions.Resolver404: {'tried': [[<URLPattern '^$' [name='home']>], [<URLResolver <URLPattern list> (admin:admin) 'admin/'>], [<URLResolver <module 'accounts.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\accounts\\urls.py'> (accounts:accounts) '^accounts/'>], [<URLResolver <module 'django.contrib.auth.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\django\\contrib\\auth\\urls.py'> (None:None) '^accounts/'>], [<URLResolver <module 'social_django.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\social_django\\urls.py'> (social:social) '^auth/'>], [<URLResolver <module 'company.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\company\\urls.py'> (company:company) '^company/'>], [<URLResolver <module 'accounting_double_entry.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\accounting_double_entry\\urls.py'> (accounting_double_entry:accounting_double_entry) '^accounting_double_entry/'>], [<URLResolver <module 'todogst.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\todogst\\urls.py'> (todogst:todogst) '^todo/'>], [<URLResolver <module 'userprofile.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\userprofile\\urls.py'> (userprofile:userprofile) '^profile/'>], [<URLResolver <module 'blog.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\blog\\urls.py'> (blog:blog) '^blog/'>], [<URLResolver <module 'django_select2.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\django_select2\\urls.py'> (None:None) '^select2/'>], [<URLResolver <module 'ckeditor_uploader.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\ckeditor_uploader\\urls.py'> (None:None) 'ckeditor/'>], [<URLPattern '^media\/(?P<path>.*)$'>]], 'path': 'companygjkj'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 835, in _resolve_lookup
+    current = current[bit]
+TypeError: 'URLResolver' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 843, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'URLResolver' object has no attribute 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 849, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 856, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [name] in <URLResolver <module 'todogst.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\todogst\\urls.py'> (todogst:todogst) '^todo/'>
+[26/Sep/2018 12:31:12] DEBUG [django.template:878] Exception while resolving variable 'name' in template 'unknown'.
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\core\handlers\exception.py", line 35, in inner
+    response = get_response(request)
+  File "C:\Users\HP\myEnv\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "C:\Users\HP\myEnv\lib\site-packages\django\urls\resolvers.py", line 527, in resolve
+    raise Resolver404({'tried': tried, 'path': new_path})
+django.urls.exceptions.Resolver404: {'tried': [[<URLPattern '^$' [name='home']>], [<URLResolver <URLPattern list> (admin:admin) 'admin/'>], [<URLResolver <module 'accounts.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\accounts\\urls.py'> (accounts:accounts) '^accounts/'>], [<URLResolver <module 'django.contrib.auth.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\django\\contrib\\auth\\urls.py'> (None:None) '^accounts/'>], [<URLResolver <module 'social_django.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\social_django\\urls.py'> (social:social) '^auth/'>], [<URLResolver <module 'company.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\company\\urls.py'> (company:company) '^company/'>], [<URLResolver <module 'accounting_double_entry.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\accounting_double_entry\\urls.py'> (accounting_double_entry:accounting_double_entry) '^accounting_double_entry/'>], [<URLResolver <module 'todogst.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\todogst\\urls.py'> (todogst:todogst) '^todo/'>], [<URLResolver <module 'userprofile.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\userprofile\\urls.py'> (userprofile:userprofile) '^profile/'>], [<URLResolver <module 'blog.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\blog\\urls.py'> (blog:blog) '^blog/'>], [<URLResolver <module 'django_select2.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\django_select2\\urls.py'> (None:None) '^select2/'>], [<URLResolver <module 'ckeditor_uploader.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\ckeditor_uploader\\urls.py'> (None:None) 'ckeditor/'>], [<URLPattern '^media\/(?P<path>.*)$'>]], 'path': 'companygjkj'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 835, in _resolve_lookup
+    current = current[bit]
+TypeError: 'URLResolver' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 843, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'URLResolver' object has no attribute 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 849, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 856, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [name] in <URLResolver <module 'userprofile.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\userprofile\\urls.py'> (userprofile:userprofile) '^profile/'>
+[26/Sep/2018 12:31:12] DEBUG [django.template:878] Exception while resolving variable 'name' in template 'unknown'.
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\core\handlers\exception.py", line 35, in inner
+    response = get_response(request)
+  File "C:\Users\HP\myEnv\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "C:\Users\HP\myEnv\lib\site-packages\django\urls\resolvers.py", line 527, in resolve
+    raise Resolver404({'tried': tried, 'path': new_path})
+django.urls.exceptions.Resolver404: {'tried': [[<URLPattern '^$' [name='home']>], [<URLResolver <URLPattern list> (admin:admin) 'admin/'>], [<URLResolver <module 'accounts.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\accounts\\urls.py'> (accounts:accounts) '^accounts/'>], [<URLResolver <module 'django.contrib.auth.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\django\\contrib\\auth\\urls.py'> (None:None) '^accounts/'>], [<URLResolver <module 'social_django.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\social_django\\urls.py'> (social:social) '^auth/'>], [<URLResolver <module 'company.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\company\\urls.py'> (company:company) '^company/'>], [<URLResolver <module 'accounting_double_entry.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\accounting_double_entry\\urls.py'> (accounting_double_entry:accounting_double_entry) '^accounting_double_entry/'>], [<URLResolver <module 'todogst.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\todogst\\urls.py'> (todogst:todogst) '^todo/'>], [<URLResolver <module 'userprofile.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\userprofile\\urls.py'> (userprofile:userprofile) '^profile/'>], [<URLResolver <module 'blog.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\blog\\urls.py'> (blog:blog) '^blog/'>], [<URLResolver <module 'django_select2.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\django_select2\\urls.py'> (None:None) '^select2/'>], [<URLResolver <module 'ckeditor_uploader.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\ckeditor_uploader\\urls.py'> (None:None) 'ckeditor/'>], [<URLPattern '^media\/(?P<path>.*)$'>]], 'path': 'companygjkj'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 835, in _resolve_lookup
+    current = current[bit]
+TypeError: 'URLResolver' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 843, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'URLResolver' object has no attribute 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 849, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 856, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [name] in <URLResolver <module 'blog.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\blog\\urls.py'> (blog:blog) '^blog/'>
+[26/Sep/2018 12:31:12] DEBUG [django.template:878] Exception while resolving variable 'name' in template 'unknown'.
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\core\handlers\exception.py", line 35, in inner
+    response = get_response(request)
+  File "C:\Users\HP\myEnv\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "C:\Users\HP\myEnv\lib\site-packages\django\urls\resolvers.py", line 527, in resolve
+    raise Resolver404({'tried': tried, 'path': new_path})
+django.urls.exceptions.Resolver404: {'tried': [[<URLPattern '^$' [name='home']>], [<URLResolver <URLPattern list> (admin:admin) 'admin/'>], [<URLResolver <module 'accounts.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\accounts\\urls.py'> (accounts:accounts) '^accounts/'>], [<URLResolver <module 'django.contrib.auth.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\django\\contrib\\auth\\urls.py'> (None:None) '^accounts/'>], [<URLResolver <module 'social_django.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\social_django\\urls.py'> (social:social) '^auth/'>], [<URLResolver <module 'company.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\company\\urls.py'> (company:company) '^company/'>], [<URLResolver <module 'accounting_double_entry.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\accounting_double_entry\\urls.py'> (accounting_double_entry:accounting_double_entry) '^accounting_double_entry/'>], [<URLResolver <module 'todogst.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\todogst\\urls.py'> (todogst:todogst) '^todo/'>], [<URLResolver <module 'userprofile.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\userprofile\\urls.py'> (userprofile:userprofile) '^profile/'>], [<URLResolver <module 'blog.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\blog\\urls.py'> (blog:blog) '^blog/'>], [<URLResolver <module 'django_select2.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\django_select2\\urls.py'> (None:None) '^select2/'>], [<URLResolver <module 'ckeditor_uploader.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\ckeditor_uploader\\urls.py'> (None:None) 'ckeditor/'>], [<URLPattern '^media\/(?P<path>.*)$'>]], 'path': 'companygjkj'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 835, in _resolve_lookup
+    current = current[bit]
+TypeError: 'URLResolver' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 843, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'URLResolver' object has no attribute 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 849, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 856, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [name] in <URLResolver <module 'django_select2.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\django_select2\\urls.py'> (None:None) '^select2/'>
+[26/Sep/2018 12:31:12] DEBUG [django.template:878] Exception while resolving variable 'name' in template 'unknown'.
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\core\handlers\exception.py", line 35, in inner
+    response = get_response(request)
+  File "C:\Users\HP\myEnv\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "C:\Users\HP\myEnv\lib\site-packages\django\urls\resolvers.py", line 527, in resolve
+    raise Resolver404({'tried': tried, 'path': new_path})
+django.urls.exceptions.Resolver404: {'tried': [[<URLPattern '^$' [name='home']>], [<URLResolver <URLPattern list> (admin:admin) 'admin/'>], [<URLResolver <module 'accounts.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\accounts\\urls.py'> (accounts:accounts) '^accounts/'>], [<URLResolver <module 'django.contrib.auth.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\django\\contrib\\auth\\urls.py'> (None:None) '^accounts/'>], [<URLResolver <module 'social_django.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\social_django\\urls.py'> (social:social) '^auth/'>], [<URLResolver <module 'company.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\company\\urls.py'> (company:company) '^company/'>], [<URLResolver <module 'accounting_double_entry.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\accounting_double_entry\\urls.py'> (accounting_double_entry:accounting_double_entry) '^accounting_double_entry/'>], [<URLResolver <module 'todogst.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\todogst\\urls.py'> (todogst:todogst) '^todo/'>], [<URLResolver <module 'userprofile.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\userprofile\\urls.py'> (userprofile:userprofile) '^profile/'>], [<URLResolver <module 'blog.urls' from 'C:\\Users\\HP\\My Documents\\github\\erpcloud\\erpcloud\\blog\\urls.py'> (blog:blog) '^blog/'>], [<URLResolver <module 'django_select2.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\django_select2\\urls.py'> (None:None) '^select2/'>], [<URLResolver <module 'ckeditor_uploader.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\ckeditor_uploader\\urls.py'> (None:None) 'ckeditor/'>], [<URLPattern '^media\/(?P<path>.*)$'>]], 'path': 'companygjkj'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 835, in _resolve_lookup
+    current = current[bit]
+TypeError: 'URLResolver' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 843, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'URLResolver' object has no attribute 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 849, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\myEnv\lib\site-packages\django\template\base.py", line 856, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [name] in <URLResolver <module 'ckeditor_uploader.urls' from 'C:\\Users\\HP\\myEnv\\lib\\site-packages\\ckeditor_uploader\\urls.py'> (None:None) 'ckeditor/'>
+[26/Sep/2018 12:31:12] WARNING [django.request:93] Not Found: /companygjkj
+[26/Sep/2018 12:31:12] WARNING [django.server:124] "GET /companygjkj HTTP/1.1" 404 3315
+[26/Sep/2018 12:31:56] DEBUG [django.db.backends:111] (0.003) 
+            SELECT name, type FROM sqlite_master
+            WHERE type in ('table', 'view') AND NOT name='sqlite_sequence'
+            ORDER BY name; args=None
+[26/Sep/2018 12:31:56] DEBUG [django.db.backends:111] (0.000) SELECT "django_migrations"."app", "django_migrations"."name" FROM "django_migrations"; args=()
+[26/Sep/2018 12:32:04] DEBUG [django.db.backends:111] (0.003) 
+            SELECT name, type FROM sqlite_master
+            WHERE type in ('table', 'view') AND NOT name='sqlite_sequence'
+            ORDER BY name; args=None
+[26/Sep/2018 12:32:04] DEBUG [django.db.backends:111] (0.001) SELECT "django_migrations"."app", "django_migrations"."name" FROM "django_migrations"; args=()

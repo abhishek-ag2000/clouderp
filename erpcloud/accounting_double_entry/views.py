@@ -9,6 +9,7 @@ from userprofile.models import Profile
 from django.db.models import Sum
 from company.models import company
 from django.db.models import Q
+from django.shortcuts import get_object_or_404
 
 
 
@@ -84,17 +85,23 @@ class ledger1ListView(LoginRequiredMixin,ListView):
 		context['profile_details'] = Profile.objects.all()
 		return context
 
-class ledger1DetailView(LoginRequiredMixin,DetailView):
-	context_object_name = 'ledger1_details'
-	model = ledger1
-	template_name = 'accounting_double_entry/ledger1_details.html'
 
-	def get_context_data(self, **kwargs):
-		context = super(ledger1DetailView, self).get_context_data(**kwargs) 
-		context['journal_list'] = journal.objects.all()
-		context['company_list'] = company.objects.all()
-		context['profile_list'] = Profile.objects.all()
-		return context
+def ledger_detail(request, pk):
+	ledger1_details = get_object_or_404(ledger1, pk=pk)
+
+	journal_details = get_object_or_404(journal, pk=pk)
+
+	context = {
+		'ledger1_details' : ledger1_details,
+		'journal_list' 	  : journal.objects.all(),
+		'Debitcount'      : journal_details.debitsum(),
+		'Creditcount'     : journal_details.creditsum(),
+	}
+	return render(request, 'accounting_double_entry/ledger1_details.html', context)
+
+
+
+
 
 class ledger1CreateView(LoginRequiredMixin,CreateView):
 	form_class = Ledgerform
@@ -146,16 +153,16 @@ class journalListView(LoginRequiredMixin,ListView):
 		context['profile_details'] = Profile.objects.all()
 		return context
 
-class journalDetailView(LoginRequiredMixin,DetailView):
-	context_object_name = 'journal_details'
-	model = journal
-	template_name = 'accounting_double_entry/journal_details.html'
+def journal_detail(request, pk):
+	journal_details = get_object_or_404(journal, pk=pk)
+
+	context = {
+		'journal_details' : journal_details,
+		'Debitcount'      : journal_details.debitsum(),
+	}
+	return render(request, 'accounting_double_entry/journal_details.html', context)
 
 
-	def get_context_data(self, **kwargs):
-		context = super(journalDetailView, self).get_context_data(**kwargs) 
-		context['profile_details'] = Profile.objects.all()
-		return context
 
 class journalCreateView(LoginRequiredMixin,CreateView):
 	model = journal
