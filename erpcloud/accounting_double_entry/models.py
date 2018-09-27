@@ -153,8 +153,6 @@ class ledger1(models.Model):
 	Pin_Code = models.BigIntegerField()
 	PanIt_No = models.CharField(max_length=100,blank=True)
 	GST_No = models.CharField(max_length=100,blank=True)
-	Total_Debit = models.DecimalField(max_digits=10,decimal_places=2)
-	Ctotal = models.DecimalField(max_digits=10,decimal_places=2)
 	Closing_balance = models.DecimalField(max_digits=10,decimal_places=2)
 	
 	def __str__(self):
@@ -172,7 +170,7 @@ class journal(models.Model):
 	Date = models.DateField()
 	By = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='Debitledgers')
 	To = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='Creditledgers')
-	Debit = models.DecimalField(max_digits=10,decimal_places=2,)
+	Debit = models.DecimalField(max_digits=10,decimal_places=2)
 	Credit = models.DecimalField(max_digits=10,decimal_places=2)
 
 
@@ -188,108 +186,39 @@ class journal(models.Model):
 		elif self.To == self.By:
 			raise ValidationError('Paricular Entry Cannot be same')
 
+# check passed dates - if strting date == ledger creation date && closing date == ledger creation date:
+#							return opening balance + debit count - credit count (on that date only)
+#							return debit count on strting date							
+#							return credit count on strting date
+
+#						elif(strting date not equal to ledger creation date):
+#							return opening balance + debit count - credit count (till that opening date only)
+#							return debit count from strting date to ending date
+#							return credit count from strting date to closing date
+#							calculate closing balance = opn balanace + debit count + credit count
+#
 
 
-#list conversion of django objects
-def list_ledger(listleg):
-	listledger = [['','','','']	for x in range(listleg.count())]
-	f=0
-	for q in listleg:
-		k=0
-		while k<4:
-			if (k==0):
-				listledger[f][k] = q.Creation_Date
-			elif(k==1):
-				listledger[f][k] = q.name
-			elif(k==2):
-				gn = q.group1_Name
-				gn_bn = gn.balance_nature
-				listledger[f][k] = gn_bn
-			else:
-				listledger[f][k] = q.Opening_Balance
-			k=k+1
-		f=f+1
-	return listledger
+	def debitsum(self):#2date range arguements # validation strting date cannot be greater than ending date
+		Debitcount = ledger1.objects.annotate(debitsum=Sum('Debitledgers__Debit')).values_list('name','debitsum')
+		# filter with the date range
+		return Debitcount
 
 
+	def creditsum(self):
+		Creditcount = ledger1.objects.annotate(creditsum=Sum('Creditledgers__Credit')).values_list('name','creditsum')
+		return Creditcount
 
-def list_journal(listjour):
-	listjournal= [['','','','',''] for x in range(listjour.count())]
-	c=0 
-	for i in listjour:
-		d=0
-		while d<5:
-			if (d==0):
-				listjournal[c][d] =i.Date
-			elif(d==1):
-				listjournal[c][d] =i.To
-			elif(d==2):
-				listjournal[c][d] =i.By
-			elif(d==3):
-				listjournal[c][d] =i.Debit
-			else:
-				listjournal[c][d] =i.Credit
-			d=d+1
-		c=c+1
-	return listjournal
-
-# logic = select journal ledgername wise, filter all transactions in 
-# which the ledger name exists in by side, thier 'To' sides total
-def toside(ledgerlist,journallist,lname):
-	for w in ledgerlist:
-		sum2 =0
-		for i in journallist:
-			if(str(i[2]) == w[1]):
-				sum2 +=i[3]
-		if(str(w[1])==str(lname)):
-			return(sum2)
-
-
-
-def byside(ledgerlist,journallist,lname):
-	for w in ledgerlist:
-		sum1 =0
-		for i in journallist:
-			if(str(i[1]) == w[1]):
-				sum1 +=i[4]
-		if(str(w[1])==str(lname)):
-			return(sum1)
-
-
-def total_balance(ledgerlist,journallist,ledgername):
-	sumby = 0
-	sumby+=byside(ledgerlist,journallist,ledgername)
-	return sumby
-
-def total_balance_credit(ledgerlist,journallist,ledgername):
-	sumto = 0
-	sumto+=toside(ledgerlist,journallist,ledgername)
-	return sumto
-
-
-lspre = ledger1.objects.all()
-ls = list_ledger(lspre)
-
-jpre = journal.objects.all()
-j = list_journal(jpre)
 
 
 @receiver(pre_save, sender=ledger1)
-def update_total_debit(sender,instance,*args,**kwargs):
-	Total_Debit = total_balance(ls,j,lspre[1].name)
-	instance.Total_Debit = Total_Debit
+def update_user_closing_balance(sender,instance,*args,**kwargs):
+	debit = instance.Debitledgers.aggregate(debit=Sum('Debit'))['debit']
+	credit = instance.Creditledgers.aggregate(credit=Sum('Credit'))['credit']
+	Closing_balance = instance.Opening_Balance + debit - credit
+	instance.Closing_balance = Closing_balance	
 
 
-@receiver(pre_save, sender=ledger1)
-def update_total_credit(sender,instance,*args,**kwargs):
-	Ctotal = total_balance_credit(ls,j,lspre[1].name)
-	instance.Ctotal = Ctotal
-
-
-@receiver(pre_save, sender=ledger1)
-def update_closing_balance(sender,instance,*args,**kwargs):
-	Closing_balance = instance.Total_Debit + instance.Opening_Balance - instance.Ctotal
-	instance.Closing_balance = Closing_balance
 
 
 

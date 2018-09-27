@@ -29,8 +29,12 @@ class companyform(forms.ModelForm):
 
 	class Meta:
 		model = company
-		fields = ('Name', 'Type_of_company','Shared_Users','Address','Country','State','Pincode','Telephone_No','Mobile_No','Financial_Year_From','Books_Begining_From')
+		fields = ('Name', 'Type_of_company','Business_nature_Service_Provider','Business_nature_Retail','Business_nature_Wholesale','Business_nature_Works_Contract','Business_nature_Leasing','Business_nature_Factory_Manufacturing','Business_nature_Bonded_Warehouse','Business_nature_Other','Please_specify','Shared_Users','Address','Country','State','Pincode','Telephone_No','Mobile_No','Financial_Year_From','Books_Begining_From')
 		widgets = {
             'Financial_Year_From': DateInput(),
             'Books_Begining_From': DateInput(),
         }
+
+
+
+

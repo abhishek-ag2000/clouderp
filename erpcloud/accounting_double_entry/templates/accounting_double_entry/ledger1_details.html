@@ -58,8 +58,8 @@
           <div class="box box-default">
           <div class="box-body">
 
-      			<a href="{% url 'accounting_double_entry:ledgercreate' %}" class="btn btn-success" role="button">Select Ledger </a>
-              	<a href="{% url 'accounting_double_entry:ledgerlist' %}" class="btn btn-warning" role="button">Create Ledger</a>
+      			<a href="{% url 'accounting_double_entry:ledgerlist' %}" class="btn btn-success" role="button">Select Ledger </a>
+              	<a href="{% url 'accounting_double_entry:ledgercreate' %}" class="btn btn-warning" role="button">Create Ledger</a>
               
 
         
@@ -138,10 +138,8 @@
 									</tr>										
 								
 									
-									{% for journal in ledger1_details.Debitledgers.all %}
-										
-
-											
+										{% for journal in ledger1_details.Debitledgers.all %}
+		
 											<tr>
 												
 												<th><center>{{ journal.Date}}</center></th>
@@ -161,14 +159,10 @@
 											</tr>
 										
 										
-									{% endfor %}
+										{% endfor %}
 
-									{% for journal in ledger1_details.Creditledgers.all %}
-										
-
-											
+										{% for journal in ledger1_details.Creditledgers.all %}		
 											<tr>
-												
 												<th><center></center></th>
 												<th><center></center></th>
 												<th><center></center></th>
@@ -179,14 +173,9 @@
 												<th><center>By</center></th>
 												<th><center>{{ journal.By }}</center></th>
 												<th><center>{{ journal.id }}</center></th>
-												<th><center>{{journal.Credit}}</center></th>
-												
-										
-										
+												<th><center>{{journal.Credit}}</center></th>									
 											</tr>
-										
-										
-									{% endfor %}
+										{% endfor %}
 
 
 											<tr>
@@ -199,26 +188,33 @@
 												<th><center>By</center></th>
 												<th><center>Closing Balance</center></th>
 
-												<th><center></center></th>
-												<th><center>{{ledger1_details.Closing_balance}}</center></th>
-									
+												<th><center></center></th>													
+												<th><center>{{ ledger1_details.Closing_balance }}</center></th>
 											</tr>
 									
 										
-											<tr>
-												<th><center></center></th>
-												<th><center></center></th>
-												<th><center>Total:</center></th>
-												<th><center></center></th>
-												
-												<th><center>{{ ledger1_details.Total_Debit|add:ledger1_details.Opening_Balance }}</center></th>
-												
-												<th><center>-</center></th>
-												<th><center>-</center></th>
-												<th><center>Total:</center></th>
-												<th><center>-</center></th>
-												<th><center>{{ ledger1_details.Ctotal|add:ledger1_details.Closing_balance }}</center></th>
-											</tr>
+													<tr>
+														<th><center></center></th>
+														<th><center></center></th>
+														<th><center>Total:</center></th>
+														<th><center></center></th>
+														{% for name, debitsum in Debitcount %}
+															{% if name == ledger1_details.name %}
+																<th><center>{{ debitsum|add:ledger1_details.Opening_Balance|floatformat:2 }}</center></th> <!-- total balance debit-->
+															{% endif %}
+														{% endfor %}
+														
+														<th><center>-</center></th>
+														<th><center>-</center></th>
+														<th><center>Total:</center></th>
+														<th><center>-</center></th>
+														{% for name, creditsum in Creditcount %}
+															{% if name == ledger1_details.name %}
+																<th><center>{{ creditsum|add:ledger1_details.Closing_balance|floatformat:2 }}</center></th> <!-- total balance debit-->
+															{% endif %}
+														{% endfor %}
+													</tr>
+											
 
 
 
@@ -256,8 +252,9 @@
 
 
 				</div>
-			</div>
-		</div>
+			
+		
 	</section>
 </div>
+
 {% endblock %}

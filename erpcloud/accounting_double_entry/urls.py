@@ -16,7 +16,7 @@ urlpatterns = [
 ####### Ledger Urls ########################################
 
     url(r'^ledgerlist/$',views.ledger1ListView.as_view(),name='ledgerlist'),
-    url(r'^ledgerlist/(?P<pk>\d+)/$',views.ledger1DetailView.as_view(),name='ledgerdetail'),
+    url(r'^ledgerlist/(?P<pk>\d+)/$',views.ledger_detail,name='ledgerdetail'),
     url(r'^ledgercreate/$',views.ledger1CreateView.as_view(),name='ledgercreate'),
     url(r'^ledgerupdate/(?P<pk>\d+)/$',views.ledger1UpdateView.as_view(),name='ledgerupdate'),
     url(r'^ledgerdelete/(?P<pk>\d+)/$',views.ledger1DeleteView.as_view(),name='ledgerdelete'),
@@ -25,7 +25,7 @@ urlpatterns = [
 ####### Journal Urls ########################################  
 
     url(r'^journallist/$',views.journalListView.as_view(),name='list'),
-    url(r'^journallist/(?P<pk>\d+)/$',views.journalDetailView.as_view(),name='detail'),
+    url(r'^journallist/(?P<pk>\d+)/$',views.journal_detail,name='detail'),
     url(r'^journal/create/$',views.journalCreateView.as_view(),name='create'),
     url(r'^journal/update/(?P<pk>\d+)/$',views.journalUpdateView.as_view(),name='update'),
     url(r'^journal/delete/(?P<pk>\d+)/$',views.journalDeleteView.as_view(),name='delete'),

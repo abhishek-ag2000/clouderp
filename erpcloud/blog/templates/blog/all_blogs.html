@@ -1,0 +1,418 @@
+{% extends "clouderp/base.html" %}
+
+
+{% block title %}All Blogs{% endblock %}
+
+{% block main-sidebar %}
+ <section class="sidebar">
+    
+      <!-- Sidebar user panel -->
+     
+      <!-- search form -->
+      <form action="#" method="get" class="sidebar-form">
+        <div class="input-group">
+          <input type="text" name="q" class="form-control" placeholder="Search...">
+              <span class="input-group-btn">
+                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                </button>
+              </span>
+        </div>
+      </form>
+      <!-- /.search form -->
+      <!-- sidebar menu: : style can be found in sidebar.less -->
+       <ul class="sidebar-menu" data-widget="tree">
+        <li class="header">MAIN NAVIGATION</li>
+        
+      <!--   <li><a href="{% url 'company:Dashboard' 1 %}"><i class="fa fa-book"></i> <span>Dashboard</span></a></li>
+         -->
+
+        <li><a href="{% url 'company:list' %}"><i class="fa fa-book"></i> <span>Dashboard</span></a></li>
+
+        
+        
+        <li>
+          <a href="pages/mailbox/mailbox.html">
+            <i class="fa fa-envelope"></i> <span>Chatbox</span>
+            <span class="pull-right-container">
+              <small class="label pull-right bg-yellow">12</small>
+              <small class="label pull-right bg-green">16</small>
+              <small class="label pull-right bg-red">5</small>
+            </span>
+          </a>
+        </li>
+        
+        
+        <li><a href="{% url 'userprofile:profiledetail' %}"><i class="fa fa-book"></i> <span>Profile Settings</span></a></li>
+
+        <li class="header">PLUGINS</li>
+        <li><a href="{% url 'blog:allbloglist' %}"><i class="fa fa-circle-o text-red"></i> <span>Read Blogs & Articles</span></a></li>
+
+        <li><a href="{% url 'consultancy:consultancylist' %}"><i class="fa fa-circle-o text-red"></i> <span>Consultancy Forum</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Subscribe Newsletter</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Bills to Scanner App</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Automated Return Filing</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Find Professional</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>E-Commerce Integration</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Investing - Trading & MFs</span></a></li>
+      </ul>
+      
+    </section>
+
+ {% endblock %}
+
+
+
+{% block content %}
+
+<div class="content-wrapper">
+
+
+ <section class="content-header">
+        <!-- <div class="col-md-12 col-md-offset-4"> -->
+          <h1>
+            <strong>All Blogs</strong>
+          </h1>
+                <ol class="breadcrumb">
+                       <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                       <!-- <li><a href="#">Company list</a></li> -->
+                     <li class="">Company list</li>
+                     <li class="active">Create Group</li>
+                </ol>
+        <!-- </div> -->
+      </section>
+
+  <section class="content">
+      <div class="callout callout-info">
+        <h4>Welcome!</h4>
+        Welcome to predict books your personal AI powered business engine!
+        <!-- <a href="http://getbootstrap.com/javascript/#modals">Bootstrap documentation</a> -->
+      </div>
+
+
+
+<div class="row">
+      <div class="col-xs-12">
+          <div class="box box-default">
+          <div class="box-body">
+
+             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">View Posts By
+                    <span class="fa fa-caret-down"></span></button>
+                  <ul class="dropdown-menu">
+                    <li><a href="{% url 'blog:latestbloglist' %}">Most Recent</a></li>
+                    <li><a href="{% url 'blog:viewbloglist' %}">Most Popular</a></li>
+                    <li><a href="{% url 'blog:likebloglist' %}">Most Helpful</a></li>
+                    
+                    
+                  </ul>
+
+            <a href="{% url 'blog:allbloglist' %}" class="btn btn-success" role="button">Show all Posts</a>
+
+
+            
+                  
+          <div class='pull-right'>
+            <a href="{% url 'blog:bloglist' %}" class="btn btn-info" role="button">Show my Posts</a>
+            <a href="{% url 'blog:blogcreate' %}" class="btn btn-warning" role="button">Create Post</a>
+              
+
+          </div>
+        
+        
+        
+        </div>
+      
+      </div>
+    
+    </div>
+
+</div>
+
+
+                  
+
+                    
+                      <div class="row">
+                                
+<style type="text/css">
+
+.col-xs-3 {
+   width: 30%;
+}
+
+
+.col-xs-9 {
+  width: 70%;
+}
+
+.blog-grids {
+    overflow: hidden;
+    margin: 0 -15px;
+}
+
+.blog-grids .grid {
+    background-color: #fff;
+    width: calc(33.33% - 30px);
+    float: left;
+    padding: 15px;
+    margin: 20px 15px 15px;
+    border-radius: 10px;
+    -webkit-box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+}
+
+.entry-media img {
+    border-radius: 10px;
+    width: 100%;
+    max-height: 188px;
+}
+
+.entry-body {
+    padding: 27px 10px;
+}
+
+.entry-body .cat {
+    font-family: "Poppins", sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: #6220d9;
+    text-transform: uppercase;
+}
+
+.entry-body h3 {
+    font-size: 21px;
+    font-weight: 600;
+    line-height: 1.30em;
+    margin: 3px 0 0.73em;
+}
+
+.entry-body h3 a {
+    color: #41516a;
+}
+
+.entry-body h3 a:hover {
+    color: #6220d9;
+    text-decoration: none;
+}
+
+.entry-body p {
+    margin-bottom: 2em;
+    color: #90949a;
+    line-height: 1.8em;
+}
+
+.read-more-date {
+    position: relative;
+}
+
+.read-more-date a {
+    font-family: "Poppins", sans-serif;
+    font-size: 16px;
+    font-size: 1.06667rem;
+    font-weight: 600;
+
+    text-transform: uppercase;
+}
+
+.read-more-date .date {
+    position: absolute;
+    right: 0;
+    color: #90949a;
+}
+
+
+                        
+                      </style>
+                    
+
+                        <small>
+                          <div class="col col-md-9">
+                                          
+                                            <div class="blog-grids">
+
+                                            {% for blog in blog_list %}
+                                                <div class="grid">
+                                                    <div class="entry-media">
+                                                        {% if blog.Blog_image %}
+                                                          <img src="{{ blog.Blog_image.url }}/" alt="">
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="entry-body">
+                                                        
+                                                        <h3><a href="../{{ blog.id}}">{{ blog.Blog_title|safe|truncatewords:"5"}}</a></h3>
+                                                        <p>{{ blog.Description|safe|truncatewords:"9"|linebreaks}}</p>
+                                                        <div class="read-more-date">
+                                                            <a href="../{{ blog.id}}" class="btn btn-info btn-block">Read More</a>
+                                                            <span class="date">{{ blog.Date|timesince}} ago</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            {% endfor %}
+                                               
+                                            </div>
+
+
+                                          <div class="blog-grids">
+
+                                            {% for blog in blogs %}
+                                                <div class="grid">
+                                                    <div class="entry-media">
+                                                        {% if blog.Blog_image %}
+                                                          <img src="{{ blog.Blog_image.url }}/" alt="">
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="entry-body">
+                                                        
+                                                        <h3><a href="../{{ blog.id}}">{{ blog.Blog_title|safe|truncatewords:"5"}}</a></h3>
+                                                        <p>{{ blog.Description|safe|truncatewords:"9"|linebreaks}}</p>
+                                                        <div class="read-more-date">
+                                                            <a href="../{{ blog.id}}" class="btn btn-info btn-block">Read More</a>
+                                                            <span class="date">{{ blog.Date|timesince}} ago</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            {% endfor %}
+                                               
+                                            </div>
+                                         
+                  <div class="text-center">
+                  {% if is_paginated %}
+                      <ul class="pagination">
+                       {% if page_obj.has_previous %}
+                          <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+                        {% else %}
+                          <li class="disabled"><span>&laquo;</span></li>
+                        {% endif %}
+                        {% for i in paginator.page_range %}
+                            {% if page_obj.number == i %}
+                               <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                            {% else %}
+                                <li><a href="?page={{ i }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if page_obj.has_next %}
+                            <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+                        {% else %}
+                            <li class="disabled"><span>&raquo;</span></li>
+                        {% endif %}
+                    </ul>
+                {% endif %}
+                  </div>
+                      
+                                          
+                                        </div>
+                        </small>
+                           
+
+      <div class="col col-md-3">
+        <div class="box box-widget widget-user-2">
+            <div class="widget-user-header bg-aqua-active"">
+              <h3 class="widget-user-username">Search</h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form method='GET' class="form-horizontal" action="{% url 'blog:search' %}">
+              <div class="box-body">
+                <div class="form-group">
+                  
+
+                  <div class="col-sm-12">
+                    <input  class="form-control" name="q" value="{{request.GET.q}}" placeholder="Search">
+                  </div>
+                </div>
+                
+                
+              </div>
+              
+              <div class="box-footer">
+                <button type="submit" class="btn btn-info pull-right">Go</button>
+                
+              </div>
+             
+            </form>
+        </div>
+
+        <br>
+
+            <div class="box box-widget widget-user-2">
+                <div class="widget-user-header bg-aqua-active">
+                    <h5 class="widget-user-username">Category</h5>
+                </div>
+                 <div class="box-footer no-padding">
+                      {% for categories in categories_list %}
+
+                          <ul class="nav nav-stacked">
+                                
+                              
+                                
+                                  <li><a href="../categorylist/{{ categories.id }}">{{ categories.Title }} <span class="pull-right badge bg-blue">{{ blog_count }}</span></a></li>
+                                 
+                             
+                                  
+                                
+                          </ul>
+                      {% endfor %}
+              </div>
+
+                <div class="box-footer no-padding">
+                      {% for categories in categories_l %}
+
+                          <ul class="nav nav-stacked">
+                                
+                              
+                                
+                                  <li><a href="../categorylist/{{ categories.id }}">{{ categories.Title }} <span class="pull-right badge bg-blue">{{ blog_count }}</span></a></li>
+                                 
+                             
+                                  
+                                
+                          </ul>
+                      {% endfor %}
+              </div>
+
+
+            </div>
+
+          </div>
+                               
+                                    
+
+
+                                 
+
+                         
+                          
+
+                              
+                                
+
+
+                          
+                              
+                          
+                           
+
+  </div>
+                   
+               
+
+   
+
+    
+          
+
+
+
+
+
+</section>
+</div>
+
+    
+  
+  
+
+  
+
+{% endblock %}

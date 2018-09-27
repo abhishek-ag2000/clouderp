@@ -26,9 +26,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 SECRET_KEY = 'a-o(^^ooxv6eaj4d-gqir9!+3*9idmc8921t+0=u681bpq1*s!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY ='954744097986-2c65ubrgiggh2nbb532es23go3a30s8c.apps.googleusercontent.com'  #Paste CLient Key
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'TBPj7U1_ieD5Ge8YKslwqeFj'
@@ -37,36 +38,24 @@ SOCIAL_AUTH_FACEBOOK_KEY = '837109483127908'
 SOCIAL_AUTH_FACEBOOK_SECRET = '82c10c3f0e510e88aa285bccb9f69b6a'
 
 
+
+
 # Application definition
 
 INSTALLED_APPS = [
 ########## Third Party Apps ###########
 
-    'social_django',
-    'bootstrap3',
-    "sslserver",
-    'crispy_forms',
-    'bootstrap_datepicker_plus',
-    'mathfilters',
-
-################################### blog
-    'wagtail.core',
-    'wagtail.admin',
-    'wagtail.documents',
-    'wagtail.snippets',
-    'wagtail.users',
-    'wagtail.images',
-    'wagtail.embeds',
-    'wagtail.search',
-    'wagtail.sites',
-    'wagtail.contrib.redirects',
-    'wagtail.contrib.forms',
-    'wagtail.contrib.sitemaps',
-    'wagtail.contrib.routable_page',
-    'taggit',
-    'modelcluster',
-    'django_social_share',
-    'puput',
+    'social_django',                            #pip install social-auth-app-django
+    'bootstrap3',                               #pip install django-bootstrap3
+    "sslserver",                                #pip install django-sslserver
+    'crispy_forms',                             #pip install --upgrade django-crispy-forms
+    'bootstrap_datepicker_plus',                #pip install django-bootstrap-datepicker-plus
+    'mathfilters',                              #pip install django-mathfilters
+    'pagedown',                                 #pip install django-pagedown                               
+    'ckeditor',                                 #pip install django-ckeditor
+    'ckeditor_uploader',                        #pip install django-ckeditor
+    'django_select2',                           #pip install django_select2
+    'select2',                                  #pip install django-select2-forms
 
 
 
@@ -84,8 +73,30 @@ INSTALLED_APPS = [
     'accounts',
     'company',
     'accounting_double_entry',
+    'todogst',
+    'userprofile',
+    'blog',
+    'consultancy',
 
 ]
+
+CKEDITOR_UPLOAD_PATH = "uploads/"
+
+CKEDITOR_CONFIGS = {
+    'special': {
+        'toolbar': 'Special',
+        'toolbar_Special': [
+            ['Styles', 'Format', 'Bold', 'Italic', 'Underline', 'Strike', 'SpellChecker', 'Undo'],
+            ['Link', 'Unlink', 'Anchor'],
+            ['Image', 'Flash', 'Table', 'HorizontalRule'],
+            ['TextColor', 'BGColor'],
+            ['Smiley', 'SpecialChar'], ['Source'],
+        ],
+    }
+}
+
+
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # During development only
 
@@ -97,9 +108,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-    'wagtail.core.middleware.SiteMiddleware',
-    'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
 
 ROOT_URLCONF = 'erpcloud.urls'
@@ -112,7 +120,6 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
-                'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
@@ -208,10 +215,13 @@ USE_TZ = True
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-MEDIA_ROOT = MEDIA_DIR
+
+
 MEDIA_URL = '/media/'
+MEDIA_ROOT = MEDIA_DIR
+
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
@@ -222,6 +232,5 @@ LOGOUT_REDIRECT_URL = "home"
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 1025
 
-WAGTAIL_SITE_NAME = 'Puput blog'
 
 

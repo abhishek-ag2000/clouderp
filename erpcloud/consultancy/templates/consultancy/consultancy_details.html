@@ -1,0 +1,295 @@
+{% extends "clouderp/base.html" %}
+{% load staticfiles %}
+
+{% block title%}Company List{% endblock %}
+
+
+ {% block main-sidebar %}
+ <section class="sidebar">
+    
+      <!-- Sidebar user panel -->
+     
+      <!-- search form -->
+      <form action="#" method="get" class="sidebar-form">
+        <div class="input-group">
+          <input type="text" name="q" class="form-control" placeholder="Search...">
+              <span class="input-group-btn">
+                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                </button>
+              </span>
+        </div>
+      </form>
+      <!-- /.search form -->
+      <!-- sidebar menu: : style can be found in sidebar.less -->
+       <ul class="sidebar-menu" data-widget="tree">
+        <li class="header">MAIN NAVIGATION</li>
+        
+      <!--   <li><a href="{% url 'company:Dashboard' 1 %}"><i class="fa fa-book"></i> <span>Dashboard</span></a></li>
+         -->
+
+        <li><a href="{% url 'company:list' %}"><i class="fa fa-book"></i> <span>Dashboard</span></a></li>
+
+        
+        
+        <li>
+          <a href="pages/mailbox/mailbox.html">
+            <i class="fa fa-envelope"></i> <span>Chatbox</span>
+            <span class="pull-right-container">
+              <small class="label pull-right bg-yellow">12</small>
+              <small class="label pull-right bg-green">16</small>
+              <small class="label pull-right bg-red">5</small>
+            </span>
+          </a>
+        </li>
+        
+        
+        <li><a href="{% url 'userprofile:profiledetail' %}"><i class="fa fa-book"></i> <span>Profile Settings</span></a></li>
+
+        <li class="header">PLUGINS</li>
+        <li><a href="{% url 'blog:allbloglist' %}"><i class="fa fa-circle-o text-red"></i> <span>Read Blogs & Articles</span></a></li>
+
+        <li><a href="{% url 'consultancy:consultancylist' %}"><i class="fa fa-circle-o text-red"></i> <span>Consultancy Forum</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Subscribe Newsletter</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Bills to Scanner App</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Automated Return Filing</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Find Professional</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>E-Commerce Integration</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Investing - Trading & MFs</span></a></li>
+      </ul>
+      
+    </section>
+
+ {% endblock %}
+
+ 
+
+
+
+{% block content %}
+<div class="content-wrapper">
+<!-- <div class="container"> -->
+			<section class="content-header">
+				<!-- <div class="col-md-12 col-md-offset-4"> -->
+					<h1>
+						<strong>Question Details</strong>
+					</h1>
+								<ol class="breadcrumb">
+			       					 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+			       					 <!-- <li><a href="#">Company list</a></li> -->
+			     				   <li class="active">Company list</li>
+			      </ol>
+				<!-- </div> -->
+			</section>
+
+<section class="content">
+      <div class="callout callout-info">
+        <h4>Welcome!</h4>
+        Welcome to predict books your personal AI powered business engine!
+        <!-- <a href="http://getbootstrap.com/javascript/#modals">Bootstrap documentation</a> -->
+      </div>
+
+  <div class="row">
+      <div class="col-xs-12">
+          <div class="box box-default">
+          <div class="box-body">
+
+            
+
+            <a href="{% url 'consultancy:consultancylist' %}" class="btn btn-success" role="button">Show Questions</a>
+
+
+            
+                  
+          <div class='pull-right'>
+            <a href="#" class="btn btn-info" role="button">Show my Questions</a>
+            <a href="{% url 'consultancy:consultancycreate' %}" class="btn btn-warning" role="button">Ask Questions</a>
+              
+
+          </div>
+        
+        
+        
+        </div>
+      
+      </div>
+    
+    </div>
+
+</div>
+
+
+
+<div class="row">
+ <div class="col-md-9">
+          <!-- Box Comment -->
+          <div class="box box-widget">
+            <div class="box-header with-border">
+              <div class="user-block">
+                {% if consultancy.User.oser.profile.image %}
+                    <img class="img-circle img-sm" src="{{ consultancy.User.oser.profile.image.url }}/" alt="">
+                {% else %}
+                    <img class="img-circle img-sm" src="{% static 'userprofile/download (1).jpg' %}">
+                {% endif %}
+                <span class="username"><a href="#">{{ consultancy_details.User }}</a></span>
+                <span class="description">Shared publicly - {{ consultancy_details.Date|date:"H:i" }}{{ consultancy_details.Date|timesince }} ago</span>
+              </div>
+              <!-- /.user-block -->
+              <div class="box-tools">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+              <!-- /.box-tools -->
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <!-- post text -->
+              <p>{{ consultancy_details.Questions }}</p>
+
+
+
+            <hr>
+
+            <p><a class='btn btn-warning' href="{% url 'consultancy:consultancyupdate' pk=consultancy_details.pk %}">Update</a> <a class='btn btn-danger pull-right' href="{% url 'consultancy:consultancydelete' pk=consultancy_details.pk %}">Delete</a></p> 
+
+            <hr>
+
+
+
+              <!-- Attachment -->
+
+
+              <!-- Social sharing buttons -->
+              
+              <button type="button" class="btn btn-default btn-xs"><i class="fa fa-thumbs-o-up"></i> Like</button>
+              <span class="pull-right text-muted">45 likes - {{ comments.count }} Comment{{ comments|pluralize }}</span>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer box-comments">
+              <div class="box-comment">
+                {% for answer in comments %}
+                <!-- User image -->
+                    {% if answer.User.user.image %}
+                      <img class="img-circle img-sm" src="{{ Answer.User.user.image.url }}/" alt="">
+                    {% else %}
+                        <img class="img-circle img-sm" src="{% static 'userprofile/download (1).jpg' %}">
+                    {% endif %}
+
+                    <div class="comment-text">
+                          <span class="username">
+                            {{ answer.User|capfirst }}
+                            <span class="text-muted pull-right">{{ answer.Date|date:"H:i" }}{{ answer.Date|timesince }} ago</span>
+                          </span><!-- /.username -->
+                      {{ answer.text }}
+                    </div>
+                <!-- /.comment-text -->
+                {% endfor %}
+              </div>
+              <!-- /.box-comment -->
+             
+              <!-- /.box-comment -->
+            </div>
+            <!-- /.box-footer -->
+            <div class="box-footer">
+              <form method="post">
+                {% csrf_token %}
+
+                
+                <!-- .img-push is used to add margin to elements next to floating images -->
+                <div class="img-push">
+
+                  {{ form.text}}
+                 
+                    <input type="submit" class="btn btn-info pull-right" value="Submit">Submit 
+                  
+                </div>
+              </form>
+            </div>
+            <!-- /.box-footer -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+
+
+                <div class="col-md-3">
+        <div class="box box-widget widget-user-2">
+            <div class="widget-user-header bg-aqua-active"">
+              <h3 class="widget-user-username">Search</h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form method='GET' class="form-horizontal" action="{% url 'blog:search' %}">
+              <div class="box-body">
+                <div class="form-group">
+                  
+
+                  <div class="col-sm-12">
+                    <input  class="form-control" name="q" value="{{request.GET.q}}" placeholder="Search">
+                  </div>
+                </div>
+                
+                
+              </div>
+              
+              <div class="box-footer">
+                <button type="submit" class="btn btn-info pull-right">Go</button>
+                
+              </div>
+             
+            </form>
+        </div>
+
+        <br>
+
+            <div class="box box-widget widget-user-2">
+                <div class="widget-user-header bg-aqua-active">
+                    <h5 class="widget-user-username">Category</h5>
+                </div>
+                 <div class="box-footer no-padding">
+                      {% for categories in categories_list %}
+
+                          <ul class="nav nav-stacked">
+                                
+                              
+                                
+                                  <li><a href="../categorylist/{{ categories.id }}">{{ categories.Title }} <span class="pull-right badge bg-blue">{{ blog_count }}</span></a></li>
+                                 
+                             
+                                  
+                                
+                          </ul>
+                      {% endfor %}
+              </div>
+
+                <div class="box-footer no-padding">
+                      {% for categories in categories_l %}
+
+                          <ul class="nav nav-stacked">
+                                
+                              
+                                
+                                  <li><a href="../categorylist/{{ categories.id }}">{{ categories.Title }} <span class="pull-right badge bg-blue">{{ blog_count }}</span></a></li>
+                                 
+                             
+                                  
+                                
+                          </ul>
+                      {% endfor %}
+              </div>
+
+
+            </div>
+
+          </div>
+</div>
+
+
+								
+
+</section>
+
+</div>
+
+
+{% endblock %}

@@ -43,6 +43,10 @@
          <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
 
+{% block head_extra %} 
+
+{% endblock head_extra %}
+
 <body class="hold-transition skin-blue sidebar-mini">
 {% block main-header %}
 <div class="wrapper">
@@ -265,14 +269,22 @@
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="{% static 'clouderp/dist/img/user2new.jpg' %}" class="user-image" alt="User Image">
+              	{% if user.profile.image %}
+                  <img class="user-image" src="{{ user.profile.image.url }}/" alt="User profile picture">
+                {% else %}
+                    <img class="user-image" src="{% static 'userprofile/download (1).jpg' %}">
+                {% endif %}
               <span class="hidden-xs">{{ user.get_username }}</span>
               <!-- https://stackoverflow.com/questions/16906515/how-can-i-get-the-username-of-the-logged-in-user-in-django -->
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src="{% static 'clouderp/dist/img/user2new.jpg' %}" class="img-circle" alt="User Image">
+                {% if user.profile.image %}
+                  <img class="profile-user-img img-responsive img-circle" src="{{ user.profile.image.url }}/" alt="User profile picture">
+                {% else %}
+                    <img class="user-image" src="{% static 'userprofile/download (1).jpg' %}">
+                {% endif %}
 
                 <p>
                   {{ user.get_username }} - Business Subscription
@@ -305,9 +317,9 @@
               </li>
             </ul>
           </li>
-
+        {% if user.has_usable_password %}
           <li><a href="{% url 'accounts:change_password' %}" class="btn btn-simple">Change Password</a></li>
-
+        {% endif %}
            <li><a href="{% url 'accounts:logout' %}" class="btn btn-simple">Sign out</a></li>
           <!-- Control Sidebar Toggle Button -->
           <li>
@@ -529,10 +541,11 @@
         </li>
         
         
-        <li><a href="base.html"><i class="fa fa-book"></i> <span>Profile Settings</span></a></li>
+        <li><a href="{% url 'userprofile:profiledetail' %}"><i class="fa fa-book"></i> <span>Profile Settings</span></a></li>
 
         <li class="header">PLUGINS</li>
-        <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Read Blogs & Articles</span></a></li>
+        <li><a href="{% url 'blog:allbloglist' %}"><i class="fa fa-circle-o text-red"></i> <span>Read Blogs & Articles</span></a></li>
+        <li><a href="{% url 'consultancy:consultancylist' %}"><i class="fa fa-circle-o text-red"></i> <span>Consultancy Forum</span></a></li>
         <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Subscribe Newsletter</span></a></li>
         <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Bills to Scanner App</span></a></li>
         <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Automated Return Filing</span></a></li>
@@ -736,11 +749,6 @@
     </div>
     {% endblock %}
   </aside>
-
-
-  
-        
-  
 
 
 
