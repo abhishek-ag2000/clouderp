@@ -63,6 +63,7 @@ def consultancy_detail(request, pk):
 		'is_liked' : is_liked,
 		'total_like' : consultancy_details.total_like(),
 		'Answer_form' : Answer_form,
+
 	}
 
 	return render(request, 'consultancy/consultancy_details.html', context)

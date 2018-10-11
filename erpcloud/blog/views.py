@@ -31,6 +31,7 @@ class viewbloglistview(LoginRequiredMixin,ListView):
 	def get_context_data(self, **kwargs):
 		context = super(viewbloglistview, self).get_context_data(**kwargs) 
 		context['categories_list'] = categories.objects.all()
+		context['categories_count'] = Blog.categories_count()
 		return context
 
 class likebloglistview(LoginRequiredMixin,ListView):
@@ -49,6 +50,7 @@ class likebloglistview(LoginRequiredMixin,ListView):
 	def get_context_data(self, **kwargs):
 		context = super(likebloglistview, self).get_context_data(**kwargs) 
 		context['categories_list'] = categories.objects.all()
+		context['categories_count'] = Blog.categories_count()
 		return context
 
 
@@ -69,6 +71,7 @@ class latestbloglistview(LoginRequiredMixin,ListView):
 	def get_context_data(self, **kwargs):
 		context = super(latestbloglistview, self).get_context_data(**kwargs) 
 		context['categories_list'] = categories.objects.all()
+		context['categories_count'] = Blog.categories_count()
 		return context
 
 
@@ -84,6 +87,7 @@ class bloglistview(LoginRequiredMixin,ListView):
 	def get_context_data(self, **kwargs):
 		context = super(bloglistview, self).get_context_data(**kwargs) 
 		context['categories_list'] = categories.objects.all()
+		context['categories_count'] = Blog.categories_count()
 		return context
 
 
@@ -104,6 +108,7 @@ class allbloglistview(ListView):
 	def get_context_data(self, **kwargs):
 		context = super(allbloglistview, self).get_context_data(**kwargs) 
 		context['categories_list'] = categories.objects.all()
+		context['categories_count'] = Blog.categories_count()
 		return context
 
 
@@ -183,11 +188,11 @@ class categoryDetailView(LoginRequiredMixin,DetailView):
 		context = super(categoryDetailView, self).get_context_data(**kwargs)
 		context['blog_list'] = Blog.objects.all()
 		context['categories_list'] = categories.objects.all()
+		context['categories_count'] = Blog.categories_count()
 		return context
 
 def search(request):
 	template = 'blog/blog_list.html'
-
 
 	query = request.GET.get('q')
 

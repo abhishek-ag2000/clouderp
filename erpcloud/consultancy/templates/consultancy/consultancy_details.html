@@ -6,6 +6,21 @@
 
  {% block main-sidebar %}
  <section class="sidebar">
+
+        <div class="user-panel">
+        <div class="pull-left image">
+                {% if user.profile.image %}
+                  <img class="img-circle" src="{{ user.profile.image.url }}/" alt="User profile picture">
+                {% else %}
+                    <img class="img-circle" src="{% static 'userprofile/download (1).jpg' %}">
+                {% endif %}
+          
+        </div>
+        <div class="pull-left info">
+          <p>{{ user.profile.Full_Name }}</p>
+          <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+        </div>
+      </div>
     
       <!-- Sidebar user panel -->
      
@@ -125,8 +140,8 @@
           <div class="box box-widget">
             <div class="box-header with-border">
               <div class="user-block">
-                {% if user.profile.image %}
-                    <img class="img-circle img-sm" src="{{ user.profile.image.url }}/" alt="">
+                {% if consultancy_details.User.profile.image %}
+                    <img class="img-circle img-sm" src="{{ consultancy_details.User.profile.image.url }}/" alt="">
                 {% else %}
                     <img class="img-circle img-sm" src="{% static 'userprofile/download (1).jpg' %}">
                 {% endif %}

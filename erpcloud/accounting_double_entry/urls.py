@@ -7,32 +7,27 @@ urlpatterns = [
 
 ####### Groups Urls ########################################
 
-    url(r'^$',views.group1ListView.as_view(),name='grouplist'),
-    url(r'^(?P<pk>\d+)/$',views.group1DetailView.as_view(),name='groupdetail'),
-    url(r'^groupcreate/$',views.group1CreateView.as_view(),name='groupcreate'),
-    url(r'^groupupdate/(?P<pk>\d+)/$',views.group1UpdateView.as_view(),name='groupupdate'),
-    url(r'^groupdelete/(?P<pk>\d+)/$',views.group1DeleteView.as_view(),name='groupdelete'),
+    url(r'^company/(?P<pk>\d+)/grouplist$',views.group1ListView.as_view(),name='grouplist'),
+    url(r'^company/(?P<pk1>\d+)/groupdetail/(?P<pk2>\d+)/$',views.group1DetailView.as_view(),name='groupdetail'),
+    url(r'^company/(?P<pk>\d+)/groupcreate/$',views.group1CreateView.as_view(),name='groupcreate'),
+    url(r'^company/(?P<pk1>\d+)/groupupdate/(?P<pk2>\d+)/$',views.group1UpdateView.as_view(),name='groupupdate'),
+    url(r'^company/(?P<pk1>\d+)/groupdelete/(?P<pk2>\d+)/$',views.group1DeleteView.as_view(),name='groupdelete'),
 
 ####### Ledger Urls ########################################
 
-    url(r'^ledgerlist/$',views.ledger1ListView.as_view(),name='ledgerlist'),
-    url(r'^ledgerlist/(?P<pk>\d+)/$',views.ledger_detail,name='ledgerdetail'),
-    url(r'^ledgercreate/$',views.ledger1CreateView.as_view(),name='ledgercreate'),
-    url(r'^ledgerupdate/(?P<pk>\d+)/$',views.ledger1UpdateView.as_view(),name='ledgerupdate'),
-    url(r'^ledgerdelete/(?P<pk>\d+)/$',views.ledger1DeleteView.as_view(),name='ledgerdelete'),
+    url(r'^company/(?P<pk>\d+)/ledgerlist/$',views.ledger1ListView.as_view(),name='ledgerlist'),
+    url(r'^company/(?P<pk1>\d+)/ledgerdetail/(?P<pk2>\d+)/$',views.ledger1_detail_view,name='ledgerdetail'),
+    url(r'^company/(?P<pk>\d+)/ledgercreate/$',views.ledger1CreateView.as_view(),name='ledgercreate'),
+    url(r'^company/(?P<pk1>\d+)/ledgerupdate/(?P<pk2>\d+)/$',views.ledger1UpdateView.as_view(),name='ledgerupdate'),
+    url(r'^company/(?P<pk1>\d+)/ledgerdelete/(?P<pk2>\d+)/$',views.ledger1DeleteView.as_view(),name='ledgerdelete'),
 
 
 ####### Journal Urls ########################################  
 
-    url(r'^journallist/$',views.journalListView.as_view(),name='list'),
-    url(r'^journallist/(?P<pk>\d+)/$',views.journal_detail,name='detail'),
-    url(r'^journal/create/$',views.journalCreateView.as_view(),name='create'),
-    url(r'^journal/update/(?P<pk>\d+)/$',views.journalUpdateView.as_view(),name='update'),
-    url(r'^journal/delete/(?P<pk>\d+)/$',views.journalDeleteView.as_view(),name='delete'),
+    url(r'^company/(?P<pk>\d+)/journallist/$',views.journalListView.as_view(),name='list'),
+    url(r'^company/(?P<pk1>\d+)/journallist/(?P<pk2>\d+)/$',views.journal_detail,name='detail'),
+    url(r'^company/(?P<pk>\d+)/journal/create/$',views.journalCreateView.as_view(),name='create'),
+    url(r'^company/(?P<pk1>\d+)/journal/update/(?P<pk2>\d+)/$',views.journalUpdateView.as_view(),name='update'),
+    url(r'^company/(?P<pk1>\d+)/journal/delete/(?P<pk2>\d+)/$',views.journalDeleteView.as_view(),name='delete'),
 
-
-
-
-   
-    
 ]

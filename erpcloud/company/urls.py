@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import url,include
 from company import views
 from django.urls import path
 
@@ -11,5 +11,9 @@ urlpatterns = [
     url(r'^create/$',views.companyCreateView.as_view(),name='create'),
     url(r'^update/(?P<pk>\d+)/$',views.companyUpdateView.as_view(),name='update'),
     url(r'^delete/(?P<pk>\d+)/$',views.companyDeleteView.as_view(),name='delete'),
+
+	
+    url(r'^selectdate/$',views.selectdaterangecreate.as_view(),name='select'),
+    url(r'^selectdateupdate/(?P<pk>\d+)/$',views.selectdaterange.as_view(),name='dateupdate'),
 	
 ]

@@ -34,7 +34,7 @@
 
 			<a href="{% url 'company:list' %}" class="btn btn-success" role="button">Select Company </a>
               <a href="{% url 'company:create' %}" class="btn btn-warning" role="button">Create Company details</a>
-              <a href="#" class="btn btn-danger" role="button">Delete Company</a>
+              <a href="{% url 'company:delete' pk=company_details.pk %}" class="btn btn-danger" role="button">Delete Company</a>
 
 				
 				
@@ -53,8 +53,8 @@
           <div class="box box-default">
           <div class="box-body">
 
-            <a href="{% url 'accounting_double_entry:ledgerlist' %}" class="btn btn-success" role="button">Select Ledger </a>
-                <a href="{% url 'accounting_double_entry:ledgercreate' %}" class="btn btn-warning" role="button">Create Ledger</a>
+            <a href="{% url 'accounting_double_entry:ledgerlist' pk=company_details.pk %}" class="btn btn-success" role="button">Select Ledger </a>
+                <a href="{% url 'accounting_double_entry:ledgercreate' pk=company_details.pk %}" class="btn btn-warning" role="button">Create Ledger</a>
               
 
         
@@ -89,7 +89,7 @@
                   </div>
                   <!-- /.box-header -->
                   <div class="box-body table-responsive no-padding">
-                    <table class="table table-hover">
+                    <table class="table table-bordered table-striped">
 
                       <tr>
                         <th>Sl no</th>
@@ -99,22 +99,54 @@
 
                       {% for ledger1 in ledger1_list %}
                       <tr>
-                        <td><a href="{{ledger1.id}}">{{ledger1.id}}</a></td>
-                        <td><a href="{{ledger1.id}}">{{ledger1.name}}</a></td>
-                        <td><a href="{{ledger1.id}}">{{ledger1.Creation_Date}}</a></td>
+                        <td><a href="{% url 'accounting_double_entry:ledgerdetail' pk1=company_details.pk pk2=ledger1.pk %}">{{ forloop.counter0|add:page_obj.start_index }}</a></td>
+                        <td><a href="{% url 'accounting_double_entry:ledgerdetail' pk1=company_details.pk pk2=ledger1.pk %}">{{ledger1.name}}</a></td>
+                        <td><a href="{% url 'accounting_double_entry:ledgerdetail' pk1=company_details.pk pk2=ledger1.pk %}}">{{ledger1.Creation_Date}}</a></td>
                       </tr>
                       {% endfor %}
                      
                      
                     </table>
+
+                    <div class="box-footer">
+                    <br>
+                    <div class="pull-left">
+                    <p>Showing item {{ page_obj.start_index }} to {{ page_obj.end_index }} of {{ page_obj.paginator.count }} entries</p>
+                  </div>
+
+                  <div class="pull-right">
+                        {% if is_paginated %}
+                            <ul class="pagination">
+                             {% if page_obj.has_previous %}
+                                <li><a href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                              {% else %}
+                                <li class="disabled"><span>Previous</span></li>
+                              {% endif %}
+                              {% for i in paginator.page_range %}
+                                  {% if page_obj.number == i %}
+                                     <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                                  {% else %}
+                                      <li><a href="?page={{ i }}">{{ i }}</a></li>
+                                  {% endif %}
+                              {% endfor %}
+                              {% if page_obj.has_next %}
+                                  <li><a href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                              {% else %}
+                                  <li class="disabled"><span>Next</span></li>
+                              {% endif %}
+                          </ul>
+                      {% endif %}
+                    </div>
+                  </div>
                   </div>
                  
                 </div>
         {% else %}
-            <span class="alert alert-danger">
-                    No ledger found 
-
-            </span>
+              <div class="col-xs-12 alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h4><i class="icon fa fa-ban"></i> Alert!</h4>
+                  No ledger created !
+              </div>
         {% endif %}
                 
         </div>

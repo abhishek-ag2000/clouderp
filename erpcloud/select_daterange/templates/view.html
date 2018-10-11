@@ -1,0 +1,241 @@
+{% extends "clouderp/base.html" %}
+
+{% block title%}Company List{% endblock %}
+
+
+ {% block main-sidebar %}
+ <section class="sidebar">
+    
+      <!-- Sidebar user panel -->
+     
+      <!-- search form -->
+      <form action="#" method="get" class="sidebar-form">
+        <div class="input-group">
+          <input type="text" name="q" class="form-control" placeholder="Search...">
+              <span class="input-group-btn">
+                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                </button>
+              </span>
+        </div>
+      </form>
+      <!-- /.search form -->
+      <!-- sidebar menu: : style can be found in sidebar.less -->
+       <ul class="sidebar-menu" data-widget="tree">
+        <li class="header">MAIN NAVIGATION</li>
+        
+      <!--   <li><a href="{% url 'company:Dashboard' 1 %}"><i class="fa fa-book"></i> <span>Dashboard</span></a></li>
+         -->
+
+        <li><a href="{% url 'company:list' %}"><i class="fa fa-book"></i> <span>Dashboard</span></a></li>
+
+        
+        
+        <li>
+          <a href="pages/mailbox/mailbox.html">
+            <i class="fa fa-envelope"></i> <span>Chatbox</span>
+            <span class="pull-right-container">
+              <small class="label pull-right bg-yellow">12</small>
+              <small class="label pull-right bg-green">16</small>
+              <small class="label pull-right bg-red">5</small>
+            </span>
+          </a>
+        </li>
+        
+        
+        <li><a href="{% url 'userprofile:profiledetail' %}"><i class="fa fa-book"></i> <span>Profile Settings</span></a></li>
+
+        <li class="header">PLUGINS</li>
+        <li><a href="{% url 'blog:allbloglist' %}"><i class="fa fa-circle-o text-red"></i> <span>Read Blogs & Articles</span></a></li>
+        <li><a href="{% url 'consultancy:consultancylist' %}"><i class="fa fa-circle-o text-red"></i> <span>Consultancy Forum</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Subscribe Newsletter</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Bills to Scanner App</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Automated Return Filing</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Find Professional</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>E-Commerce Integration</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Investing - Trading & MFs</span></a></li>
+      </ul>
+      
+    </section>
+
+ {% endblock %}
+
+ 
+
+
+
+{% block content %}
+<div class="content-wrapper">
+<!-- <div class="container"> -->
+			<section class="content-header">
+				<!-- <div class="col-md-12 col-md-offset-4"> -->
+					<h1>
+						<strong>Company List</strong>
+					</h1>
+								<ol class="breadcrumb">
+			       					 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+			       					 <!-- <li><a href="#">Company list</a></li> -->
+			     				   <li class="active">Company list</li>
+			      </ol>
+				<!-- </div> -->
+			</section>
+
+<section class="content">
+      <div class="callout callout-info">
+        <h4>Welcome!</h4>
+        Welcome to predict books your personal AI powered business engine!
+        <!-- <a href="http://getbootstrap.com/javascript/#modals">Bootstrap documentation</a> -->
+      </div>
+<!-- _________________________________________________________________________________ -->
+<div class="row">
+			<div class="col-xs-12">
+          <div class="box box-default">
+					<div class="box-body">
+
+			<a href="{% url 'company:list' %}" class="btn btn-success" role="button">Select Company </a>
+              <a href="{% url 'company:create' %}" class="btn btn-warning" role="button">Create Company details</a>
+              <a href="#" class="btn btn-danger" role="button">Delete Company</a>
+
+				
+			         <a href="#" class="pull-right">{% include 'search/snippets/search-form.html' %}</a>
+               
+
+          
+				
+				</div>
+			
+			</div>
+		
+		</div>
+
+</div>
+
+<div class='col-12'>
+                <hr>
+            
+  {% if query %}
+            <div class='col-12' >
+                Results for
+                <b>{{ query1 }}</b>
+                <b>{{ query2 }}</b>
+                <b>{{ instance }}</b>
+                <hr/>
+            </div>
+            {% else %}
+
+		</div>
+
+<div class="row">
+        <div class="col-xs-12">
+          
+          {% if company_list %}
+              <div class="box box-info">
+                <div class="box-header">
+                  <h3 class="box-title">Company list details</h3>
+
+                  <div class="box-tools">
+                    <div class="input-group input-group-sm" style="width: 150px;">
+                      <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+
+                      <div class="input-group-btn">
+                        <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body table-responsive no-padding">
+                  <table class="table table-hover">
+
+                    <tr>
+                      <th>Sl no</th>
+                      <th>Name</th>
+                      <th>Date Created</th>
+                      <th>Capital</th>
+                      <th>Detail</th>
+                      <th>Assets</th>
+                      <th>Last updated</th>
+                      <th>P/L</th>
+
+                    </tr>
+
+                    {% for company in company_list %}
+                    <tr>
+                      <td><a href="{{company.id}}">{{company.id}}</a></td>
+                      <td><a href="{{company.id}}">{{company.Name}}</a></td>
+                      <td>11-7-2014</td>
+                      <td>75800</td>
+                      <td>Private equity firm</td>
+                      <td>1259000</td>
+                      <td>11-7-2014</td>
+                      <td>100000</td>
+                      <!-- <td><span class="label label-success">Approved</span></td> -->
+                      
+                    </tr>
+                    {% endfor %}
+                   
+                      
+                      <!-- <td><span class="label label-warning">Pending</span></td>
+                      <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td> -->
+                    
+                    <!-- <tr>
+                      <td>657</td>
+                      <td>Bob Doe</td>
+                      <td>11-7-2014</td>
+                      <td><span class="label label-primary">Approved</span></td>
+                      <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                    </tr>
+                    <tr>
+                      <td>175</td>
+                      <td>Mike Doe</td>
+                      <td>11-7-2014</td>
+                      <td><span class="label label-danger">Denied</span></td>
+                      <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                    </tr> -->
+                  </table>
+                </div>
+
+
+
+
+
+                {% if is_paginated %}
+                    <ul class="pagination">
+                       {% if page_obj.has_previous %}
+                          <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+                        {% else %}
+                          <li class="disabled"><span>&laquo;</span></li>
+                        {% endif %}
+                        {% for i in paginator.page_range %}
+                            {% if page_obj.number == i %}
+                               <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                            {% else %}
+                                <li><a href="?page={{ i }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if page_obj.has_next %}
+                            <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+                        {% else %}
+                            <li class="disabled"><span>&raquo;</span></li>
+                        {% endif %}
+                    </ul>
+                {% endif %}
+               </div>
+          {% else %}
+          
+                <div class="col-xs-12 alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h4><i class="icon fa fa-ban"></i> Alert!</h4>
+                  No company details created !
+              </div>
+          {% endif %}  
+         
+          <!-- /.box -->
+        </div>
+
+      </div>
+</section>
+
+</div>
+
+
+{% endblock %}

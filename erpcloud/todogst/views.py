@@ -10,7 +10,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 @login_required
 def index(request):
-    todo_list = Todo.objects.order_by('id')
+    todo_list = Todo.objects.filter(User=request.user).order_by('-id')
 
     form = TodoForm()
 
@@ -25,8 +25,8 @@ def index(request):
 def addTodo(request):
     form = TodoForm(request.POST)
 
-    if form.is_valid():
-        new_todo = Todo(text=request.POST['text'])
+    if form.is_valid(): 
+        new_todo = Todo(text=request.POST['text'], User=request.user)
         new_todo.save()
 
     return redirect('todogst:index')
@@ -51,6 +51,6 @@ def deleteCompleted(request):
 
 @login_required
 def deleteAll(request):
-    Todo.objects.all().delete()
+    Todo.objects.filter(User=request.user).delete()
 
     return redirect('todogst:index')

@@ -3,19 +3,27 @@
 
 <html>
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>{% block title %}Predict Books{% endblock %}</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>{% block title %}Predict Books{% endblock %}</title>
 
-	 <!-- Tell the browser to be responsive to screen width -->
-		    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+   <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <!-- Bootstrap 3.3.7 -->
         <link rel="stylesheet" href="{% static 'clouderp/bower_components/bootstrap/dist/css/bootstrap.min.css' %}">
+
+        <link rel="stylesheet" href="{% static 'clouderp/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}">
 
         <!-- Font Awesome -->
         <link rel="stylesheet" href="{% static 'clouderp/bower_components/font-awesome/css/font-awesome.min.css' %}">
 
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
+
+          <!-- DataTables -->
+        <link rel="stylesheet" href="{% static 'clouderp/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+
+          <!-- daterange picker -->
+        <link rel="stylesheet" href="{% static 'clouderp/bower_components/bootstrap-daterangepicker/daterangepicker.css' %}">
 
         <!-- Ionicons -->
         <link rel="stylesheet" href="{% static 'clouderp/bower_components/Ionicons/css/ionicons.min.css' %}">
@@ -31,9 +39,6 @@
 
         <!-- {# Custom CSS#} -->
         <link rel="stylesheet" href="{% static 'clouderp/css/master.css' %}">
-
-        <link rel="stylesheet" href="{% static 'clouderp/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}">
-
         <!-- {# Theme CSS#} -->
         <link rel="stylesheet" href="{% static 'clouderp/css/theme.min.css' %}">
         <!-- {# Skin CSS#} -->
@@ -49,13 +54,12 @@
 {% block head_extra %} 
 
 {% endblock head_extra %}
-
 <body class="hold-transition skin-blue sidebar-mini">
 {% block main-header %}
 <div class="wrapper">
 
-	
-	<header class="main-header">
+  
+  <header class="main-header">
     <!-- Logo -->
     <a href="{% url 'company:list' %}" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
@@ -272,7 +276,7 @@
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              	{% if user.profile.image %}
+                {% if user.profile.image %}
                   <img class="user-image" src="{{ user.profile.image.url }}/" alt="User profile picture">
                 {% else %}
                     <img class="user-image" src="{% static 'userprofile/download (1).jpg' %}">
@@ -291,7 +295,7 @@
 
                 <p>
                   {{ user.get_username }} - Business Subscription
-                  <small>Member since Nov. 2018</small>
+                  <small>Member since {{ user.profile.Date|date:"M Y" }}</small>
                 </p>
               </li>
               <!-- Menu Body -->
@@ -310,9 +314,9 @@
                 
               </li> -->
               <!-- Menu Footer-->
-              <li class="user-footer">
+                <li class="user-footer">
                 <div class="pull-left">
-                  <a href="#" class="btn btn-default btn-flat">Profile</a>
+                  <a href="{% url 'userprofile:profiledetail' %}" class="btn btn-default btn-flat">Profile</a>
                 </div>
                 <div class="pull-right">
                   <a href="{% url 'accounts:logout' %}" class="btn btn-default btn-flat">Sign out</a>
@@ -346,6 +350,21 @@
     {% block main-sidebar %}
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
+
+      <div class="user-panel">
+        <div class="pull-left image">
+                {% if user.profile.image %}
+                  <img class="img-circle" src="{{ user.profile.image.url }}/" alt="User profile picture">
+                {% else %}
+                    <img class="img-circle" src="{% static 'userprofile/download (1).jpg' %}">
+                {% endif %}
+          
+        </div>
+        <div class="pull-left info">
+          <p>{{ user.profile.Full_Name }}</p>
+          <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+        </div>
+      </div>
     
       <!-- Sidebar user panel -->
      
@@ -384,9 +403,9 @@
                 </span>
               </a>
               <ul class="treeview-menu">
-                <li><a href="{% url 'accounting_double_entry:groupcreate' %}"><i class="fa fa-circle-o"></i> Create</a></li>
+                <li><a href="{% url 'accounting_double_entry:groupcreate' pk=company_details.pk %}"><i class="fa fa-circle-o"></i> Create</a></li>
                 
-                  <li><a href="{% url 'accounting_double_entry:grouplist' %}"><i class="fa fa-circle-o"></i> Display</a></li>
+                  <li><a href="{% url 'accounting_double_entry:grouplist' pk=company_details.pk %}"><i class="fa fa-circle-o"></i> Display</a></li>
                   <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Alter</a></li> -->
                    
               </ul>
@@ -400,8 +419,8 @@
               </a>
               <ul class="treeview-menu">
                
-                 <li><a href="{% url 'accounting_double_entry:create' %}"><i class="fa fa-circle-o"></i> Create</a></li>
-                   <li><a href="{% url 'accounting_double_entry:list' %}"><i class="fa fa-circle-o"></i> Display</a></li>
+                 <li><a href="{% url 'accounting_double_entry:create' pk=company_details.pk %}"><i class="fa fa-circle-o"></i> Create</a></li>
+                   <li><a href="{% url 'accounting_double_entry:list' pk=company_details.pk %}"><i class="fa fa-circle-o"></i> Display</a></li>
                  
                    
               </ul>
@@ -414,9 +433,9 @@
                 </span>
               </a>
               <ul class="treeview-menu">
-                <li><a href="{% url 'accounting_double_entry:ledgercreate' %}"><i class="fa fa-circle-o"></i> Create</a></li>
+                <li><a href="{% url 'accounting_double_entry:ledgercreate' pk=company_details.pk %}"><i class="fa fa-circle-o"></i> Create</a></li>
                 
-                <li><a href="{% url 'accounting_double_entry:ledgerlist' %}"><i class="fa fa-circle-o"></i> Display</a></li>
+                <li><a href="{% url 'accounting_double_entry:ledgerlist' pk=company_details.pk %}"><i class="fa fa-circle-o"></i> Display</a></li>
                   <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Alter</a></li> -->
                    
               </ul>
@@ -561,6 +580,7 @@
     <!-- /.sidebar -->
     {% endblock %}
   </aside>
+
 
 <aside class="control-sidebar control-sidebar-dark">
 {% block control-sidebar%}
@@ -795,13 +815,25 @@
 
 <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
-<script src="{% static 'clouderp/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+
+<!-- jquery-confirm JS  -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+
+<!-- js Render  -->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jsrender/0.9.88/jsrender.min.js'></script> 
+
 <!-- Slimscroll -->
 <script src="{% static 'clouderp/bower_components/jquery-slimscroll/jquery.slimscroll.min.js' %}"></script>
 <!-- FastClick -->
 <script src="{% static 'clouderp/bower_components/fastclick/lib/fastclick.js' %}"></script>
+
+<!-- DataTables -->
+<script src="{% static 'clouderp/bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'clouderp/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
 
 <script src="{% static 'clouderp/bower_components/chart.js/Chart.js' %}"></script>
 <!-- AdminLTE App -->
@@ -810,16 +842,12 @@
 <script src="{% static 'clouderp/js/demo.js' %}"></script>
 <script src="{% static 'clouderp/js/select2.min.js' %}"></script>
 
-<script type="text/javascript">
-  
-  $(function() {
-  $('input[name="daterange"]').daterangepicker({
-    opens: 'left'
-  }, function(start, end, label) {
-    console.log("A new date selection was made: " + start.format('DD-MM-YYYY') + ' to ' + end.format('DD-MM-YYYY'));
-  });
-});
-</script>
+<script src="{% static 'clouderp/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+
+<!-- date-range-picker -->
+<script src="{% static 'clouderp/bower_components/moment/min/moment.min.js' %}"></script>
+<script src="{% static 'clouderp/bower_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+
 <script>
   $(function () {
     //Initialize Select2 Elements
@@ -884,6 +912,20 @@
     //Timepicker
     $('.timepicker').timepicker({
       showInputs: false
+    })
+  })
+</script>
+
+<script>
+  $(function () {
+    $('#example1').DataTable()
+    $('#example2').DataTable({
+      'paging'      : true,
+      'lengthChange': false,
+      'searching'   : false,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : false
     })
   })
 </script>

@@ -48,7 +48,7 @@
 
       <a href="{% url 'company:list' %}" class="btn btn-success" role="button">Select Company </a>
               <a href="{% url 'company:create' %}" class="btn btn-warning" role="button">Create Company details</a>
-              <a href="#" class="btn btn-danger" role="button">Delete Company</a>
+              <a href="{% url 'company:delete' pk=company_details.pk %}" class="btn btn-danger" role="button">Delete Company</a>
 
         
         
@@ -66,8 +66,8 @@
           <div class="box box-default">
           <div class="box-body">
 
-            <a href="{% url 'accounting_double_entry:list' %}" class="btn btn-success" role="button">Select Journal </a>
-            <a href="{% url 'accounting_double_entry:create' %}" class="btn btn-warning" role="button">Create Journal</a>
+            <a href="{% url 'accounting_double_entry:list' pk=company_details.pk %}" class="btn btn-success" role="button">Select Journal </a>
+            <a href="{% url 'accounting_double_entry:create' pk=company_details.pk %}" class="btn btn-warning" role="button">Create Journal</a>
               
 
         

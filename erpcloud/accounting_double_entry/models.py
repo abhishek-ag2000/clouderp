@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.db import models
-from datetime import datetime
+import datetime
 from django.db.models.signals import pre_save,post_save
 from django.dispatch import receiver
 from django.urls import reverse
@@ -9,9 +9,12 @@ from django.dispatch import receiver
 from django.db.models import Sum
 from company.models import company
 
+
+
 class group1(models.Model):
 	User = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,null=True,blank=True)
-	group_Name = models.CharField(max_length=32,unique=True,error_messages={'unique':"This Group Name has already been registered"})
+	group_Name = models.CharField(max_length=32)
+	Company = models.ForeignKey(company,on_delete=models.CASCADE,null=True,blank=True,related_name='Company_group')
 	Name = (
 		('Primary','Primary'),
 		('Fixed_Asset','Fixed_Asset'),
@@ -55,8 +58,45 @@ class group1(models.Model):
 		return self.group_Name
 
 
-	def get_absolute_url(self):
-		return reverse("accounting_double_entry:groupdetail", kwargs={'pk':self.pk})
+	def get_absolute_url(self, **kwargs):
+		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
+		return reverse("accounting_double_entry:groupdetail", kwargs={'pk2':self.pk, 'pk1':company_details.pk})
+
+@receiver(post_save, sender=company)
+def create_default_groups(sender, instance, created, **kwargs):
+	if created:
+		group1.objects.bulk_create([
+			group1(User=instance.User,Company=instance,group_Name='Bank Accounts',Master='Current_Assets',Nature_of_group1='Not Applicable',balance_nature='Debit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
+			group1(User=instance.User,Company=instance,group_Name='Bank OD A/c',Master='Loans',Nature_of_group1='Not Applicable',balance_nature='Credit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
+			group1(User=instance.User,Company=instance,group_Name='Branch/Divisions',Master='Primary',Nature_of_group1='Liabilities',balance_nature='Credit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
+			group1(User=instance.User,Company=instance,group_Name='Capital A/c',Master='Primary',Nature_of_group1='Liabilities',balance_nature='Credit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
+			group1(User=instance.User,Company=instance,group_Name='Cash-in-hand',Master='Current_Assets',Nature_of_group1='Not Applicable',balance_nature='Debit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
+			group1(User=instance.User,Company=instance,group_Name='Current Assets',Master='Primary',Nature_of_group1='Assets',balance_nature='Debit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
+			group1(User=instance.User,Company=instance,group_Name='Current Liabilities',Master='Primary',Nature_of_group1='Assets',balance_nature='Credit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
+			group1(User=instance.User,Company=instance,group_Name='Deposits(Asset)',Master='Current Assets',Nature_of_group1='Not Applicable',balance_nature='Debit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
+			group1(User=instance.User,Company=instance,group_Name='Direct Expenses',Master='Primary',Nature_of_group1='Expenses',balance_nature='Debit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
+			group1(User=instance.User,Company=instance,group_Name='Direct Incomes',Master='Primary',Nature_of_group1='Income',balance_nature='Credit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
+			group1(User=instance.User,Company=instance,group_Name='Duties & Taxes',Master='Current_Liabilities',Nature_of_group1='Not Applicable',balance_nature='Credit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
+			group1(User=instance.User,Company=instance,group_Name='Fixed Assets',Master='Primary',Nature_of_group1='Assets',balance_nature='Debit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
+			group1(User=instance.User,Company=instance,group_Name='Indirect Incomes',Master='Primary',Nature_of_group1='Income',balance_nature='Credit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
+			group1(User=instance.User,Company=instance,group_Name='Indirect Expenses',Master='Primary',Nature_of_group1='Expenses',balance_nature='Debit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
+			group1(User=instance.User,Company=instance,group_Name='Investments',Master='Primary',Nature_of_group1='Assets',balance_nature='Debit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
+			group1(User=instance.User,Company=instance,group_Name='Loans & Advances(Asset)',Master='Current_Assets',Nature_of_group1='Not Applicable',balance_nature='Debit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
+			group1(User=instance.User,Company=instance,group_Name='Loans (Liability)',Master='Primary',Nature_of_group1='Liabilities',balance_nature='Credit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
+			group1(User=instance.User,Company=instance,group_Name='Misc Expenses (ASSET)',Master='Primary',Nature_of_group1='Assets',balance_nature='Debit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
+			group1(User=instance.User,Company=instance,group_Name='Provisions',Master='Current_Liabilities',Nature_of_group1='Not Applicable',balance_nature='Debit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
+			group1(User=instance.User,Company=instance,group_Name='Purchase Accounts',Master='Primary',Nature_of_group1='Expenses',balance_nature='Debit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
+			group1(User=instance.User,Company=instance,group_Name='Reserves & Surplus',Master='Capital',Nature_of_group1='Not Applicable',balance_nature='Credit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
+			group1(User=instance.User,Company=instance,group_Name='Retained Earning',Master='Capital',Nature_of_group1='Not Applicable',balance_nature='Credit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
+			group1(User=instance.User,Company=instance,group_Name='Sales Account',Master='Primary',Nature_of_group1='Income',balance_nature='Credit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
+			group1(User=instance.User,Company=instance,group_Name='Secured Loans',Master='Loans',Nature_of_group1='Not Applicable',balance_nature='Credit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
+			group1(User=instance.User,Company=instance,group_Name='Stock-in-hand',Master='Current_Assets',Nature_of_group1='Not Applicable',balance_nature='Debit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
+			group1(User=instance.User,Company=instance,group_Name='Sundry Creditors',Master='Current_Liabilities',Nature_of_group1='Not Applicable',balance_nature='Credit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
+			group1(User=instance.User,Company=instance,group_Name='Sundry Debtors',Master='Current_Assets',Nature_of_group1='Not Applicable',balance_nature='Debit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
+			group1(User=instance.User,Company=instance,group_Name='Suspense A/c',Master='Primary',Nature_of_group1='Liabilities',balance_nature='Credit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
+			group1(User=instance.User,Company=instance,group_Name='Unsecured Loans',Master='Loans',Nature_of_group1='Not Applicable',balance_nature='Credit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
+
+		])
 
 
 def group1_master1(master1_level):
@@ -111,12 +151,12 @@ def update_user_balance_nature(sender,instance,*args,**kwargs):
 class ledger1(models.Model):
 	User = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,null=True,blank=True)
 	Company = models.ForeignKey(company,on_delete=models.CASCADE,null=True,blank=True,related_name='Companys')
-	Creation_Date = models.DateField(default=datetime.now)
-	name = models.CharField(max_length=32,unique=True)
-	group1_Name = models.ForeignKey(group1,on_delete=models.CASCADE)
-	Opening_Balance = models.DecimalField(max_digits=19,decimal_places=2)	
-	User_Name = models.CharField(max_length=100)
-	Address = models.TextField()
+	Creation_Date = models.DateField(default=datetime.datetime.now())
+	name = models.CharField(max_length=32)
+	group1_Name = models.ForeignKey(group1,on_delete=models.CASCADE,blank=True,null=True)
+	Opening_Balance = models.DecimalField(max_digits=19,decimal_places=2,blank=True)	
+	User_Name = models.CharField(max_length=100,blank=True)
+	Address = models.TextField(blank=True)
 	State_Name = (
 		('Choose','Choose'),
 		('Andra Pradesh','Andra Pradesh'),
@@ -149,17 +189,27 @@ class ledger1(models.Model):
 		('Uttarakhand','Uttarakhand'),
 		('West Bengal','West Bengal'),
 		)
-	State = models.CharField(max_length=100,choices=State_Name,default='Choose')
-	Pin_Code = models.BigIntegerField()
+	State = models.CharField(max_length=100,choices=State_Name,default='Choose',blank=True)
+	Pin_Code = models.BigIntegerField(blank=True,null=True)
 	PanIt_No = models.CharField(max_length=100,blank=True)
 	GST_No = models.CharField(max_length=100,blank=True)
-	Closing_balance = models.DecimalField(max_digits=10,decimal_places=2)
+	Closing_balance = models.DecimalField(max_digits=10,decimal_places=2,blank=True,null=True)
 	
 	def __str__(self):
 		return self.name
 
 	def get_absolute_url(self):
-		return reverse("accounting_double_entry:ledgerdetail", kwargs={'pk':self.pk})
+		company_details = get_object_or_404(company, pk=self.kwargs['pk1'])
+		return reverse("accounting_double_entry:ledgerdetail", kwargs={'pk2':self.pk, 'pk1':company_details.pk})
+
+		
+@receiver(post_save, sender=company)
+def create_default_ledger(sender, instance, created, **kwargs):
+	if created:
+		ledger1.objects.bulk_create([
+			ledger1(User=instance.User,Company=instance,name='Cash',Opening_Balance=0),
+			ledger1(User=instance.User,Company=instance,name='Profit & Loss A/c',Opening_Balance=0),
+			])
 
 
 
@@ -172,6 +222,7 @@ class journal(models.Model):
 	To = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='Creditledgers')
 	Debit = models.DecimalField(max_digits=10,decimal_places=2)
 	Credit = models.DecimalField(max_digits=10,decimal_places=2)
+
 
 
 	def __str__(self):
@@ -198,14 +249,13 @@ class journal(models.Model):
 #							calculate closing balance = opn balanace + debit count + credit count
 #
 
-
-	def debitsum(self):#2date range arguements # validation strting date cannot be greater than ending date
+	@classmethod
+	def debitsum(cls):#2date range arguements # validation strting date cannot be greater than ending date
 		Debitcount = ledger1.objects.annotate(debitsum=Sum('Debitledgers__Debit')).values_list('name','debitsum')
-		# filter with the date range
 		return Debitcount
 
-
-	def creditsum(self):
+	@classmethod
+	def creditsum(cls):
 		Creditcount = ledger1.objects.annotate(creditsum=Sum('Creditledgers__Credit')).values_list('name','creditsum')
 		return Creditcount
 
@@ -213,10 +263,30 @@ class journal(models.Model):
 
 @receiver(pre_save, sender=ledger1)
 def update_user_closing_balance(sender,instance,*args,**kwargs):
-	debit = instance.Debitledgers.aggregate(debit=Sum('Debit'))['debit']
-	credit = instance.Creditledgers.aggregate(credit=Sum('Credit'))['credit']
-	Closing_balance = instance.Opening_Balance + debit - credit
-	instance.Closing_balance = Closing_balance	
+    debit = instance.Debitledgers.aggregate(debit=Sum('Debit'))['debit']
+    credit = instance.Creditledgers.aggregate(credit=Sum('Credit'))['credit']
+    instance.Closing_balance = instance.Opening_Balance + debit - credit	
+
+
+class selectdatefield(models.Model):
+	User = models.ForeignKey(settings.AUTH_USER_MODEL,related_name="Users",on_delete=models.CASCADE,null=True,blank=True)
+	Company = models.ForeignKey(company,on_delete=models.CASCADE,null=True,blank=True,related_name='CompanyDate')
+	Journal = models.ForeignKey(journal,on_delete=models.CASCADE,null=True,blank=True,related_name='journals')
+	Ledger = models.ForeignKey(ledger1,on_delete=models.CASCADE,null=True,blank=True,related_name='ledgers')
+	Start_Date = models.DateField(blank=True, null=True)
+	End_Date = models.DateField(blank=True, null=True)
+
+	def __str__(self):
+		return str(self.Start_Date)
+
+	def get_absolute_url(self):
+		return reverse("company:list")
+
+	def clean(self):
+		if self.Start_Date > self.End_Date:
+			raise ValidationError('Start Date Cannot Be Greater Than End Date')
+
+
 
 
 

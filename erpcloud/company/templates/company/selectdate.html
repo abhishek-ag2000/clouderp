@@ -1,0 +1,176 @@
+{% extends "clouderp/base.html" %}
+
+{% block title %}
+Select Date
+{% endblock %}
+
+{% block main-sidebar %}
+ <section class="sidebar">
+    
+      <!-- Sidebar user panel -->
+     
+      <!-- search form -->
+      <form action="#" method="get" class="sidebar-form">
+        <div class="input-group">
+          <input type="text" name="q" class="form-control" placeholder="Search...">
+              <span class="input-group-btn">
+                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                </button>
+              </span>
+        </div>
+      </form>
+      <!-- /.search form -->
+      <!-- sidebar menu: : style can be found in sidebar.less -->
+       <ul class="sidebar-menu" data-widget="tree">
+        <li class="header">MAIN NAVIGATION</li>
+      <!--   <li><a href="{% url 'company:Dashboard' 1 %}"><i class="fa fa-book"></i> <span>Dashboard</span></a></li>
+         -->
+
+        <li><a href="{% url 'company:list' %}"><i class="fa fa-book"></i> <span>Dashboard</span></a></li>
+
+        
+        
+        <li>
+          <a href="pages/mailbox/mailbox.html">
+            <i class="fa fa-envelope"></i> <span>Chatbox</span>
+            <span class="pull-right-container">
+              <small class="label pull-right bg-yellow">12</small>
+              <small class="label pull-right bg-green">16</small>
+              <small class="label pull-right bg-red">5</small>
+            </span>
+          </a>
+        </li>
+        
+        
+        <li><a href="{% url 'userprofile:profiledetail' %}"><i class="fa fa-book"></i> <span>Profile Settings</span></a></li>
+
+        <li class="header">PLUGINS</li>
+        <li><a href="{% url 'blog:allbloglist' %}"><i class="fa fa-circle-o text-red"></i> <span>Read Blogs & Articles</span></a></li>
+        <li><a href="{% url 'consultancy:consultancylist' %}"><i class="fa fa-circle-o text-red"></i> <span>Consultancy Forum</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Subscribe Newsletter</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Bills to Scanner App</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Automated Return Filing</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Find Professional</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>E-Commerce Integration</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Investing - Trading & MFs</span></a></li>
+      </ul>
+      
+    </section>
+
+ {% endblock %}
+
+
+
+
+
+
+{% block content %}
+<div class="content-wrapper">
+   <section class="content-header">
+        <!-- <div class="col-md-12 col-md-offset-4"> -->
+          <h1>
+            <strong>Select Date</strong>
+          </h1>
+                <ol class="breadcrumb">
+                       <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                       <!-- <li><a href="#">Company list</a></li> -->
+                     <li class="">Company Create</li>
+                     
+            </ol>
+        <!-- </div> -->
+      </section>
+
+  <section class="content">
+      <div class="callout callout-warning">
+        <h4>Welcome!</h4>
+        Welcome to predict books your personal AI powered business engine!
+        <!-- <a href="http://getbootstrap.com/javascript/#modals">Bootstrap documentation</a> -->
+      </div>
+
+<div class="row">
+      <div class="col-xs-12">
+          <div class="box box-default">
+          <div class="box-body">
+
+      <a href="{% url 'company:list' %}" class="btn btn-success" role="button">Select Company </a>
+              <a href="{% url 'company:create' %}" class="btn btn-warning" role="button">Create Company details</a>
+              <a href="#" class="btn btn-danger" role="button">Delete Company</a>
+
+        
+        
+        
+        </div>
+      
+      </div>
+    
+    </div>
+
+</div>
+
+<div class="row">
+      <div class="col-xs-12">
+
+        <form method="POST" class="form-horizontal">
+          <div class="box box-default">
+
+
+          <div class="box-body">
+
+            
+                   
+                          {% csrf_token %}
+                          
+                      <div class="form-group">
+                            <label for="input" class="col-sm-2 control-label">Start Date</label>
+                            
+                              <div class="col-sm-10">
+                                    
+                                  {{ form.Start_Date.errors }}
+                                  {{ form.Start_Date }}
+                                
+                              </div>
+                      </div>
+
+                       <div class="form-group">
+                            <label for="input" class="col-sm-2 control-label">End Date</label>
+                            
+                              <div class="col-sm-10">
+                                    
+                                  {{ form.End_Date.errors }}
+                                  {{ form.End_Date }}
+                                
+                              </div>
+                      </div>
+
+
+                    <div class="box-footer">
+                      <button type="button" class="btn btn-default pull-left">Close</button>
+                    <button type="submit" class="btn btn-primary pull-right" value="save">Save changes</button>
+                   </div>
+                        
+                      
+                      <!-- /.modal-content -->
+                    
+        
+        
+        
+        </div>
+      
+      </div>
+    
+    </div>
+
+   </form>
+
+</div>
+
+</div>
+
+
+
+    </section>
+  
+</div>
+
+
+{% endblock %}

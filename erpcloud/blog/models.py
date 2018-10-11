@@ -42,7 +42,8 @@ class Blog(models.Model):
 	def total_likes(self):
 		return self.likes.count()
 
-	def categories_count(self):
+	@classmethod
+	def categories_count(cls):
 		categories_count = categories.objects.annotate(blog_count=Count('blogs')).values_list('Title','blog_count')
 		return categories_count
 

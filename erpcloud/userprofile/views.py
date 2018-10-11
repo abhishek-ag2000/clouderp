@@ -3,6 +3,9 @@ from django.views.generic import DetailView,UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from userprofile.models import Profile
 from userprofile.forms import profileform
+from django.shortcuts import get_object_or_404
+from company.models import company
+
 
 # Create your views here.
 

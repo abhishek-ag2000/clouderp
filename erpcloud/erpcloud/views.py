@@ -1,16 +1,21 @@
 from django.urls import reverse
 from django.http import HttpResponseRedirect
-from django.views.generic import TemplateView
+from django.views.generic import ListView,TemplateView
 from django.shortcuts import render
 from django.template import RequestContext
 from django.conf import settings
 from blog.models import Blog
 from django.db.models import Count
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from company.models import company
+from django.shortcuts import get_object_or_404
 
  
-class HomePage(TemplateView):
+class HomePage(ListView):
 	template_name = "clouderp/index.html"
+	paginate_by = 4
+
+	def get_queryset(self):
+		return Blog.objects.all().order_by('-id')
 
 	def get(self, request, *args, **kwargs):
 		if request.user.is_authenticated:
@@ -19,23 +24,16 @@ class HomePage(TemplateView):
 
 	def get_context_data(self, **kwargs):
 		context = super(HomePage, self).get_context_data(**kwargs) 
-		qs = Blog.objects.all()
-		context['blog_list'] = qs
 		context['likes'] = Blog.objects.annotate(Count('likes')).values_list('Blog_title','likes')
+		return context
 
-		page = self.request.GET.get('page')
+class base(TemplateView):
+	template_name = "clouderp/base.html"
 
-		paginator = Paginator(qs, 4)
-
-		try:
-			users = paginator.page(page)
-		except PageNotAnInteger:
-			users = paginator.page(1)
-		except EmptyPage:
-			users = paginator.page(paginator.num_pages)
-
-		context['users'] = users
-
+	def get_context_data(self, **kwargs):
+		context = super(base, self).get_context_data(**kwargs) 
+		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
+		context['company_details'] = company_details
 		return context
 
 

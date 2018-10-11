@@ -38,7 +38,7 @@
 
       <a href="{% url 'company:list' %}" class="btn btn-success" role="button">Select Company </a>
               <a href="{% url 'company:create' %}" class="btn btn-warning" role="button">Create Company details</a>
-              <a href="#" class="btn btn-danger" role="button">Delete Company</a>
+              <a href="{% url 'company:delete' pk=company_details.pk %}" class="btn btn-danger" role="button">Delete Company</a>
 
         
         
@@ -56,10 +56,10 @@
           <div class="box box-default">
           <div class="box-body">
 
-           <a href="{% url 'accounting_double_entry:grouplist' %}" class="btn btn-success" role="button">Select Group </a>
-              <a href="{% url 'accounting_double_entry:groupcreate' %}" class="btn btn-warning" role="button">Create Group</a>
+           <a href="{% url 'accounting_double_entry:grouplist' pk=company_details.pk %}" class="btn btn-success" role="button">Select Group </a>
+              <a href="{% url 'accounting_double_entry:groupcreate' pk=company_details.pk %}" class="btn btn-warning" role="button">Create Group</a>
 
-              <a class='btn btn-danger' href="{% url 'accounting_double_entry:groupdelete' pk=group1_details.pk %}">Delete Group</a>
+              <a class='btn btn-danger' href="{% url 'accounting_double_entry:groupdelete' pk1=company_details.pk pk2=group1_details.pk %}">Delete Group</a>
 
         
         
@@ -130,7 +130,7 @@
  -->
 
 					<div class="box-footer">
-    					<p><a class='btn btn-warning' href="{% url 'accounting_double_entry:groupupdate' pk=group1_details.pk %}">Update Group</a> </p>
+    					<p><a class='btn btn-warning' href="{% url 'accounting_double_entry:groupupdate' pk1=company_details.pk pk2=group1_details.pk %}">Update Group</a></p>
 
   					</div>
 
