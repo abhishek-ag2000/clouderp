@@ -23,8 +23,7 @@ Select Date
       <!-- sidebar menu: : style can be found in sidebar.less -->
        <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MAIN NAVIGATION</li>
-      <!--   <li><a href="{% url 'company:Dashboard' 1 %}"><i class="fa fa-book"></i> <span>Dashboard</span></a></li>
-         -->
+      
 
         <li><a href="{% url 'company:list' %}"><i class="fa fa-book"></i> <span>Dashboard</span></a></li>
 
@@ -144,7 +143,8 @@ Select Date
 
 
                     <div class="box-footer">
-                      <button type="button" class="btn btn-default pull-left">Close</button>
+                      <a href="{% url 'company:list' %}" class="btn btn-default pull-left" role="button">Cancel</a>
+                      
                     <button type="submit" class="btn btn-primary pull-right" value="save">Save changes</button>
                    </div>
                         

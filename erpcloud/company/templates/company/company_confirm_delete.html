@@ -37,8 +37,7 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
        <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MAIN NAVIGATION</li>
-      <!--   <li><a href="{% url 'company:Dashboard' 1 %}"><i class="fa fa-book"></i> <span>Dashboard</span></a></li>
-         -->
+      
 
         <li><a href="{% url 'company:list' %}"><i class="fa fa-book"></i> <span>Dashboard</span></a></li>
 
@@ -88,7 +87,7 @@
 <form method="post">
   {% csrf_token %}
   <input type="submit" class="btn btn-danger" value="Delete">
-  <a href="{% url 'company:Dashboard' pk=company.pk %} ">Cancel</a>
+  <a href="{% url 'company:Dashboard' pk=company.pk pk3=selectdatefield_details.pk %} ">Cancel</a>
 
 </form>
 	</div>

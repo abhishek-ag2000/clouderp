@@ -1,5 +1,6 @@
 from django import forms
-from accounting_double_entry.models import journal,group1,ledger1
+from accounting_double_entry.models import journal,group1,ledger1,selectdatefield
+from company.models import company
 import datetime
 
 
@@ -68,9 +69,24 @@ class journalForm(forms.ModelForm):
 			self.fields['By'].queryset = ledger1.objects.filter(Company=self.kwargs['pk'])
 
 
-class DateRangeForm(forms.Form):
-	start_date = forms.DateField(widget=DateInput())
-	end_date   = forms.DateField(widget=DateInput())
+class DateRangeForm(forms.ModelForm):
+
+	def __init__(self, *args, **kwargs):
+		super(DateRangeForm, self).__init__(*args, **kwargs)
+		self.fields['Start_Date'].widget.attrs = {'class': 'form-control',}
+		self.fields['End_Date'].widget.attrs = {'class': 'form-control',}
+
+	class Meta:
+		model = selectdatefield
+		fields = ('Start_Date', 'End_Date')
+		widgets = {
+			'Start_Date'  : DateInput(),
+			'End_Date'    : DateInput(),
+		}
+
+
+
+
 
 
 

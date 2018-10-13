@@ -37,7 +37,7 @@
 
 			<a href="{% url 'company:list' %}" class="btn btn-success" role="button">Select Company </a>
               <a href="{% url 'company:create' %}" class="btn btn-warning" role="button">Create Company details</a>
-              <a href="{% url 'company:delete' pk=company_details.pk %}" class="btn btn-danger" role="button">Delete Company</a>
+              <a href="{% url 'company:delete' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-danger" role="button">Delete Company</a>
 
 				
 				
@@ -55,8 +55,8 @@
           <div class="box box-default">
           <div class="box-body">
 
-           <a href="{% url 'accounting_double_entry:grouplist' pk=company_details.pk %}" class="btn btn-success" role="button">Select Group </a>
-              <a href="{% url 'accounting_double_entry:groupcreate' pk=company_details.pk %}" class="btn btn-warning" role="button">Create Group</a>
+           <a href="{% url 'accounting_double_entry:grouplist' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-success" role="button">Select Group </a>
+              <a href="{% url 'accounting_double_entry:groupcreate' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-warning" role="button">Create Group</a>
               
 
         
@@ -109,13 +109,13 @@
 
                     {% for group1 in group1_list %}
                     <tr>
-                      <td><a href="{% url 'accounting_double_entry:groupdetail' pk1=company_details.pk pk2=group1.pk %}">
+                      <td><a href="{% url 'accounting_double_entry:groupdetail' pk1=company_details.pk pk2=group1.pk pk3=selectdatefield_details.pk %}">
                         {{ forloop.counter0|add:page_obj.start_index }}
                       </a></td>
-                      <td><a href="{% url 'accounting_double_entry:groupdetail' pk1=company_details.pk pk2=group1.pk %}">{{group1.group_Name}}</a></td>
-                      <td><a href="{% url 'accounting_double_entry:groupdetail' pk1=company_details.pk pk2=group1.pk %}">{{group1.Master}}</a></td>
-                      <td><a href="{% url 'accounting_double_entry:groupdetail' pk1=company_details.pk pk2=group1.pk %}">{{group1.Nature_of_group1}}</a></td>
-                      <td><a href="{% url 'accounting_double_entry:groupdetail' pk1=company_details.pk pk2=group1.pk %}">{{group1.balance_nature}}</a></td>
+                      <td><a href="{% url 'accounting_double_entry:groupdetail' pk1=company_details.pk pk2=group1.pk pk3=selectdatefield_details.pk %}">{{group1.group_Name}}</a></td>
+                      <td><a href="{% url 'accounting_double_entry:groupdetail' pk1=company_details.pk pk2=group1.pk pk3=selectdatefield_details.pk %}">{{group1.Master}}</a></td>
+                      <td><a href="{% url 'accounting_double_entry:groupdetail' pk1=company_details.pk pk2=group1.pk pk3=selectdatefield_details.pk %}">{{group1.Nature_of_group1}}</a></td>
+                      <td><a href="{% url 'accounting_double_entry:groupdetail' pk1=company_details.pk pk2=group1.pk pk3=selectdatefield_details.pk %}">{{group1.balance_nature}}</a></td>
                     </tr>
                     {% endfor %}
 

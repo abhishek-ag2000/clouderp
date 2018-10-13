@@ -8,6 +8,7 @@ from blog.models import Blog
 from django.db.models import Count
 from company.models import company
 from django.shortcuts import get_object_or_404
+from accounting_double_entry.models import selectdatefield
 
  
 class HomePage(ListView):
@@ -34,6 +35,8 @@ class base(TemplateView):
 		context = super(base, self).get_context_data(**kwargs) 
 		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
 		context['company_details'] = company_details
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		context['selectdatefield_details'] = selectdatefield_details
 		return context
 
 

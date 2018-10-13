@@ -12,6 +12,7 @@
         <!-- Bootstrap 3.3.7 -->
         <link rel="stylesheet" href="{% static 'clouderp/bower_components/bootstrap/dist/css/bootstrap.min.css' %}">
 
+        <!-- bootstrap datepicker -->
         <link rel="stylesheet" href="{% static 'clouderp/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}">
 
         <!-- Font Awesome -->
@@ -382,8 +383,7 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
        <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MAIN NAVIGATION</li>
-      <!--   <li><a href="{% url 'company:Dashboard' 1 %}"><i class="fa fa-book"></i> <span>Dashboard</span></a></li>
-         -->
+      
 
         <li><a href="{% url 'company:list' %}"><i class="fa fa-book"></i> <span>Dashboard</span></a></li>
 
@@ -403,9 +403,9 @@
                 </span>
               </a>
               <ul class="treeview-menu">
-                <li><a href="{% url 'accounting_double_entry:groupcreate' pk=company_details.pk %}"><i class="fa fa-circle-o"></i> Create</a></li>
+                <li><a href="{% url 'accounting_double_entry:groupcreate' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Create</a></li>
                 
-                  <li><a href="{% url 'accounting_double_entry:grouplist' pk=company_details.pk %}"><i class="fa fa-circle-o"></i> Display</a></li>
+                  <li><a href="{% url 'accounting_double_entry:grouplist' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Display</a></li>
                   <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Alter</a></li> -->
                    
               </ul>
@@ -419,8 +419,8 @@
               </a>
               <ul class="treeview-menu">
                
-                 <li><a href="{% url 'accounting_double_entry:create' pk=company_details.pk %}"><i class="fa fa-circle-o"></i> Create</a></li>
-                   <li><a href="{% url 'accounting_double_entry:list' pk=company_details.pk %}"><i class="fa fa-circle-o"></i> Display</a></li>
+                 <li><a href="{% url 'accounting_double_entry:create' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Create</a></li>
+                   <li><a href="{% url 'accounting_double_entry:list' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Display</a></li>
                  
                    
               </ul>
@@ -433,9 +433,9 @@
                 </span>
               </a>
               <ul class="treeview-menu">
-                <li><a href="{% url 'accounting_double_entry:ledgercreate' pk=company_details.pk %}"><i class="fa fa-circle-o"></i> Create</a></li>
+                <li><a href="{% url 'accounting_double_entry:ledgercreate' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Create</a></li>
                 
-                <li><a href="{% url 'accounting_double_entry:ledgerlist' pk=company_details.pk %}"><i class="fa fa-circle-o"></i> Display</a></li>
+                <li><a href="{% url 'accounting_double_entry:ledgerlist' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Display</a></li>
                   <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Alter</a></li> -->
                    
               </ul>

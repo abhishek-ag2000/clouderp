@@ -40,7 +40,7 @@
 
       <a href="{% url 'company:list' %}" class="btn btn-success" role="button">Select Company </a>
               <a href="{% url 'company:create' %}" class="btn btn-warning" role="button">Create Company details</a>
-              <a href="{% url 'company:delete' pk=company_details.pk %}" class="btn btn-danger" role="button">Delete Company</a>
+              <a href="{% url 'company:delete' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-danger" role="button">Delete Company</a>
 
         
         
@@ -58,8 +58,8 @@
           <div class="box box-default">
           <div class="box-body">
 
-           <a href="{% url 'accounting_double_entry:grouplist' pk=company_details.pk %}" class="btn btn-success" role="button">Select Group </a>
-              <a href="{% url 'accounting_double_entry:groupcreate' pk=company_details.pk %}" class="btn btn-warning" role="button">Create Group</a>
+           <a href="{% url 'accounting_double_entry:grouplist' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-success" role="button">Select Group </a>
+              <a href="{% url 'accounting_double_entry:groupcreate' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-warning" role="button">Create Group</a>
               
 
         
@@ -151,7 +151,7 @@
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
-                <button class="btn btn-default">Cancel</button>
+               <a href="{% url 'accounting_double_entry:grouplist' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-default" role="button">Cancel </a>
                 {% if not form.instance.pk %}
                 <button type="submit" class="btn btn-info pull-right" value="Submit">Create</button>
                 {% else %}

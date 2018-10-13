@@ -5,11 +5,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic.edit import FormMixin
 from company.models import company
-from company.forms import companyform,daterangeform
+from company.forms import companyform
 from django.shortcuts import redirect
 from todogst.models import Todo
 from accounting_double_entry.models import selectdatefield
-
+from accounting_double_entry.forms import DateRangeForm
+from django.shortcuts import get_object_or_404
+from django.urls import reverse
 # Create your views here.
 
 
@@ -35,7 +37,7 @@ class FormListView(FormMixin, ListView):
 
 class companyListView(LoginRequiredMixin,FormListView):
 	model = company
-	form_class  = daterangeform
+	form_class  = DateRangeForm
 	paginate_by = 10
 
 	def get_queryset(self):
@@ -43,7 +45,7 @@ class companyListView(LoginRequiredMixin,FormListView):
 
 	def get_context_data(self, **kwargs):
 		context = super(companyListView, self).get_context_data(**kwargs)
-		context['selectdate'] = selectdatefield.objects.filter(User=self.request.user).latest('Start_Date')
+		context['selectdates'] = selectdatefield.objects.filter(User=self.request.user)
 		return context
 
 class companyDetailView(LoginRequiredMixin,DetailView):
@@ -54,12 +56,17 @@ class companyDetailView(LoginRequiredMixin,DetailView):
 	def get_context_data(self, **kwargs):
 		context = super(companyDetailView, self).get_context_data(**kwargs)
 		context['todo_list'] = Todo.objects.filter(User=self.request.user).order_by('-id')
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		context['selectdatefield_details'] = selectdatefield_details
 		return context
 
 
 class companyCreateView(LoginRequiredMixin,CreateView):
 	form_class  = companyform
 	template_name = "company/company_form.html"
+
+	def get_success_url(self,**kwargs):
+		return reverse('company:list')
 
 	def form_valid(self, form):
 		form.instance.User = self.request.user
@@ -71,22 +78,23 @@ class companyUpdateView(LoginRequiredMixin,UpdateView):
 	form_class  = companyform
 	template_name = "company/company_form.html"
 
+	def get_success_url(self,**kwargs):
+		return reverse('company:list')
+
 class companyDeleteView(LoginRequiredMixin,DeleteView):
 	model = company
 	success_url = reverse_lazy("company:list")
 
-class selectdaterangecreate(LoginRequiredMixin,CreateView):
-	form_class  = daterangeform
-	template_name = "company/selectdate.html"
+	def get_success_url(self,**kwargs):
+		return reverse('company:list')
 
-class selectdaterange(LoginRequiredMixin,UpdateView):
-	model = selectdatefield
-	form_class  = daterangeform
-	template_name = "company/selectdate.html"
+	def get_context_data(self, **kwargs):
+		context = super(companyDeleteView, self).get_context_data(**kwargs) 
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		context['selectdatefield_details'] = selectdatefield_details
+		return context
 
-	def form_valid(self, form):
-		form.instance.User = self.request.user
-		return super(selectdaterange, self).form_valid(form)
+
 
 
 
