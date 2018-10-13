@@ -27,12 +27,13 @@ from django.conf import settings
 
 urlpatterns = [
     url(r"^$", views.HomePage.as_view(), name="home"),
+    url(r"^base/$", views.base.as_view(), name="base"),
     path('admin/', admin.site.urls),
     url(r"^accounts/", include("accounts.urls", namespace="accounts")),
     url(r"^accounts/", include("django.contrib.auth.urls")),
     url(r'^auth/', include('social_django.urls', namespace='social')),
-    url(r"^company/", include("company.urls", namespace="company")),
     url(r"^accounting_double_entry/", include("accounting_double_entry.urls", namespace="accounting_double_entry")),
+    url(r"^company/", include("company.urls", namespace="company")),
     url(r"^todo/", include("todogst.urls", namespace="todogst")),
     url(r"^profile/", include("userprofile.urls", namespace="userprofile")),
     url(r"^blog/", include("blog.urls", namespace="blog")),
@@ -40,6 +41,8 @@ urlpatterns = [
     path('ckeditor/', include('ckeditor_uploader.urls')),
     url(r"^consultancy/", include("consultancy.urls", namespace="consultancy")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns += staticfiles_urlpatterns()
 
 
 handler404 = 'erpcloud.views.custom_404'

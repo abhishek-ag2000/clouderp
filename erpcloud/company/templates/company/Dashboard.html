@@ -1,14 +1,14 @@
 {% extends "clouderp/base.html" %}
-
+{% load staticfiles %}
 
 {% block title %}Dashboard{% endblock %}
 
 
 	
-		
+    
 			
 			
-	{% block content %}
+{% block content %}
 <div class="content-wrapper">
 	<!-- <div class="container"> -->
 		<section class="content-header">
@@ -59,13 +59,23 @@
               </button> -->
               <a href="{% url 'company:list' %}" class="btn btn-success" role="button">Select Company </a>
               <a href="{% url 'company:update' pk=company_details.pk %}" class="btn btn-warning" role="button">Update Company details</a>
-              <a href="{% url 'company:delete' pk=company_details.pk %}" class="btn btn-danger" role="button">Delete Company</a>
-              <!-- <button type="button" class="btn btn-warning" href="{% url 'company:update' pk=company_details.pk %}" >
-                Update Company details
-              </button> -->
-              <!-- <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-danger" href="{% url 'company:delete' pk=company_details.pk %}">
-                Delete Company
-              </button> -->
+              <a href="{% url 'company:delete' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-danger" role="button">Delete Company</a>
+              
+              {% if not selectdatefield_details %}
+
+                   <a type="button" class="btn btn-primary pull-right" href="{% url 'accounting_double_entry:datecreate' %}">Select Date Range</a>
+
+                {% else %} 
+              
+  
+                      <a type="button" class='btn btn-warning pull-right'  href="{% url 'accounting_double_entry:dateupdate' pk=selectdatefield_details.pk %}">Update Date Range</a>
+
+                      <a class="pull-right"><strong>Selected Period: From</strong> {{ selectdatefield_details.Start_Date|date }} <strong>To</strong> {{ selectdatefield_details.End_Date|date }}  &nbsp;</a> 
+
+                 
+
+                {% endif %} 
+               
               
               
             </div>
@@ -101,27 +111,7 @@
 
               <h3 class="box-title">To Do List</h3>
 
-                {% if is_paginated %}
-                    <ul class="pagination">
-                       {% if page_obj.has_previous %}
-                          <li><a href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
-                        {% else %}
-                          <li class="disabled"><span>Previous</span></li>
-                        {% endif %}
-                        {% for i in paginator.page_range %}
-                            {% if page_obj.number == i %}
-                               <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
-                            {% else %}
-                                <li><a href="?page={{ i }}">{{ i }}</a></li>
-                            {% endif %}
-                        {% endfor %}
-                        {% if page_obj.has_next %}
-                            <li><a href="?page={{ page_obj.next_page_number }}">Next</a></li>
-                        {% else %}
-                            <li class="disabled"><span>Next</span></li>
-                        {% endif %}
-                    </ul>
-                {% endif %}
+               
 
               
 
@@ -444,7 +434,7 @@
 
 <!-- /.content-wrapper -->
 
-			{% endblock %}
+{% endblock %}
 			
 	
 	

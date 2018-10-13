@@ -3,19 +3,28 @@
 
 <html>
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>{% block title %}Predict Books{% endblock %}</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>{% block title %}Predict Books{% endblock %}</title>
 
-	 <!-- Tell the browser to be responsive to screen width -->
-		    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+   <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <!-- Bootstrap 3.3.7 -->
         <link rel="stylesheet" href="{% static 'clouderp/bower_components/bootstrap/dist/css/bootstrap.min.css' %}">
+
+        <!-- bootstrap datepicker -->
+        <link rel="stylesheet" href="{% static 'clouderp/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}">
 
         <!-- Font Awesome -->
         <link rel="stylesheet" href="{% static 'clouderp/bower_components/font-awesome/css/font-awesome.min.css' %}">
 
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
+
+          <!-- DataTables -->
+        <link rel="stylesheet" href="{% static 'clouderp/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+
+          <!-- daterange picker -->
+        <link rel="stylesheet" href="{% static 'clouderp/bower_components/bootstrap-daterangepicker/daterangepicker.css' %}">
 
         <!-- Ionicons -->
         <link rel="stylesheet" href="{% static 'clouderp/bower_components/Ionicons/css/ionicons.min.css' %}">
@@ -50,8 +59,8 @@
 {% block main-header %}
 <div class="wrapper">
 
-	
-	<header class="main-header">
+  
+  <header class="main-header">
     <!-- Logo -->
     <a href="{% url 'company:list' %}" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
@@ -287,7 +296,7 @@
 
                 <p>
                   {{ user.get_username }} - Business Subscription
-                  <small>Member since Nov. 2018</small>
+                  <small>Member since {{ user.profile.Date|date:"M Y" }}</small>
                 </p>
               </li>
               <!-- Menu Body -->
@@ -308,7 +317,7 @@
               <!-- Menu Footer-->
                 <li class="user-footer">
                 <div class="pull-left">
-                  <a href="#" class="btn btn-default btn-flat">Profile</a>
+                  <a href="{% url 'userprofile:profiledetail' %}" class="btn btn-default btn-flat">Profile</a>
                 </div>
                 <div class="pull-right">
                   <a href="{% url 'accounts:logout' %}" class="btn btn-default btn-flat">Sign out</a>
@@ -342,6 +351,21 @@
     {% block main-sidebar %}
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
+
+      <div class="user-panel">
+        <div class="pull-left image">
+                {% if user.profile.image %}
+                  <img class="img-circle" src="{{ user.profile.image.url }}/" alt="User profile picture">
+                {% else %}
+                    <img class="img-circle" src="{% static 'userprofile/download (1).jpg' %}">
+                {% endif %}
+          
+        </div>
+        <div class="pull-left info">
+          <p>{{ user.profile.Full_Name }}</p>
+          <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+        </div>
+      </div>
     
       <!-- Sidebar user panel -->
      
@@ -359,8 +383,7 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
        <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MAIN NAVIGATION</li>
-      <!--   <li><a href="{% url 'company:Dashboard' 1 %}"><i class="fa fa-book"></i> <span>Dashboard</span></a></li>
-         -->
+      
 
         <li><a href="{% url 'company:list' %}"><i class="fa fa-book"></i> <span>Dashboard</span></a></li>
 
@@ -380,9 +403,9 @@
                 </span>
               </a>
               <ul class="treeview-menu">
-                <li><a href="{% url 'accounting_double_entry:groupcreate' %}"><i class="fa fa-circle-o"></i> Create</a></li>
+                <li><a href="{% url 'accounting_double_entry:groupcreate' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Create</a></li>
                 
-                  <li><a href="{% url 'accounting_double_entry:grouplist' %}"><i class="fa fa-circle-o"></i> Display</a></li>
+                  <li><a href="{% url 'accounting_double_entry:grouplist' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Display</a></li>
                   <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Alter</a></li> -->
                    
               </ul>
@@ -396,8 +419,8 @@
               </a>
               <ul class="treeview-menu">
                
-                 <li><a href="{% url 'accounting_double_entry:create' %}"><i class="fa fa-circle-o"></i> Create</a></li>
-                   <li><a href="{% url 'accounting_double_entry:list' %}"><i class="fa fa-circle-o"></i> Display</a></li>
+                 <li><a href="{% url 'accounting_double_entry:create' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Create</a></li>
+                   <li><a href="{% url 'accounting_double_entry:list' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Display</a></li>
                  
                    
               </ul>
@@ -410,9 +433,9 @@
                 </span>
               </a>
               <ul class="treeview-menu">
-                <li><a href="{% url 'accounting_double_entry:ledgercreate' %}"><i class="fa fa-circle-o"></i> Create</a></li>
+                <li><a href="{% url 'accounting_double_entry:ledgercreate' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Create</a></li>
                 
-                <li><a href="{% url 'accounting_double_entry:ledgerlist' %}"><i class="fa fa-circle-o"></i> Display</a></li>
+                <li><a href="{% url 'accounting_double_entry:ledgerlist' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Display</a></li>
                   <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Alter</a></li> -->
                    
               </ul>
@@ -792,11 +815,25 @@
 
 <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+<!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+
+<!-- jquery-confirm JS  -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+
+<!-- js Render  -->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jsrender/0.9.88/jsrender.min.js'></script> 
+
 <!-- Slimscroll -->
 <script src="{% static 'clouderp/bower_components/jquery-slimscroll/jquery.slimscroll.min.js' %}"></script>
 <!-- FastClick -->
 <script src="{% static 'clouderp/bower_components/fastclick/lib/fastclick.js' %}"></script>
+
+<!-- DataTables -->
+<script src="{% static 'clouderp/bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'clouderp/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
 
 <script src="{% static 'clouderp/bower_components/chart.js/Chart.js' %}"></script>
 <!-- AdminLTE App -->
@@ -805,96 +842,92 @@
 <script src="{% static 'clouderp/js/demo.js' %}"></script>
 <script src="{% static 'clouderp/js/select2.min.js' %}"></script>
 
-<script type="text/javascript">
-  
-  $(function() {
-  $('input[name="daterange"]').daterangepicker({
-    opens: 'left'
-  }, function(start, end, label) {
-    console.log("A new date selection was made: " + start.format('DD-MM-YYYY') + ' to ' + end.format('DD-MM-YYYY'));
-  });
-});
-</script>
+<script src="{% static 'clouderp/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+
+<!-- date-range-picker -->
+<script src="{% static 'clouderp/bower_components/moment/min/moment.min.js' %}"></script>
+<script src="{% static 'clouderp/bower_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+
 <script>
- $(function () {
-    /* ChartJS
-     * -------
-     * Here we will create a few charts using ChartJS
-     */
+  $(function () {
+    //Initialize Select2 Elements
+    $('.select2').select2()
 
-    //--------------
-    //- AREA CHART -
-    //--------------
+    //Datemask dd/mm/yyyy
+    $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+    //Datemask2 mm/dd/yyyy
+    $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+    //Money Euro
+    $('[data-mask]').inputmask()
 
-    // Get context with jQuery - using jQuery's .get() method.
-    var areaChartCanvas = $('#areaChart').get(0).getContext('2d')
-    // This will get the first returned node in the jQuery collection.
-    var areaChart       = new Chart(areaChartCanvas)
-
-    var areaChartData = {
-      labels  : ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-      datasets: [
-        {
-          label               : 'Electronics',
-          fillColor           : 'rgba(210, 214, 222, 1)',
-          strokeColor         : 'rgba(210, 214, 222, 1)',
-          pointColor          : 'rgba(210, 214, 222, 1)',
-          pointStrokeColor    : '#c1c7d1',
-          pointHighlightFill  : '#fff',
-          pointHighlightStroke: 'rgba(220,220,220,1)',
-          data                : [65, 59, 80, 81, 56, 55, 40]
+    //Date range picker
+    $('#reservation').daterangepicker()
+    //Date range picker with time picker
+    $('#reservationtime').daterangepicker({ timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A' })
+    //Date range as a button
+    $('#daterange-btn').daterangepicker(
+      {
+        ranges   : {
+          'Today'       : [moment(), moment()],
+          'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+          'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
+          'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+          'This Month'  : [moment().startOf('month'), moment().endOf('month')],
+          'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
         },
-        {
-          label               : 'Digital Goods',
-          fillColor           : 'rgba(60,141,188,0.9)',
-          strokeColor         : 'rgba(60,141,188,0.8)',
-          pointColor          : '#3b8bba',
-          pointStrokeColor    : 'rgba(60,141,188,1)',
-          pointHighlightFill  : '#fff',
-          pointHighlightStroke: 'rgba(60,141,188,1)',
-          data                : [28, 48, 40, 19, 86, 27, 90]
-        }
-      ]
-    }
+        startDate: moment().subtract(29, 'days'),
+        endDate  : moment()
+      },
+      function (start, end) {
+        $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+      }
+    )
 
-    var areaChartOptions = {
-      //Boolean - If we should show the scale at all
-      showScale               : true,
-      //Boolean - Whether grid lines are shown across the chart
-      scaleShowGridLines      : false,
-      //String - Colour of the grid lines
-      scaleGridLineColor      : 'rgba(0,0,0,.05)',
-      //Number - Width of the grid lines
-      scaleGridLineWidth      : 1,
-      //Boolean - Whether to show horizontal lines (except X axis)
-      scaleShowHorizontalLines: true,
-      //Boolean - Whether to show vertical lines (except Y axis)
-      scaleShowVerticalLines  : true,
-      //Boolean - Whether the line is curved between points
-      bezierCurve             : true,
-      //Number - Tension of the bezier curve between points
-      bezierCurveTension      : 0.3,
-      //Boolean - Whether to show a dot for each point
-      pointDot                : false,
-      //Number - Radius of each point dot in pixels
-      pointDotRadius          : 4,
-      //Number - Pixel width of point dot stroke
-      pointDotStrokeWidth     : 1,
-      //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
-      pointHitDetectionRadius : 20,
-      //Boolean - Whether to show a stroke for datasets
-      datasetStroke           : true,
-      //Number - Pixel width of dataset stroke
-      datasetStrokeWidth      : 2,
-      //Boolean - Whether to fill the dataset with a color
-      datasetFill             : true,
-      //String - A legend template
-      legendTemplate          : '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<datasets.length; i++)><li><span style="background-color:<%=datasets[i].lineColor%>"></span><%if(datasets[i].label)><%=datasets[i].label%><%}%></li><%}%></ul>',
-      //Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
-      maintainAspectRatio     : true,
-      //Boolean - whether to make the chart responsive to window resizing
-      responsive              : true
-    }
+    //Date picker
+    $('#datepicker').datepicker({
+      autoclose: true
+    })
+
+    //iCheck for checkbox and radio inputs
+    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+      checkboxClass: 'icheckbox_minimal-blue',
+      radioClass   : 'iradio_minimal-blue'
+    })
+    //Red color scheme for iCheck
+    $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+      checkboxClass: 'icheckbox_minimal-red',
+      radioClass   : 'iradio_minimal-red'
+    })
+    //Flat red color scheme for iCheck
+    $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+      checkboxClass: 'icheckbox_flat-green',
+      radioClass   : 'iradio_flat-green'
+    })
+
+    //Colorpicker
+    $('.my-colorpicker1').colorpicker()
+    //color picker with addon
+    $('.my-colorpicker2').colorpicker()
+
+    //Timepicker
+    $('.timepicker').timepicker({
+      showInputs: false
+    })
+  })
+</script>
+
+<script>
+  $(function () {
+    $('#example1').DataTable()
+    $('#example2').DataTable({
+      'paging'      : true,
+      'lengthChange': false,
+      'searching'   : false,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : false
+    })
+  })
 </script>
 
     </div>

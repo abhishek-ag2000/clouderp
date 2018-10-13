@@ -7,6 +7,7 @@ from PIL import Image
 from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 import sys
+from sorl.thumbnail import ImageField, get_thumbnail
 # Create your models here.
 
 class Profile(models.Model):
@@ -55,7 +56,7 @@ class Profile(models.Model):
 	Country = models.CharField(max_length=32,blank=True)
 	Phone_no = models.BigIntegerField(null=True,blank=True)
 	Skills = models.TextField(blank=True)
-	image = models.ImageField(upload_to='user_images', null=True, blank=True)
+	image = ImageField(upload_to='user_images', null=True, blank=True)
 
 	def __str__(self):
 		return str(self.Name)

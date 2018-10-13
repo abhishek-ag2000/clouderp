@@ -29,7 +29,7 @@ SECRET_KEY = 'a-o(^^ooxv6eaj4d-gqir9!+3*9idmc8921t+0=u681bpq1*s!'
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY ='954744097986-2c65ubrgiggh2nbb532es23go3a30s8c.apps.googleusercontent.com'  #Paste CLient Key
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'TBPj7U1_ieD5Ge8YKslwqeFj'
@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'ckeditor_uploader',                        #pip install django-ckeditor
     'django_select2',                           #pip install django_select2
     'select2',                                  #pip install django-select2-forms
+    'sorl.thumbnail',                           #pip install sorl-thumbnail
 
 
 
@@ -215,8 +216,12 @@ USE_TZ = True
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+STATICFILES_DIRS =(
+
+    os.path.join(BASE_DIR, 'static'),
+
+) 
 
 
 MEDIA_URL = '/media/'

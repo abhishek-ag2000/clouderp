@@ -4,13 +4,11 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save,pre_save
 from django.dispatch import receiver
-
+from django.core.exceptions import ValidationError
+from django.shortcuts import get_object_or_404
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
-
-# from django import template
-# register = template.Library()
 
 
 
@@ -76,19 +74,25 @@ class company(models.Model):
 	State = models.CharField(max_length=100,choices=State_Name,default='Choose')
 	Pincode = models.CharField(max_length=32)
 	Telephone_No = models.BigIntegerField(blank=True,null=True)
-	Mobile_No = models.BigIntegerField()
+	Mobile_No = models.BigIntegerField(blank=True,null=True)
 	Financial_Year_From = models.DateTimeField(default=datetime.now, blank=False)
 	Books_Begining_From = models.DateTimeField(default=datetime.now, blank=False)
+
 
 	def __str__(self):
 		return self.Name
 
-
-	def get_absolute_url(self):
-		return reverse("company:Dashboard",kwargs={'pk':self.pk})
+	def clean(self):
+		if self.Books_Begining_From < self.Financial_Year_From:
+			raise ValidationError('Books Begining year cannot be less than starting of the Financial year')
 
 	class Meta:
 		ordering = ["Name"]
+		
+
+
+
+ 
 
 
 

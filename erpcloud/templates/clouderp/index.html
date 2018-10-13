@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% load staticfiles %}
+{% load static %}
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
@@ -259,14 +259,11 @@
           </span>
           <h4 class="text-center">GST Practitioners</h4>         
         </div>
-
       </div>
     </div>
   </section>  
    
     
-
-
  <section id="offer" class="">
       <div class="container">
           <div class="row ">
@@ -288,7 +285,6 @@
                   <div class="full-square"></div>
                   <i class="sprite-Mail_icon"></i>
               </div>
-
               <div class="figcaption">
                   <h4>Accountancy</h4>
                   <h5>Book keeping in a double entry erp system.</h5>
@@ -305,7 +301,6 @@
                   <div class="full-square"></div>
                   <i class="sprite-Compass_icon"></i>
               </div>
-
               <div class="figcaption">
                   <h4>Legal & Litigation</h4>
                   <h5>All drafting needs and paperwork from expert lawyer</h5>
@@ -322,7 +317,6 @@
                   <div class="full-square"></div>
                   <i class="sprite-Support_icon"></i>
               </div>
-
               <div class="figcaption">
                   <h4>Consultancy</h4>
                   <h5>There are many versions of lorem ipsum available</h5>
@@ -828,7 +822,6 @@
                 <hr class="title-border">
             </div>
          </div>
-
             <div class="row">
                 <div class="block col-sm-6">
                     <h3>Drop us a message </h3>
@@ -936,7 +929,6 @@
             var lat;
             var lng;
             var map;
-
             //type your address after "address="
             jQuery.getJSON('http://maps.googleapis.com/maps/api/geocode/json?address=london, baker street, 221b&sensor=false', function(data) {
                 lat = data.results[0].geometry.location.lat;
@@ -944,7 +936,6 @@
             }).complete(function(){
                 dxmapLoadMap();
             });
-
             function attachSecretMessage(marker, message)
             {
                 var infowindow = new google.maps.InfoWindow(
@@ -954,7 +945,6 @@
                     infowindow.open(map,marker);
                 });
             }
-
             window.dxmapLoadMap = function()
             {
                 var center = new google.maps.LatLng(lat, lng);
@@ -966,7 +956,6 @@
                     center: center
                 };
                 map = new google.maps.Map(document.getElementById('map'), settings);
-
                 var marker = new google.maps.Marker({
                     position: center,
                     title: 'Map title',

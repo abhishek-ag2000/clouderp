@@ -1,5 +1,5 @@
 from django.contrib import admin
-from accounting_double_entry.models import group1,ledger1,journal
+from accounting_double_entry.models import group1,ledger1,journal,selectdatefield
 
 # Register your models here.
 
@@ -48,6 +48,7 @@ class ledgerAdmin(admin.ModelAdmin):
 admin.site.register(ledger1,ledgerAdmin)
 admin.site.register(group1,group1admin)
 admin.site.register(journal,journaladmin)
+admin.site.register(selectdatefield)
 
 
 

@@ -1,12 +1,14 @@
 from django.urls import reverse
 from django.http import HttpResponseRedirect
-from django.views.generic import ListView
+from django.views.generic import ListView,TemplateView
 from django.shortcuts import render
 from django.template import RequestContext
 from django.conf import settings
 from blog.models import Blog
 from django.db.models import Count
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from company.models import company
+from django.shortcuts import get_object_or_404
+from accounting_double_entry.models import selectdatefield
 
  
 class HomePage(ListView):
@@ -24,6 +26,17 @@ class HomePage(ListView):
 	def get_context_data(self, **kwargs):
 		context = super(HomePage, self).get_context_data(**kwargs) 
 		context['likes'] = Blog.objects.annotate(Count('likes')).values_list('Blog_title','likes')
+		return context
+
+class base(TemplateView):
+	template_name = "clouderp/base.html"
+
+	def get_context_data(self, **kwargs):
+		context = super(base, self).get_context_data(**kwargs) 
+		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
+		context['company_details'] = company_details
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		context['selectdatefield_details'] = selectdatefield_details
 		return context
 
 
