@@ -84,6 +84,7 @@ class group1(models.Model):
 def create_default_groups(sender, instance, created, **kwargs):
 	if created:
 		group1.objects.bulk_create([
+			group1(User=instance.User,Company=instance,group_Name='Primary',Master='Primary',Nature_of_group1='Not Applicable',balance_nature='Not Applicable',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
 			group1(User=instance.User,Company=instance,group_Name='Bank Accounts',Master='Current_Assets',Nature_of_group1='Not Applicable',balance_nature='Debit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
 			group1(User=instance.User,Company=instance,group_Name='Bank OD A/c',Master='Loans',Nature_of_group1='Not Applicable',balance_nature='Credit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
 			group1(User=instance.User,Company=instance,group_Name='Branch/Divisions',Master='Primary',Nature_of_group1='Liabilities',balance_nature='Credit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
@@ -115,7 +116,7 @@ def create_default_groups(sender, instance, created, **kwargs):
 			group1(User=instance.User,Company=instance,group_Name='Unsecured Loans',Master='Loans',Nature_of_group1='Not Applicable',balance_nature='Credit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
 
 		])
-
+	
 
 def group1_master1(master1_level):
 	if master1_level == "Primary":
@@ -172,7 +173,7 @@ class ledger1(models.Model):
 	Creation_Date	= models.DateField(default=datetime.date.today,blank=True, null=True)
 	name 			= models.CharField(max_length=32)
 	group1_Name 	= models.ForeignKey(group1,on_delete=models.CASCADE,blank=True,null=True)
-	Opening_Balance = models.DecimalField(max_digits=19,decimal_places=2,blank=True)	
+	Opening_Balance = models.DecimalField(default=0.00,max_digits=19,decimal_places=2,blank=True)	
 	User_Name 		= models.CharField(max_length=100,blank=True)
 	Address 		= models.TextField(blank=True)
 	State_Name 		= (
@@ -225,22 +226,21 @@ class ledger1(models.Model):
 def create_default_ledger(sender, instance, created, **kwargs):
 	if created:
 		ledger1.objects.bulk_create([
-			ledger1(User=instance.User,Company=instance,Creation_Date=instance.Books_Begining_From,group1_Name='Primary',name='Cash',Opening_Balance=0),
-			ledger1(User=instance.User,Company=instance,Creation_Date=instance.Books_Begining_From,group1_Name='Primary',name='Profit & Loss A/c',Opening_Balance=0),
+			ledger1(User=instance.User,Company=instance,Creation_Date=instance.Books_Begining_From,group1_Name=instance.Company_group.get(group_Name='Primary'),name='Cash',Opening_Balance=0),
+			ledger1(User=instance.User,Company=instance,Creation_Date=instance.Books_Begining_From,group1_Name=instance.Company_group.get(group_Name='Primary'),name='Profit & Loss A/c',Opening_Balance=0),
 			])
 
-
-
-
+	
 		
 class journal(models.Model):
 	User       = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,null=True,blank=True)
 	Company    = models.ForeignKey(company,on_delete=models.CASCADE,null=True,blank=True,related_name='Companyname')
-	Date       = models.DateField()
+	Date       = models.DateField(default=datetime.date.today)
 	By         = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='Debitledgers')
 	To         = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='Creditledgers')
 	Debit      = models.DecimalField(max_digits=10,decimal_places=2)
 	Credit     = models.DecimalField(max_digits=10,decimal_places=2)
+	narration  = models.TextField(blank=True)
 
 
 

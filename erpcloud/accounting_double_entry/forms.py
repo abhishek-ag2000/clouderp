@@ -40,7 +40,7 @@ class Ledgerform(forms.ModelForm):
 		super(Ledgerform, self).__init__(*args, **kwargs)
 		self.fields['Creation_Date'].widget.attrs = {'class': 'form-control',}
 		self.fields['name'].widget.attrs = {'class': 'form-control',}
-		self.fields['group1_Name'].queryset = group1.objects.filter(User= self.User,Company = self.Company)
+		self.fields['group1_Name'].queryset = group1.objects.filter(User= self.User,Company = self.Company).exclude(group_Name__icontains='Primary')
 		self.fields['group1_Name'].widget.attrs = {'class': 'form-control select2', 'placeholder':"Select Group",}
 		self.fields['Opening_Balance'].widget.attrs = {'class': 'form-control',}
 		self.fields['User_Name'].widget.attrs = {'class': 'form-control',}
@@ -56,7 +56,7 @@ class journalForm(forms.ModelForm):
 	
 	class Meta:
 		model = journal
-		fields = ('Date','By','To','Debit','Credit')
+		fields = ('Date','By','To','Debit','Credit','narration')
 		widgets = {
             'Date': DateInput(),
         }
@@ -71,6 +71,7 @@ class journalForm(forms.ModelForm):
 		self.fields['To'].widget.attrs = {'class': 'form-control select2',}
 		self.fields['By'].queryset = ledger1.objects.filter(User= self.User,Company = self.Company)
 		self.fields['By'].widget.attrs = {'class': 'form-control select2',}
+		self.fields['narration'].widget.attrs = {'class': 'form-control',}
 			
 
 
