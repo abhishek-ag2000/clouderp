@@ -192,8 +192,6 @@ def ledger1_detail_view(request, pk, pk2, pk3):
 	else:
 		closing_balance = opening_balance + total_creditcb - total_debitcb 
 
-	print(opening_balance)
-	print(closing_balance)
 
 	context = {
 
