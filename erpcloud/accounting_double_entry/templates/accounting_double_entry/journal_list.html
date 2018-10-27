@@ -107,8 +107,8 @@
 										<table class="table table-hover">
 											<tr>
 												<th><center>Date</center></th>
-												<th><center>Particulars</center></th>
-												<th></th>
+												<th><center>By</center></th>
+												<th><center>To</center></th>
 												<th><center>Voucher Type</center></th>
 												<th><center>Voucher No</center></th>
 												<th><center>Debit Amount</center></th>
@@ -119,7 +119,7 @@
 												
 														<td><center><a href="{% url 'accounting_double_entry:detail' pk1=company_details.pk pk2=journal.pk pk3=selectdatefield_details.pk %}">{{journal.Date}}</a></center></td>
 														<td><center><a href="{% url 'accounting_double_entry:detail' pk1=company_details.pk pk2=journal.pk pk3=selectdatefield_details.pk %}">{{journal.By}}</a></center></td>
-														<td><center></center></td>
+														<td><center><a href="{% url 'accounting_double_entry:detail' pk1=company_details.pk pk2=journal.pk pk3=selectdatefield_details.pk %}">{{journal.To}}</a></center></td>
 														<td><center>Journal</center></td>
 														<td><center><a href="{% url 'accounting_double_entry:detail' pk1=company_details.pk pk2=journal.pk pk3=selectdatefield_details.pk %}">{{journal.id}}</a></center></td>
 														<td><center><a href="{% url 'accounting_double_entry:detail' pk1=company_details.pk pk2=journal.pk pk3=selectdatefield_details.pk %}">{{journal.Debit}}</a></center></td>

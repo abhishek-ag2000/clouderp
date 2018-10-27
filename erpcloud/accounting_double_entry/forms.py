@@ -4,6 +4,7 @@ from company.models import company
 import datetime
 
 
+
 class group1Form(forms.ModelForm):		
 	class Meta:
 		model = group1
@@ -33,10 +34,13 @@ class Ledgerform(forms.ModelForm):
             'Creation_Date': DateInput(),
         }
 
-	def __init__(self, *args, **kwargs):
+	def __init__(self,  *args, **kwargs):
+		self.User = kwargs.pop('User', None)		
+		self.Company = kwargs.pop('Company', None)
 		super(Ledgerform, self).__init__(*args, **kwargs)
 		self.fields['Creation_Date'].widget.attrs = {'class': 'form-control',}
 		self.fields['name'].widget.attrs = {'class': 'form-control',}
+		self.fields['group1_Name'].queryset = group1.objects.filter(User= self.User,Company = self.Company)
 		self.fields['group1_Name'].widget.attrs = {'class': 'form-control select2', 'placeholder':"Select Group",}
 		self.fields['Opening_Balance'].widget.attrs = {'class': 'form-control',}
 		self.fields['User_Name'].widget.attrs = {'class': 'form-control',}
@@ -45,9 +49,6 @@ class Ledgerform(forms.ModelForm):
 		self.fields['Pin_Code'].widget.attrs = {'class': 'form-control',}
 		self.fields['PanIt_No'].widget.attrs = {'class': 'form-control',}
 		self.fields['GST_No'].widget.attrs = {'class': 'form-control',}
-
-
-
 
 
 
@@ -60,13 +61,17 @@ class journalForm(forms.ModelForm):
             'Date': DateInput(),
         }
 
-		def __init__(self, *args, **kwargs):
-			super(journalForm, self).__init__(*args, **kwargs)
-			self.fields['Debit'].widget.attrs = {'class': 'form-control',}
-			self.fields['Credit'].widget.attrs = {'class': 'form-control',}
-			self.fields['To'].widget.attrs = {'class': 'form-control select2',}
-			self.fields['By'].widget.attrs = {'class': 'form-control select2',}
-			self.fields['By'].queryset = ledger1.objects.filter(Company=self.kwargs['pk'])
+	def __init__(self, *args, **kwargs):
+		self.User = kwargs.pop('User', None)		
+		self.Company = kwargs.pop('Company', None)
+		super(journalForm, self).__init__(*args, **kwargs)
+		self.fields['Debit'].widget.attrs = {'class': 'form-control',}
+		self.fields['Credit'].widget.attrs = {'class': 'form-control',}
+		self.fields['To'].queryset = ledger1.objects.filter(User= self.User,Company = self.Company)
+		self.fields['To'].widget.attrs = {'class': 'form-control select2',}
+		self.fields['By'].queryset = ledger1.objects.filter(User= self.User,Company = self.Company)
+		self.fields['By'].widget.attrs = {'class': 'form-control select2',}
+			
 
 
 class DateRangeForm(forms.ModelForm):
@@ -75,6 +80,7 @@ class DateRangeForm(forms.ModelForm):
 		super(DateRangeForm, self).__init__(*args, **kwargs)
 		self.fields['Start_Date'].widget.attrs = {'class': 'form-control',}
 		self.fields['End_Date'].widget.attrs = {'class': 'form-control',}
+
 
 	class Meta:
 		model = selectdatefield

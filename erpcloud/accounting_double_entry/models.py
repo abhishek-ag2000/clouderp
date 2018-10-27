@@ -13,10 +13,12 @@ from django.utils import timezone
 
 
 
+
+
 class selectdatefield(models.Model):
 	User       = models.OneToOneField(settings.AUTH_USER_MODEL,related_name="Users",on_delete=models.CASCADE,null=True,blank=True)
-	Start_Date = models.DateField(blank=True, null=True)
-	End_Date   = models.DateField(blank=True, null=True)
+	Start_Date = models.DateField(default=datetime.date(2018,4,1),blank=True, null=True)
+	End_Date   = models.DateField(default=datetime.date(2019,3,31),blank=True, null=True)
 
 	def __str__(self):
 		return str(self.Start_Date)
@@ -64,7 +66,7 @@ class group1(models.Model):
 		('Not Applicable','Not Applicable'),# to be removed
 		)
 
-	balance_nature = models.CharField(max_length=32,choices=Nature,default='Debit')
+	balance_nature = models.CharField(max_length=32,choices=Nature,default='Debit',blank=False)
 	Group_behaves_like_a_Sub_Ledger = models.BooleanField(default=False)
 	Nett_Debit_or_Credit_Balances_for_Reporting = models.BooleanField(default=False)
 	
@@ -100,7 +102,7 @@ def create_default_groups(sender, instance, created, **kwargs):
 			group1(User=instance.User,Company=instance,group_Name='Loans & Advances(Asset)',Master='Current_Assets',Nature_of_group1='Not Applicable',balance_nature='Debit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
 			group1(User=instance.User,Company=instance,group_Name='Loans (Liability)',Master='Primary',Nature_of_group1='Liabilities',balance_nature='Credit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
 			group1(User=instance.User,Company=instance,group_Name='Misc Expenses (ASSET)',Master='Primary',Nature_of_group1='Assets',balance_nature='Debit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
-			group1(User=instance.User,Company=instance,group_Name='Provisions',Master='Current_Liabilities',Nature_of_group1='Not Applicable',balance_nature='Debit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
+			group1(User=instance.User,Company=instance,group_Name='Provisions',Master='Current_Liabilities',Nature_of_group1='Not Applicable',balance_nature='Credit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
 			group1(User=instance.User,Company=instance,group_Name='Purchase Accounts',Master='Primary',Nature_of_group1='Expenses',balance_nature='Debit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
 			group1(User=instance.User,Company=instance,group_Name='Reserves & Surplus',Master='Capital',Nature_of_group1='Not Applicable',balance_nature='Credit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
 			group1(User=instance.User,Company=instance,group_Name='Retained Earning',Master='Capital',Nature_of_group1='Not Applicable',balance_nature='Credit',Group_behaves_like_a_Sub_Ledger=False,Nett_Debit_or_Credit_Balances_for_Reporting=False),
@@ -165,15 +167,15 @@ def update_user_balance_nature(sender,instance,*args,**kwargs):
 
 
 class ledger1(models.Model):
-	User = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,null=True,blank=True)
-	Company = models.ForeignKey(company,on_delete=models.CASCADE,null=True,blank=True,related_name='Companys')
-	Creation_Date = models.DateField(blank=True, null=True)
-	name = models.CharField(max_length=32)
-	group1_Name = models.ForeignKey(group1,on_delete=models.CASCADE,blank=True,null=True)
+	User 			= models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,null=True,blank=True)
+	Company 		= models.ForeignKey(company,on_delete=models.CASCADE,null=True,blank=True,related_name='Companys')
+	Creation_Date	= models.DateField(default=datetime.date.today,blank=True, null=True)
+	name 			= models.CharField(max_length=32)
+	group1_Name 	= models.ForeignKey(group1,on_delete=models.CASCADE,blank=True,null=True)
 	Opening_Balance = models.DecimalField(max_digits=19,decimal_places=2,blank=True)	
-	User_Name = models.CharField(max_length=100,blank=True)
-	Address = models.TextField(blank=True)
-	State_Name = (
+	User_Name 		= models.CharField(max_length=100,blank=True)
+	Address 		= models.TextField(blank=True)
+	State_Name 		= (
 		('Choose','Choose'),
 		('Andra Pradesh','Andra Pradesh'),
 		('Arunachal Pradesh','Arunachal Pradesh'),
@@ -205,11 +207,11 @@ class ledger1(models.Model):
 		('Uttarakhand','Uttarakhand'),
 		('West Bengal','West Bengal'),
 		)
-	State = models.CharField(max_length=100,choices=State_Name,default='Choose',blank=True)
-	Pin_Code = models.BigIntegerField(blank=True,null=True)
-	PanIt_No = models.CharField(max_length=100,blank=True)
-	GST_No = models.CharField(max_length=100,blank=True)
-	Closing_balance = models.DecimalField(max_digits=10,decimal_places=2,blank=True,null=True)
+	State 			= models.CharField(max_length=100,choices=State_Name,default='Choose',blank=True)
+	Pin_Code 		= models.BigIntegerField(blank=True,null=True)
+	PanIt_No 		= models.CharField(max_length=100,blank=True)
+	GST_No 			= models.CharField(max_length=100,blank=True)
+	# Closing_balance = models.DecimalField(max_digits=10,decimal_places=2,blank=True,null=True)
 	
 	def __str__(self):
 		return self.name
@@ -223,9 +225,10 @@ class ledger1(models.Model):
 def create_default_ledger(sender, instance, created, **kwargs):
 	if created:
 		ledger1.objects.bulk_create([
-			ledger1(User=instance.User,Company=instance,name='Cash',Opening_Balance=0),
-			ledger1(User=instance.User,Company=instance,name='Profit & Loss A/c',Opening_Balance=0),
+			ledger1(User=instance.User,Company=instance,Creation_Date=instance.Books_Begining_From,group1_Name='Primary',name='Cash',Opening_Balance=0),
+			ledger1(User=instance.User,Company=instance,Creation_Date=instance.Books_Begining_From,group1_Name='Primary',name='Profit & Loss A/c',Opening_Balance=0),
 			])
+
 
 
 
@@ -264,16 +267,6 @@ class journal(models.Model):
 #							return credit count from strting date to closing date
 #							calculate closing balance = opn balanace + debit count + credit count
 #
-
-	@classmethod
-	def debitsum(cls):
-		Debitcount = ledger1.objects.annotate(debitsum=Sum('Debitledgers__Debit')).values_list('name','debitsum')
-		return Debitcount
-
-	@classmethod
-	def creditsum(cls):
-		Creditcount = ledger1.objects.annotate(creditsum=Sum('Creditledgers__Credit')).values_list('name','creditsum')
-		return Creditcount
 
 
 
