@@ -65,14 +65,11 @@ class Profile(models.Model):
 	def get_absolute_url(self):
 		return reverse("userprofile:profiledetail")
 
-	def save(self, *args, **kwargs):
-		imageTemproary = Image.open(self.image)
-		outputIoStream = BytesIO()
-		imageTemproaryResized = imageTemproary.resize( (128,128) ) 
-		imageTemproaryResized.save(outputIoStream , format='JPEG', quality=150)
-		outputIoStream.seek(0)
-		self.image = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" %self.image.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
-		super(Profile, self).save(*args, **kwargs)
+
+	# def save(self, *args, **kwargs):
+	# 	if self.image:
+	# 		self.image = get_thumbnail(self.image, '128x128', quality=150, format='JPEG')
+	# 	super(Profile, self).save(*args, **kwargs)
 
 
 	

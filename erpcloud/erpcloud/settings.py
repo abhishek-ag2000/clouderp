@@ -78,6 +78,7 @@ INSTALLED_APPS = [
     'userprofile',
     'blog',
     'consultancy',
+    'stockkeeping',
 
 ]
 

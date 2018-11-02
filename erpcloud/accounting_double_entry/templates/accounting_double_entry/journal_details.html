@@ -36,7 +36,20 @@
               <a href="{% url 'company:create' %}" class="btn btn-warning" role="button">Create Company details</a>
               <a href="{% url 'company:delete' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-danger" role="button">Delete Company</a>
 
-        
+            {% if not selectdatefield_details %}
+
+                   <a type="button" class="btn btn-primary pull-right" href="{% url 'accounting_double_entry:datecreate' %}">Select Date Range</a>
+
+                {% else %} 
+              
+  
+                      <a type="button" class='btn btn-warning pull-right'  href="{% url 'accounting_double_entry:dateupdate' pk=selectdatefield_details.pk %}">Update Date Range</a>
+
+                      <a class="pull-right"><strong>Selected Period: From</strong> {{ selectdatefield_details.Start_Date|date }} <strong>To</strong> {{ selectdatefield_details.End_Date|date }}  &nbsp;</a> 
+
+                 
+
+                {% endif %} 
         
         
         </div>
@@ -54,7 +67,7 @@
           <div class="box-body">
 
       		<a href="{% url 'accounting_double_entry:list' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-success" role="button">Select Journal </a>
-            <a href="{% url 'accounting_double_entry:create' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-warning" role="button">Create Journal</a>
+          <a href="{% url 'accounting_double_entry:create' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-warning" role="button">Create Journal</a>
               
 
         
@@ -144,32 +157,47 @@
                     </style>
 
                     <div class="box-body table-responsive no-padding">
-                        <table class="table table-bordered">
+              <table class="table table-bordered">
 
                             <tr>
                                 <td>
-                                    <table class="table table-hover">
+                <table class="table table-hover">
 									<tr>
-										<th></th>
+										<th><center></center></th>
 										
 										<th><center>Date</center></th>
 										<th><center>Particulars</center></th>
-										<th><center></center></th>
+										<th><center>Lf</center></th>
 										<th><center>Credit</center></th>
 									</tr>
+                  
 									<tr>
 										<th><center><strong>To</strong></center></th>
-										
+			
 										<td><center>{{journal_details.Date}}</center></td>
 										<td><center>{{journal_details.To}}</center></td>
-										<th><center></center></th>
+										<td><center>{{journal_details.id}}</center></td>
 										<td><center>{{journal_details.Credit}}</center></td>
 									</tr>
 									
 								</table>
-                                </td>
-                            </tr>
-                        </table>
+             </td>
+            </tr>
+          </table>
+          <table class="table table-hover">
+                                        <tr>
+                                          
+                                            <th>Narration</th>
+                                            
+                                          </tr>
+                                        <tr>
+                                          {% if journal_details.narration %}
+                                            <td>{{ journal_details.narration }}</td>
+                                          {% else %}
+                                            <td>being {{journal_details.By}} debited by {{journal_details.To}} for {{journal_details.Credit}}.</td>
+                                          {% endif %}  
+                                        </tr>
+                                    </table>
                     </div>
                     
                 </div>

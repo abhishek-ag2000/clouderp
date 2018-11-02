@@ -40,11 +40,24 @@
               <a href="{% url 'company:create' %}" class="btn btn-warning" role="button">Create Company details</a>
               <a href="{% url 'company:delete' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-danger" role="button">Delete Company</a>
  
+              {% if not selectdatefield_details %}
 
+                   <a type="button" class="btn btn-primary pull-right" href="{% url 'accounting_double_entry:datecreate' %}">Select Date Range</a>
+
+                {% else %} 
+              
+  
+                      <a type="button" class='btn btn-warning pull-right'  href="{% url 'accounting_double_entry:dateupdate' pk=selectdatefield_details.pk %}">Update Date Range</a>
+
+                      <a class="pull-right"><strong>Selected Period: From</strong> {{ selectdatefield_details.Start_Date|date }} <strong>To</strong> {{ selectdatefield_details.End_Date|date }}  &nbsp;</a> 
+
+                 
+
+                {% endif %} 
 
 
           			
-          			</div>   
+          	</div>   
         
         
         </div>
@@ -60,6 +73,10 @@
 
       			<a href="{% url 'accounting_double_entry:ledgerlist' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-success" role="button">Select Ledger </a>
               	<a href="{% url 'accounting_double_entry:ledgercreate' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-warning" role="button">Create Ledger</a>
+
+              	<div class="pull-right">
+              		<a href="{% url 'accounting_double_entry:create' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-warning" role="button">Create Journal</a>
+              	</div>
 
               
               	
@@ -116,30 +133,97 @@
 									<th><center>Amount(Rs)</center></th>
 									</tr>
 
-									<tr>
-									<th><center>{{ ledger1_details.Creation_Date}}</center></th>
-									<th><center>To</center></th>
-									<th><center>Opening Balance</center></th>
-									<th><center></center></th>
-									<th><center>{{ ledger1_details.Opening_Balance}}</center></th>
-									
+									{% if ledger1_details.group1_Name.balance_nature == 'Debit' %}
+										{% if opening_balance >= 0 %}
+											<tr>
+												<th><center>{{ selectdatefield_details.Start_Date}}</center></th>
+												<th><center>To</center></th>
+												<th><center>Opening Balance</center></th>
+												<th><center></center></th>
 
-									<th><center>-</center></th>
-									<th><center>-</center></th>
-									<th><center>-</center></th>
+												<th><center>{{ opening_balance|floatformat:2|abs }}</center></th>
+												
 
-									<th><center>-</center></th>
-									<th><center>-</center></th>
-									
-									</tr>										
+												<th><center></center></th>
+												<th><center></center></th>
+												<th><center></center></th>
+
+												<th><center>-</center></th>
+												<th><center></center></th>
+											
+											</tr>
+
+										{% else %}
+
+											<tr>
+												<th><center></center></th>
+												<th><center></center></th>
+												<th><center></center></th>
+												<th><center></center></th>
+
+												<th><center></center></th>
+												
+
+												<th><center>{{ selectdatefield_details.Start_Date}}</center></th>
+												<th><center>By</center></th>
+												<th><center>Opening Balance</center></th>
+
+												<th><center>-</center></th>
+												<th><center>{{ opening_balance|floatformat:2|abs }}</center></th>
+											
+											</tr>
+										{% endif %}	
+
+									{% else %}	
+
+										{% if opening_balance >= 0 %}						
 								
-									
+											<tr>
+												<th><center></center></th>
+												<th><center></center></th>
+												<th><center></center></th>
+												<th><center></center></th>
+
+												<th><center></center></th>
+												
+
+												<th><center>{{ selectdatefield_details.Start_Date}}</center></th>
+												<th><center>By</center></th>
+												<th><center>Opening Balance</center></th>
+
+												<th><center>-</center></th>
+												<th><center>{{ opening_balance|floatformat:2|abs }}</center></th>
+											
+											</tr>
+										{% else %}
+
+											<tr>
+												<th><center>{{ selectdatefield_details.Start_Date}}</center></th>
+												<th><center>To</center></th>
+												<th><center>Opening Balance</center></th>
+												<th><center></center></th>
+
+												<th><center>{{ opening_balance|floatformat:2|abs }}</center></th>
+												
+
+												<th><center></center></th>
+												<th><center></center></th>
+												<th><center></center></th>
+
+												<th><center>-</center></th>
+												<th><center></center></th>
+											
+											</tr>
+										{% endif %}
+
+									{% endif %}
+
 										{% for journal in journal_debit %}
 		
 											<tr>
 												<th><center>{{ journal.Date}}</center></th>
 												<th><center>To</center></th>
-												<th><center>{{ journal.To }}</center></th>
+												<th><center><a href="{% url 'accounting_double_entry:detail' pk1=company_details.pk pk2=journal.pk pk3=selectdatefield_details.pk %}">{{journal.To}}</a></center></th>
 												<th><center>{{ journal.id }}</center></th>
 												<th><center>{{journal.Debit}}</center></th>								
 												<th><center></center></th>
@@ -163,54 +247,316 @@
 												
 												<th><center>{{ journal.Date}}</center></th>
 												<th><center>By</center></th>
-												<th><center>{{ journal.By }}</center></th>
+												<th><center><a href="{% url 'accounting_double_entry:detail' pk1=company_details.pk pk2=journal.pk pk3=selectdatefield_details.pk %}">{{journal.By}}</a></center></th>
 												<th><center>{{ journal.id }}</center></th>
 												<th><center>{{journal.Credit}}</center></th>									
 											</tr>
 										{% endfor %}
 
+										{% if ledger1_details.group1_Name.balance_nature == 'Debit' %}
 
-											<tr>
-							 					<th><center></center></th>
-												<th><center></center></th>
-												<th><center></center></th>
-												<th><center></center></th>
-												<th><center></center></th>
-												<th><center>range end date</center></th>
-												<th><center>By</center></th>
-												<th><center>Closing Balance</center></th>
+											{% if closing_balance >= 0 %}
+												<tr>
+								 					<th><center></center></th>
+													<th><center></center></th>
+													<th><center></center></th>
+													<th><center></center></th>
+													<th><center></center></th>
+													<th><center>{{ selectdatefield_details.End_Date}}</center></th>
+													<th><center>By</center></th>
+													<th><center>Closing Balance</center></th>
 
-												<th><center></center></th>													
-												<th><center>{{ ledger1_details.Closing_balance }}</center></th>
-											</tr>
-									
-										
-													<tr>
-														<th><center></center></th>
-														<th><center></center></th>
-														<th><center>Total:</center></th>
-														<th><center></center></th>
-														
-															{% for name, debitsum in Debitcount %}
-																{% if name == ledger1_details.name %}
-																	<th><center>{{ debitsum|add:ledger1_details.Opening_Balance|floatformat:2 }}</center></th> <!-- total balance debit-->
+													<th><center></center></th>													
+													<th><center>{{ closing_balance|floatformat:2|abs }}</center></th>
+												</tr>
+
+											{% else %}
+
+												<tr>
+								 					<th><center>{{ selectdatefield_details.End_Date}}</center></th>
+													<th><center>To</center></th>
+													<th><center>Closing Balance</center></th>
+													<th><center></center></th>
+													<th><center>{{ closing_balance|floatformat:2|abs }}</center></th>
+													<th><center></center></th>
+													<th><center></center></th>
+													<th><center></center></th>
+
+													<th><center></center></th>													
+													<th><center></center></th>
+												</tr>
+
+											{% endif %}
+
+
+
+										{% else %} <!-- main -->
+
+											{% if closing_balance >= 0 %}
+												<tr>
+								 					<th><center>{{ selectdatefield_details.End_Date}}</center></th>
+													<th><center>To</center></th>
+													<th><center>Closing Balance</center></th>
+													<th><center></center></th>
+													<th><center>{{ closing_balance|floatformat:2|abs }}</center></th>
+													<th><center></center></th>
+													<th><center></center></th>
+													<th><center></center></th>
+
+													<th><center></center></th>													
+													<th><center></center></th>
+												</tr>
+											{% else %}
+
+												<tr>
+								 					<th><center></center></th>
+													<th><center></center></th>
+													<th><center></center></th>
+													<th><center></center></th>
+													<th><center></center></th>
+													<th><center>{{ selectdatefield_details.End_Date}}</center></th>
+													<th><center>By</center></th>
+													<th><center>Closing Balance</center></th>
+
+													<th><center></center></th>													
+													<th><center>{{ closing_balance|floatformat:2|abs }}</center></th>
+												</tr>
+
+											{% endif %}
+										{% endif %}
+												
+												
+
+												{% if ledger1_details.group1_Name.balance_nature == 'Debit' %}
+
+													{% if opening_balance > 0 %}
+
+														{% if closing_balance >= 0 %}
+												
+															<tr>
+																<th><center></center></th>
+																<th><center></center></th>
+																<th><center>Total:</center></th>
+																<th><center></center></th>
+																{% if total_debit %}
+																	<th><center>{{ total_debit|add:opening_balance|floatformat:2|abs }}</center></th> 
+																{% else %}
+																	<th><center>{{ opening_balance|floatformat:2|abs }}</center></th>
 																{% endif %}
-															{% endfor %}
-														
-														<th><center></center></th>
-														<th><center></center></th>
-														<th><center>Total:</center></th>
-														<th><center>-</center></th>
-														
-														
-														{% for name, creditsum in Creditcount %}
-															{% if name == ledger1_details.name %}
-																<th><center>{{ creditsum|add:ledger1_details.Closing_balance|floatformat:2 }}</center></th> <!-- total balance debit-->
 
-															{% endif %}
-														{% endfor %}
+																	
+																<th><center></center></th>
+																<th><center></center></th>
+																<th><center>Total:</center></th>
+																<th><center></center></th>
+																{% if total_credit %}
+																	<th><center>{{ total_credit|add:closing_balance|floatformat:2|abs }}</center></th>
+																{% else %}
 
-													</tr>
+																	<th><center>{{ closing_balance|floatformat:2|abs }}</center></th>
+																{% endif %} 
+															</tr>
+														{% else %}																													<tr>
+																<th><center></center></th>
+																<th><center></center></th>
+																<th><center>Total:</center></th>
+																<th><center></center></th>
+																{% if total_debit %}
+																	<th><center>{{ total_debit|add:opening_balance|add:closing_balance|floatformat:2|abs }}</center></th> 
+																{% else %}
+																	<th><center>{{ opening_balance|add:closing_balance|floatformat:2|abs }}</center></th>
+																{% endif %}
+
+																	
+																<th><center></center></th>
+																<th><center></center></th>
+																<th><center>Total:</center></th>
+																<th><center></center></th>
+																
+																<th><center>{{ total_credit|floatformat:2|abs }}</center></th>
+																
+
+																	
+															</tr>
+
+														{% endif %}
+
+													{% else %}
+
+														{% if closing_balance >= 0 %}
+
+
+															<tr>
+																<th><center></center></th>
+																<th><center></center></th>
+																<th><center>Total:</center></th>
+																<th><center></center></th>
+																
+																<th><center>{{ total_debit|floatformat:2|abs }}</center></th> 
+																
+																
+
+																	
+																<th><center></center></th>
+																<th><center></center></th>
+																<th><center>Total:</center></th>
+																<th><center></center></th>
+																{% if total_credit %}
+																	<th><center>{{ total_credit|add:opening_balance|add:closing_balance|floatformat:2|abs }}</center></th>
+																{% else %}
+
+																	<th><center>{{ opening_balance|add:closing_balance|floatformat:2|abs }}</center></th>
+																{% endif %} 
+															</tr>
+														{% else %}
+
+															<tr>
+																<th><center></center></th>
+																<th><center></center></th>
+																<th><center>Total:</center></th>
+																<th><center></center></th>
+																{% if total_credit %}
+																	<th><center>{{ total_credit|add:opening_balance|floatformat:2|abs }}</center></th> 
+																{% else %}
+																	<th><center>{{ opening_balance|floatformat:2|abs }}</center></th>
+																{% endif %}
+
+																	
+																<th><center></center></th>
+																<th><center></center></th>
+																<th><center>Total:</center></th>
+																<th><center></center></th>
+																{% if total_debit %}
+																	<th><center>{{ total_debit|add:opening_balance|add:closing_balance|floatformat:2|abs }}</center></th>
+																{% else %}
+
+																	<th><center>{{ opening_balance|add:closing_balance|floatformat:2|abs }}</center></th>
+																{% endif %} 
+															</tr>
+														{% endif %}
+													{% endif %}
+
+
+												{% else %}
+
+													{% if opening_balance > 0 %}
+
+														{% if closing_balance > 0 %}
+
+															<tr>
+																<th><center></center></th>
+																<th><center></center></th>
+																<th><center>Total:</center></th>
+																<th><center></center></th>
+																{% if total_credit %}
+																	<th><center>{{ total_credit|add:opening_balance|floatformat:2|abs }}</center></th> 
+																{% else %}
+																	<th><center>{{ opening_balance|floatformat:2|abs }}</center></th>
+																{% endif %}
+
+																	
+																<th><center></center></th>
+																<th><center></center></th>
+																<th><center>Total:</center></th>
+																<th><center></center></th>
+																{% if total_debit %}
+																	<th><center>{{ total_debit|add:closing_balance|floatformat:2|abs }}</center></th>
+																{% else %}
+
+																	<th><center>{{ closing_balance|floatformat:2|abs }}</center></th>
+																{% endif %} 
+															</tr>
+
+														{% else %}
+
+															<tr>
+																<th><center></center></th>
+																<th><center></center></th>
+																<th><center>Total:</center></th>
+																<th><center></center></th>
+																{% if total_credit %}
+																	<th><center>{{ total_credit|add:opening_balance|add:closing_balance|floatformat:2|abs }}</center></th> 
+																{% else %}
+																	<th><center>{{ opening_balance|add:closing_balance|floatformat:2|abs }}</center></th>
+																{% endif %}
+
+																	
+																<th><center></center></th>
+																<th><center></center></th>
+																<th><center>Total:</center></th>
+																<th><center></center></th>
+																
+																<th><center>{{ total_debit|floatformat:2|abs }}</center></th>
+																
+
+																	
+															</tr>
+
+														{% endif %}
+													{% else %}
+
+														{% if closing_balance > 0 %}
+
+															<tr>
+																<th><center></center></th>
+																<th><center></center></th>
+																<th><center>Total:</center></th>
+																<th><center></center></th>
+																
+																<th><center>{{ total_credit|floatformat:2|abs }}</center></th> 
+																
+																	
+
+																	
+																<th><center></center></th>
+																<th><center></center></th>
+																<th><center>Total:</center></th>
+																<th><center></center></th>
+																{% if total_debit %}
+																	<th><center>{{ total_debit|add:closing_balance|add:opening_balance|floatformat:2|abs }}</center></th>
+																{% else %}
+
+																	<th><center>{{ closing_balance|add:opening_balance|floatformat:2|abs }}</center></th>
+																{% endif %} 
+															</tr>
+
+														{% else %}
+
+															<tr>
+																<th><center></center></th>
+																<th><center></center></th>
+																<th><center>Total:</center></th>
+																<th><center></center></th>
+																
+																{% if total_debit %}
+																	<th><center>{{ total_debit|add:opening_balance|floatformat:2|abs }}</center></th>
+																{% else %}
+
+																	<th><center>{{ opening_balance|floatformat:2|abs }}</center></th>
+																{% endif %}  
+																
+																	
+
+																	
+																<th><center></center></th>
+																<th><center></center></th>
+																<th><center>Total:</center></th>
+																<th><center></center></th>
+																{% if total_credit %}
+																	<th><center>{{ total_credit|add:closing_balance|floatformat:2|abs }}</center></th>
+																{% else %}
+
+																	<th><center>{{ closing_balance|floatformat:3|abs }}</center></th>
+																{% endif %} 
+															</tr>
+
+														{% endif %}
+													{% endif %}
+
+												{% endif %}
+
+														
+
 																					
 									
 								
@@ -224,7 +570,7 @@
 						<br>
 
 						<div class="box-footer">
-    					<p><a class='btn btn-warning' href="{% url 'accounting_double_entry:ledgerupdate' pk1=company_details.pk pk2=ledger1_details.pk pk3=selectdatefield_details.pk %}">Update Ledger</a> <a class='btn btn-danger pull-right' href="{% url 'accounting_double_entry:ledgerdelete' pk1=company_details.pk pk2=ledger1_details.pk pk3=selectdatefield_details.pk %}">Delete Ledger</a></p>
+    					<p><a class='btn btn-warning' href="{% url 'accounting_double_entry:ledgerupdate' pk=company_details.pk pk2=ledger1_details.pk pk3=selectdatefield_details.pk %}">Update Ledger</a> <a class='btn btn-danger pull-right' href="{% url 'accounting_double_entry:ledgerdelete' pk=company_details.pk pk2=ledger1_details.pk pk3=selectdatefield_details.pk %}">Delete Ledger</a></p>
 
   					</div>
 

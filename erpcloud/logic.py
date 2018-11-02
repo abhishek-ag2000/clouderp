@@ -57,3 +57,29 @@
 #     			credit = instance.Creditledgers.aggregate(credit=Sum('Credit'))['credit']
 # 				closing_balance = ledger.opening_balance - debit + credit
 #     	return closing_balance
+
+
+
+# {% if purchase_details.State == company_details.State %}
+#                       <tr>
+#                         <th>CGST ({{purchase_details.stockitem.gst_rate}}%)</th>
+#                         <td>{{purchase_details.Total_Amount|mul:purchase_details.stockitem.gst_rate|div:2 }}</td>
+#                       </tr>
+#                       <tr>
+#                         <th>SGST ({{purchase_details.stockitem.gst_rate}}%)</th>
+#                         <td>{{purchase_details.Total_Amount|mul:purchase_details.stockitem.gst_rate|div:2 }}</td>
+#                       </tr>
+#                       <tr>
+#                     <th>Total:</th>
+#                       <td>{{purchase_details.Total_Amount|mul:1|add:purchase_details.stockitem.gst_rate|div:100}}</td>
+#                     </tr>
+#                 {% else %}
+#                       <tr>
+#                         <th>IGST ({{purchase_details.stockitem.gst_rate}}%)</th>
+#                         <td>{{purchase_details.Total_Amount|mul:purchase_details.stockitem.gst_rate}}</td>
+#                       </tr>
+#                       <tr>
+#                       <th>Total:</th>
+#                         <td>{{purchase_details.Total_Amount|mul:1|add:purchase_details.stockitem.gst_rate|div:100}}</td>
+#                       </tr>
+#                 {% endif %}

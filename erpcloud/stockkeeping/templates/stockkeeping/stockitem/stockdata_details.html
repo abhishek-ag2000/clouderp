@@ -1,0 +1,146 @@
+{% extends "clouderp/base.html" %}
+{% load staticfiles %}
+
+{% block title %}StockItem Details{% endblock %}
+
+
+
+
+{% block content %}
+
+<div class="content-wrapper">
+	 <section class="content-header">
+        <!-- <div class="col-md-12 col-md-offset-4"> -->
+          <h1>
+            <strong>Company : {{company_details.Name}}</strong>
+          </h1>
+                <ol class="breadcrumb">
+                       <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                       <!-- <li><a href="#">Company list</a></li> -->
+                     <li class="">Company list</li>
+                     <li class="active">Group Details</li>
+            </ol>
+           
+        <!-- </div> -->
+      </section>
+
+  <section class="content">
+      <div class="callout callout-warning">
+        <h4>Welcome!</h4>
+        Welcome to predict books your personal AI powered business engine!
+        <!-- <a href="http://getbootstrap.com/javascript/#modals">Bootstrap documentation</a> -->
+      </div>
+
+<div class="row">
+      <div class="col-xs-12">
+          <div class="box box-default">
+          <div class="box-body">
+
+      <a href="{% url 'company:list' %}" class="btn btn-success" role="button">Select Company </a>
+              <a href="{% url 'company:create' %}" class="btn btn-warning" role="button">Create Company details</a>
+              <a href="{% url 'company:delete' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-danger" role="button">Delete Company</a>
+
+        
+        
+        
+        </div>
+      
+      </div>
+    
+    </div>
+
+</div>
+
+<div class="row">
+      <div class="col-xs-12">
+          <div class="box box-default">
+          <div class="box-body">
+
+          <a href="{% url 'stockkeeping:stockgrouplist' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-success" role="button">Stockgroup List</a>
+          
+          <a href="{% url 'stockkeeping:stockgroupcreate' pk=company_details.pk pk3=selectdatefield_details.pk  %}" class="btn btn-warning" role="button">Create Stockgroup</a>
+
+          
+        
+        
+        </div>
+      
+      </div>
+    
+    </div>
+
+</div>
+
+		<div class="row">
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				<div class="box box-info">
+					<div class="box-header with-border">
+        			
+          		<h2 class="box-title"><b>StockItem Details</b></h2>
+        
+        	</div>
+
+          <div class="box-body table-responsive no-padding">
+            <table class="table table-striped">
+              <tr>
+                <th>Stock Name</th>
+                <th>{{ stockdata_details.stock_name }}</th>
+              </tr>
+
+              
+
+              <tr>
+                <th>Under</th>
+                <th>{{ stockdata_details.under }}</th>
+              </tr>
+
+              {% if stockdata_details.unitsimple %}
+
+                <tr>
+                  <th>Unit</th>
+                  <th>{{ stockdata_details.unitsimple }}</th>
+                </tr>
+
+              {% else %}
+                <tr>
+                  <th>Unit</th>
+                  <th>{{ stockdata_details.unitcomplex }}</th>
+                </tr>
+
+              {% endif %}
+
+              <tr>
+                  <th>Rate</th>
+                  <th>{{ stockdata_details.rate }}</th>
+              </tr>
+
+              <tr>
+                  <th>HSN/SAC</th>
+                  <th>{{ stockdata_details.hsn }}</th>
+              </tr>
+
+
+
+
+
+              
+
+              
+            </table>
+          </div>
+
+          <div class="box-footer">
+              <p><a class='btn btn-warning' href="{% url 'stockkeeping:stockdataupdate' pk1=company_details.pk pk2=stockdata_details.pk pk3=selectdatefield_details.pk %}">Update StockGroup</a><a class='btn btn-danger pull-right' href="{% url 'stockkeeping:stockdatadelete' pk=company_details.pk pk2=stockdata_details.pk pk3=selectdatefield_details.pk %}">Delete Stockgroup</a></p>
+
+            </div>
+
+				</div>
+
+
+				</div>
+			</div>
+		
+	</section>
+</div>
+
+{% endblock %}

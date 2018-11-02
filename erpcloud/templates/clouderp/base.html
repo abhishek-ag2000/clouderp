@@ -385,11 +385,11 @@
         <li class="header">MAIN NAVIGATION</li>
       
 
-        <li><a href="{% url 'company:list' %}"><i class="fa fa-book"></i> <span>Dashboard</span></a></li>
+        <li><a href="{% url 'company:Dashboard' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-book"></i> <span>Dashboard</span></a></li>
 
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-share"></i> <span>Entry & Posting</span>
+            <i class="fa fa-share"></i> <span>Accounting- Entry & info</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -443,6 +443,132 @@
           </ul>
         </li>
 
+
+      <li class="treeview">
+          <a href="#">
+              <i class="fa fa-pie-chart"></i>
+            <span>Invoice- Entry & info</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class="treeview">
+              <a href="#"><i class="fa fa-circle-o"></i>Sales Invoice
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="{% url 'stockkeeping:salescreate' pk=company_details.pk pk3=selectdatefield_details.pk  %}"><i class="fa fa-circle-o"></i> Create</a></li>
+                
+                  <li><a href="{% url 'stockkeeping:saleslist' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Display</a></li>
+                  <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Alter</a></li> -->
+                   
+              </ul>
+            </li>
+            <li class="treeview">
+              <a href="#"><i class="fa fa-circle-o"></i>Purchase Invoice
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="{% url 'stockkeeping:purchasecreate' pk=company_details.pk pk3=selectdatefield_details.pk  %}"><i class="fa fa-circle-o"></i> Create</a></li>
+                
+                  <li><a href="{% url 'stockkeeping:purchaselist' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Display</a></li>
+                  <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Alter</a></li> -->
+                   
+              </ul>
+            </li>
+          </ul>
+        </li>
+
+        <li class="treeview">
+          <a href="#">
+              <i class="fa fa-pie-chart"></i>
+            <span>Stock- Entry & info</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            
+            <li class="treeview">
+              <a href="#"><i class="fa fa-circle-o"></i> Stock Groups
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="{% url 'stockkeeping:stockgroupcreate' pk=company_details.pk pk3=selectdatefield_details.pk  %}"><i class="fa fa-circle-o"></i> Create</a></li>
+                
+                  <li><a href="{% url 'stockkeeping:stockgrouplist' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Display</a></li>
+                  <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Alter</a></li> -->
+                   
+              </ul>
+            </li>
+            
+            <li class="treeview">
+              <a href="#"><i class="fa fa-circle-o"></i> Stock items
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+              <ul class="treeview-menu">
+               
+                 <li><a href="{% url 'stockkeeping:stockdatacreate' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Create</a></li>
+                   <li><a href="{% url 'stockkeeping:stockdatalist' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Display</a></li>
+                 
+                   
+              </ul>
+            </li>
+
+            <li class="treeview">
+              <a href="#"><i class="fa fa-circle-o"></i> Stock Units Mgt 
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+              <ul class="treeview-menu">
+               <li class="treeview">
+              <a href="#"><i class="fa fa-circle-o"></i> Simple Unit 
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+           
+              <ul class="treeview-menu">
+               <li class="treeview">
+                <li><a href="{% url 'stockkeeping:simplecreate' pk=company_details.pk pk3=selectdatefield_details.pk  %}"><i class="fa fa-circle-o"></i> Create</a></li>
+                
+                <li><a href="{% url 'stockkeeping:simplelist' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Display</a></li>
+              </li>
+            </ul>
+            <a href="#"><i class="fa fa-circle-o"></i> Complex Unit 
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+           
+              <ul class="treeview-menu">
+               <li class="treeview">
+                <li><a href="{% url 'stockkeeping:compoundcreate' pk=company_details.pk pk3=selectdatefield_details.pk  %}"><i class="fa fa-circle-o"></i> Create</a></li>
+                
+                <li><a href="{% url 'stockkeeping:compoundlist' pk=company_details.pk pk3=selectdatefield_details.pk  %}"><i class="fa fa-circle-o"></i> Display</a></li>
+              </li>
+            </ul>
+          </li>
+                  <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Alter</a></li> -->
+                   
+              </ul>
+            </li>
+          </ul>
+        </li>
+
+
+
+
          <li><a href="trial_bal.html"><i class="fa fa-book"></i> <span>Trial Balance</span></a></li>
 
            <li class="treeview">
@@ -473,20 +599,7 @@
             </li>
 
 
-        <li class="treeview">
-          <a href="#">
-              <i class="fa fa-pie-chart"></i>
-            <span>Invoicing</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="Sales_Invoice.html"><i class="fa fa-circle-o"></i> Sales Invoice</a></li>
-            <li><a href="Purchase_Invoice.html"><i class="fa fa-circle-o"></i> Purchase Invoice</a></li>
-          </ul>
-        </li>
-
+        
             
         <li class="treeview">
               <a href="#">

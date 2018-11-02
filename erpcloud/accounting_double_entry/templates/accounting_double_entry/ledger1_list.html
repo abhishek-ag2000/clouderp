@@ -36,6 +36,20 @@
               <a href="{% url 'company:create' %}" class="btn btn-warning" role="button">Create Company details</a>
               <a href="{% url 'company:delete' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-danger" role="button">Delete Company</a>
 
+              {% if not selectdatefield_details %}
+
+                   <a type="button" class="btn btn-primary pull-right" href="{% url 'accounting_double_entry:datecreate' %}">Select Date Range</a>
+
+                {% else %} 
+              
+  
+                      <a type="button" class='btn btn-warning pull-right'  href="{% url 'accounting_double_entry:dateupdate' pk=selectdatefield_details.pk %}">Update Date Range</a>
+
+                      <a class="pull-right"><strong>Selected Period: From</strong> {{ selectdatefield_details.Start_Date|date }} <strong>To</strong> {{ selectdatefield_details.End_Date|date }}  &nbsp;</a> 
+
+                 
+
+                {% endif %} 
 				
 				
 				
@@ -54,7 +68,7 @@
           <div class="box-body">
 
             <a href="{% url 'accounting_double_entry:ledgerlist' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-success" role="button">Select Ledger </a>
-                <a href="{% url 'accounting_double_entry:ledgercreate' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-warning" role="button">Create Ledger</a>
+            <a href="{% url 'accounting_double_entry:ledgercreate' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-warning" role="button">Create Ledger</a>
               
 
         
@@ -95,13 +109,17 @@
                         <th>Sl no</th>
                         <th>Name</th>
                         <th>Date Created</th>
+                        <th>Under Group</th>
+                        <th>Opening Balance</th>
                       </tr>
 
                       {% for ledger1 in ledger1_list %}
                       <tr>
-                        <td><a href="{% url 'accounting_double_entry:ledgerdetail' pk1=company_details.pk pk2=ledger1.pk pk3=selectdatefield_details.pk %}">{{ forloop.counter0|add:page_obj.start_index }}</a></td>
-                        <td><a href="{% url 'accounting_double_entry:ledgerdetail' pk1=company_details.pk pk2=ledger1.pk pk3=selectdatefield_details.pk %}">{{ledger1.name}}</a></td>
-                        <td><a href="{% url 'accounting_double_entry:ledgerdetail' pk1=company_details.pk pk2=ledger1.pk pk3=selectdatefield_details.pk %}}">{{ledger1.Creation_Date}}</a></td>
+                        <td><a href="{% url 'accounting_double_entry:ledgerdetail' pk=company_details.pk pk2=ledger1.pk pk3=selectdatefield_details.pk %}">{{ forloop.counter0|add:page_obj.start_index }}</a></td>
+                        <td><a href="{% url 'accounting_double_entry:ledgerdetail' pk=company_details.pk pk2=ledger1.pk pk3=selectdatefield_details.pk %}">{{ledger1.name}}</a></td>
+                        <td><a href="{% url 'accounting_double_entry:ledgerdetail' pk=company_details.pk pk2=ledger1.pk pk3=selectdatefield_details.pk %}s">{{ledger1.Creation_Date}}</a></td>
+                        <td><a href="{% url 'accounting_double_entry:ledgerdetail' pk=company_details.pk pk2=ledger1.pk pk3=selectdatefield_details.pk %}}">{{ledger1.group1_Name}}</a></td>
+                        <td><a href="{% url 'accounting_double_entry:ledgerdetail' pk=company_details.pk pk2=ledger1.pk pk3=selectdatefield_details.pk %}}">{{ledger1.Opening_Balance}}</a></td>
                       </tr>
                       {% endfor %}
                      

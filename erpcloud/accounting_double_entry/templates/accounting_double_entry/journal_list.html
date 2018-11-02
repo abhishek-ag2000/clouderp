@@ -4,6 +4,10 @@
 {% block title %}Journals{% endblock %}
 
 {% block content %}
+
+
+
+
 <div class="content-wrapper">
 <section class="content-header">
 				<!-- <div class="col-md-12 col-md-offset-4"> -->
@@ -34,7 +38,20 @@
               <a href="{% url 'company:create' %}" class="btn btn-warning" role="button">Create Company details</a>
               <a href="{% url 'company:delete' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-danger" role="button">Delete Company</a>
 
-				
+				{% if not selectdatefield_details %}
+
+                   <a type="button" class="btn btn-primary pull-right" href="{% url 'accounting_double_entry:datecreate' %}">Select Date Range</a>
+
+                {% else %} 
+              
+  
+                      <a type="button" class='btn btn-warning pull-right'  href="{% url 'accounting_double_entry:dateupdate' pk=selectdatefield_details.pk %}">Update Date Range</a>
+
+                      <a class="pull-right"><strong>Selected Period: From</strong> {{ selectdatefield_details.Start_Date|date }} <strong>To</strong> {{ selectdatefield_details.End_Date|date }}  &nbsp;</a> 
+
+                 
+
+                {% endif %} 
 				
 				
 				</div>
@@ -88,35 +105,33 @@
 		            </div>
 
 		            	<div class="box-body table-responsive no-padding">
-		            									<table id="example1" class="table table-bordered table-striped">
-								<tr>
-									<td>
-										<table class="table table-hover">
+		            		<table id="example1" class="table table-bordered table-striped">
+								
 											<tr>
 												<th><center>Date</center></th>
-												<th><center>Particulars</center></th>
-												<th></th>
-												<th><center>Voucher Type</center></th>
+												<th><center>Debit A/c</center></th>
+												<th><center>Credit A/c</center></th>
 												<th><center>Voucher No</center></th>
-												<th><center>Debit Amount</center></th>
-												<th><center>Credit Amount</center></th>
+												<th><center>Amount</center></th>
+												<th><center>Narration</center></th>
 											</tr>
 											{% for journal in journal_list %}
 												<tr>
-												
-														<td><center><a href="{% url 'accounting_double_entry:detail' pk1=company_details.pk pk2=journal.pk pk3=selectdatefield_details.pk %}">{{journal.Date}}</a></center></td>
-														<td><center><a href="{% url 'accounting_double_entry:detail' pk1=company_details.pk pk2=journal.pk pk3=selectdatefield_details.pk %}">{{journal.By}}</a></center></td>
-														<td><center></center></td>
-														<td><center>Journal</center></td>
-														<td><center><a href="{% url 'accounting_double_entry:detail' pk1=company_details.pk pk2=journal.pk pk3=selectdatefield_details.pk %}">{{journal.id}}</a></center></td>
-														<td><center><a href="{% url 'accounting_double_entry:detail' pk1=company_details.pk pk2=journal.pk pk3=selectdatefield_details.pk %}">{{journal.Debit}}</a></center></td>
-														<td><center><a href="{% url 'accounting_double_entry:detail' pk1=company_details.pk pk2=journal.pk pk3=selectdatefield_details.pk %}">{{journal.Credit}}</a></center></td>
-												
+													<td><center><a href="{% url 'accounting_double_entry:detail' pk1=company_details.pk pk2=journal.pk pk3=selectdatefield_details.pk %}">{{journal.Date}}</a></center></td>
+													<td><center><a href="{% url 'accounting_double_entry:detail' pk1=company_details.pk pk2=journal.pk pk3=selectdatefield_details.pk %}">{{journal.By}}</a></center></td>
+													<td><center><a href="{% url 'accounting_double_entry:detail' pk1=company_details.pk pk2=journal.pk pk3=selectdatefield_details.pk %}">{{journal.To}}</a></center></td>
+														
+													<td><center><a href="{% url 'accounting_double_entry:detail' pk1=company_details.pk pk2=journal.pk pk3=selectdatefield_details.pk %}">{{journal.id}}</a></center></td>
+													<td><center><a href="{% url 'accounting_double_entry:detail' pk1=company_details.pk pk2=journal.pk pk3=selectdatefield_details.pk %}">{{journal.Debit}}</a></center></td>
+
+													{% if journal.narration %}
+														<td><center><a href="{% url 'accounting_double_entry:detail' pk1=company_details.pk pk2=journal.pk pk3=selectdatefield_details.pk %}">{{journal.narration|safe|truncatewords:"8"}}</a></center></td>
+													{% else %}
+														<td><center><a href="{% url 'accounting_double_entry:detail' pk1=company_details.pk pk2=journal.pk pk3=selectdatefield_details.pk %}" >being {{journal.By}} debited by {{journal.To}} for {{journal.Credit}}.</a></center></td>
+													{% endif %}			
 												</tr>
 											{% endfor %}
-										</table>
-									</td>
-								</tr>
+									
 							</table>
 		            	</div>
 

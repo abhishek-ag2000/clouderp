@@ -25,11 +25,13 @@ class companyform(forms.ModelForm):
 		self.fields['Mobile_No'].widget.attrs = {'class': 'form-control',}
 		self.fields['Financial_Year_From'].widget.attrs = {'class': 'form-control',}
 		self.fields['Books_Begining_From'].widget.attrs = {'class': 'form-control',}
+		self.fields['gst'].widget.attrs = {'class': 'form-control',}
+		self.fields['pan'].widget.attrs = {'class': 'form-control',}
 
 
 	class Meta:
 		model = company
-		fields = ('Name', 'Type_of_company','Business_nature_Service_Provider','Business_nature_Retail','Business_nature_Wholesale','Business_nature_Works_Contract','Business_nature_Leasing','Business_nature_Factory_Manufacturing','Business_nature_Bonded_Warehouse','Business_nature_Other','Please_specify','Shared_Users','Address','Country','State','Pincode','Telephone_No','Mobile_No','Financial_Year_From','Books_Begining_From')
+		fields = ('Name', 'Type_of_company','Business_nature_Service_Provider','Business_nature_Retail','Business_nature_Wholesale','Business_nature_Works_Contract','Business_nature_Leasing','Business_nature_Factory_Manufacturing','Business_nature_Bonded_Warehouse','Business_nature_Other','Please_specify','Shared_Users','Address','Country','State','Pincode','Telephone_No','Mobile_No','Financial_Year_From','Books_Begining_From','gst','pan')
 		widgets = {
             'Financial_Year_From': DateInput(),
             'Books_Begining_From': DateInput(),

@@ -68,6 +68,15 @@
 
             <a href="{% url 'accounting_double_entry:list' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-success" role="button">Select Journal </a>
             <a href="{% url 'accounting_double_entry:create' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-warning" role="button">Create Journal</a>
+
+            <div class="pull-right">
+              <a href="{% url 'accounting_double_entry:groupcreate' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-warning" role="button">Create Group</a>
+
+              <a href="{% url 'accounting_double_entry:ledgercreate' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-warning" role="button">Create Ledger</a>
+              
+            </div>
+
+            
               
 
         
@@ -109,7 +118,7 @@
 
 
 
-        <div class="row">
+      <!--   <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="box box-info">
                   <div class="box-header with-border">
@@ -131,7 +140,48 @@
                 </div>
               </div>
             </div>
-            <!-- /.box-body -->
+           
+                    
+                </div>
+                
+            </div>
+            
+        </div> -->
+
+                        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="box box-info">
+                    <style type="text/css">
+
+                    .table-bordered td, .table-bordered th{
+                        border-color: #bfbfbf !important;
+                    
+                         }
+                    </style>
+
+                    <div class="box-body table-responsive no-padding">
+                        <table class="table table-bordered">
+
+                            <tr>
+                                <td>
+                                    <table class="table table-hover">
+                                        <tr>
+                                            <th><center></center></th>
+                                            <th><center>Particulars</center></th>
+                                            
+                                            <th><center>Debit Amount</center></th>
+                                        </tr>
+                                        <tr>
+                                            <th><center>By</center></th>
+                                            <th><center>{{ form.By }}</center></th>
+                                            
+                                            <th><center>{{ form.Debit }}</center></th>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                     
                 </div>
                 
@@ -169,11 +219,25 @@
                                             <th><center>{{ form.Credit }}</center></th>
                                         </tr>
                                     </table>
+
+                                    <table class="table table-hover">
+                                        <tr>
+                                          
+                                            <th>Narration</th>
+                                            
+                                          </tr>
+                                        <tr>
+                                            <th>{{ form.narration }}</th>
+                                        </tr>
+                                    </table>
                                 </td>
                             </tr>
                         </table>
                     </div>
                     
+
+
+
                 </div>
                 
             </div>
