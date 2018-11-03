@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy, reverse
 from accounting_double_entry.models import group1,ledger1,journal,selectdatefield
 from company.models import company
-from stockkeeping.models import Stockgroup,Simpleunits,Compoundunits,Stockdata,Purchase,Sales,Stock_Total
+from stockkeeping.models import Stockgroup,Simpleunits,Compoundunits,Stockdata,Purchase,Sales,Stock_Total,Stock_Total_sales
 from stockkeeping.forms import Stockgroup_form,Simpleunits_form,Compoundunits_form,Stockdata_form,Purchase_form,Sales_form,Purchase_formSet,Sales_formSet
 from userprofile.models import Profile
 from django.shortcuts import get_object_or_404
@@ -756,7 +756,7 @@ class Sales_detailsview(LoginRequiredMixin,DetailView):
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
 		sales_details = get_object_or_404(Sales, pk=self.kwargs['pk2'])
-		qsjb  = Stock_Total.objects.filter(sales=sales_details.pk)
+		qsjb  = Stock_Total_sales.objects.filter(sales=sales_details.pk)
 		context['stocklist'] = qsjb
 		return context
 
@@ -824,14 +824,6 @@ class Sales_updateview(LoginRequiredMixin,UpdateView):
 		sales = get_object_or_404(Sales, pk=pk2)
 		return sales
 
-	def get_form_kwargs(self):
-		data = super(Sales_updateview, self).get_form_kwargs()
-		data.update(
-			User=self.request.user,
-			Company=company.objects.get(pk=self.kwargs['pk'])
-			)
-		return data
-
 	def get_context_data(self, **kwargs):
 		context = super(Sales_updateview, self).get_context_data(**kwargs) 
 		context['profile_details'] = Profile.objects.all()
@@ -839,7 +831,34 @@ class Sales_updateview(LoginRequiredMixin,UpdateView):
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
+		if self.request.POST:
+			context['stocksales'] = Sales_formSet(self.request.POST)
+		else:
+			context['stocksales'] = Sales_formSet()
 		return context
+
+	def form_valid(self, form):
+		form.instance.User = self.request.user
+		c = company.objects.get(pk=self.kwargs['pk'])
+		form.instance.Company = c
+		context = self.get_context_data()
+		stocksales = context['stocksales']
+		with transaction.atomic():
+			self.object = form.save()
+			if stocksales.is_valid():
+				stocksales.instance = self.object
+				stocksales.save()
+		return super(Sales_createview, self).form_valid(form)
+
+	def get_form_kwargs(self):
+		data = super(Sales_updateview, self).get_form_kwargs()
+		data.update(
+			User=self.request.user,
+			Company=company.objects.get(pk=self.kwargs['pk1'])
+			)
+		return data
+
+
 
 class Sales_deleteview(LoginRequiredMixin,DeleteView):
 	model = Sales

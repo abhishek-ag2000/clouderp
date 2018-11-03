@@ -73,7 +73,11 @@ class Stockdata(models.Model):
 class Purchase(models.Model):
 	User         = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,null=True,blank=True)
 	Company      = models.ForeignKey(company,on_delete=models.CASCADE,null=True,blank=True)
-	date         = models.DateField(default=datetime.date.today,blank=True, null=True)
+	date         = models.DateField(default=datetime.date.today,blank=False, null=True)
+	ref_no       = models.PositiveIntegerField()
+	Party_ac     = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='partyledger')
+	purchase     = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='purchaseledger')
+	billname     = models.CharField(max_length=32,default='Supplier')
 	Address		 = models.CharField(max_length=32,blank=True)
 	GSTIN        = models.CharField(max_length=32,blank=True)
 	PAN          = models.CharField(max_length=32,blank=True)
@@ -114,10 +118,7 @@ class Purchase(models.Model):
 	DeliveryNote = models.CharField(max_length=32,blank=True)
 	Supplierref  = models.CharField(max_length=32,blank=True)
 	Mode         = models.CharField(max_length=32,blank=True)
-	ref_no       = models.PositiveIntegerField()
-	Party_ac     = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='partyledger')
-	purchase     = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='purchaseledger')
-	Total_Amount = models.DecimalField(max_digits=10,decimal_places=2,blank=True, null=True)
+	Total_Purchase = models.DecimalField(max_digits=10,decimal_places=2,blank=True, null=True)
 
 	def __str__(self):
 		return str(self.Party_ac)
@@ -126,7 +127,11 @@ class Purchase(models.Model):
 class Sales(models.Model):
 	User         = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,null=True,blank=True)
 	Company      = models.ForeignKey(company,on_delete=models.CASCADE,null=True,blank=True)
-	date         = models.DateField(default=datetime.date.today,blank=True, null=True)
+	ref_no       = models.PositiveIntegerField()
+	Party_ac     = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='partyledgersales')
+	sales        = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='saleledger')
+	billname     = models.CharField(max_length=32,default='Customer')
+	date         = models.DateField(default=datetime.date.today,blank=False, null=True)
 	Address		 = models.CharField(max_length=32,blank=True)
 	GSTIN        = models.CharField(max_length=32,blank=True)
 	PAN          = models.CharField(max_length=32,blank=True)
@@ -167,29 +172,36 @@ class Sales(models.Model):
 	DeliveryNote = models.CharField(max_length=32,blank=True)
 	Supplierref  = models.CharField(max_length=32,blank=True)
 	Mode         = models.CharField(max_length=32,blank=True)
-	ref_no       = models.PositiveIntegerField()
-	sales        = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='salesledger')
-	Party_ac     = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='partyledgersales')
 	Total_Amount = models.DecimalField(max_digits=10,decimal_places=2,blank=True, null=True)
 
 	def __str__(self):
 		return str(self.Party_ac)
 
 
-
 class Stock_Total(models.Model):
-	purchases   = models.ForeignKey(Purchase,on_delete=models.CASCADE,null=True,blank=True,related_name='purchasetotal')
-	sales       = models.ForeignKey(Sales,on_delete=models.CASCADE,null=True,blank=True,related_name='salestotal')
+	purchases   = models.ForeignKey(Purchase,on_delete=models.CASCADE,null=True,blank=False,related_name='purchasetotal') 
 	stockitem   = models.ForeignKey(Stockdata,on_delete=models.CASCADE,null=True,blank=True,related_name='purchasestock') 
 	Quantity    = models.PositiveIntegerField()
 	rate		= models.DecimalField(max_digits=10,decimal_places=2)
 	Disc    	= models.DecimalField(max_digits=10,decimal_places=2,default=0)
 	gst_rate    = models.DecimalField(max_digits=4,decimal_places=2,default=5)
 	Total 		= models.DecimalField(max_digits=10,decimal_places=2,null=True,blank=True)
-	Total_sales = models.DecimalField(max_digits=10,decimal_places=2,null=True,blank=True)
 
 	def __str__(self):
 		return str(self.purchases)
+
+
+class Stock_Total_sales(models.Model):
+	sales       = models.ForeignKey(Sales,on_delete=models.CASCADE,null=True,blank=False,related_name='saletotal')
+	stockitem   = models.ForeignKey(Stockdata,on_delete=models.CASCADE,null=True,blank=True,related_name='salestock') 
+	Quantity    = models.PositiveIntegerField()
+	rate		= models.DecimalField(max_digits=10,decimal_places=2)
+	Disc    	= models.DecimalField(max_digits=10,decimal_places=2,default=0)
+	gst_rate    = models.DecimalField(max_digits=4,decimal_places=2,default=5)
+	Total 		= models.DecimalField(max_digits=10,decimal_places=2,null=True,blank=True)
+
+	def __str__(self):
+		return str(self.sales)
 
 @receiver(pre_save, sender=Stock_Total)
 def update_gst_rate(sender, instance, *args, **kwargs):
@@ -197,35 +209,47 @@ def update_gst_rate(sender, instance, *args, **kwargs):
 
 @receiver(pre_save, sender=Stock_Total)
 def update_amount(sender, instance, *args, **kwargs):
-	instance.Total_sales = instance.rate * instance.Quantity * (1 - (instance.Disc/100))
+	instance.Total = instance.rate * instance.Quantity * (1 - (instance.Disc/100))
 
-@receiver(pre_save, sender=Stock_Total)
+@receiver(pre_save, sender=Stock_Total_sales)
+def update_gst_rate(sender, instance, *args, **kwargs):
+	instance.gst_rate = instance.stockitem.gst_rate
+
+@receiver(pre_save, sender=Stock_Total_sales)
 def update_amount(sender, instance, *args, **kwargs):
 	instance.Total = instance.rate * instance.Quantity * (1 - (instance.Disc/100))
+	
 
 @receiver(pre_save, sender=Purchase)
 def update_total(sender,instance,*args,**kwargs):
 	total = instance.purchasetotal.aggregate(the_sum=Coalesce(Sum('Total'), Value(0)))['the_sum']
-	instance.Total_Amount = total
+	instance.Total_Purchase = total
 
 @receiver(pre_save, sender=Sales)
 def update_total(sender,instance,*args,**kwargs):
-	total = instance.salestotal.aggregate(the_sum=Coalesce(Sum('Total_sales'), Value(0)))['the_sum']
-	instance.Total_Amount = total
+	total1 = instance.saletotal.aggregate(the_sum=Coalesce(Sum('Total'), Value(0)))['the_sum']
+	instance.Total_Amount = total1
+
+@receiver(post_save, sender=Stock_Total)
+def trigger_pre_save_purchase(sender, instance, *args, **kwargs):
+	instance.purchases.save()
+
+@receiver(post_save, sender=Stock_Total_sales)
+def trigger_pre_save_sale(sender, instance, *args, **kwargs):
+	instance.sales.save()
+
+@receiver(post_delete, sender=Stock_Total)
+def trigger_post_save_purchase(sender, instance, *args, **kwargs):
+	instance.purchases.save()
+
+@receiver(post_delete, sender=Stock_Total_sales)
+def trigger_post_save_sale(sender, instance, *args, **kwargs):
+	instance.sales.save()
 
 
 
-@receiver(post_save, sender=Purchase)
-def create_purchase_journal(sender, instance, created, **kwargs):
-	total1 = instance.purchasetotal.aggregate(the_sum=Coalesce(Sum('Total'), Value(0)))['the_sum']
-	if created:
-		journal.objects.create(User=instance.User,Company=instance.Company,By=instance.Party_ac,To=instance.purchase,Debit=total1,Credit=total1)
-		
-@receiver(post_save, sender=Sales)
-def create_purchase_journal(sender, instance, created, **kwargs):
-	total2 =  instance.salestotal.aggregate(the_sum=Coalesce(Sum('Total'), Value(0)))['the_sum']
-	if created:
-		journal.objects.create(User=instance.User,Company=instance.Company,By=instance.sales,To=instance.Party_ac,Debit=total2,Credit=total2)
+
+
 
 
 	

@@ -167,8 +167,8 @@ class ledger1(models.Model):
 	Company 		= models.ForeignKey(company,on_delete=models.CASCADE,null=True,blank=True,related_name='Companys')
 	Creation_Date	= models.DateField(default=datetime.date.today,blank=True, null=True)
 	name 			= models.CharField(max_length=32)
-	group1_Name 	= models.ForeignKey(group1,on_delete=models.CASCADE,blank=True,null=True)
-	Opening_Balance = models.DecimalField(default=0.00,max_digits=19,decimal_places=2,blank=True)	
+	group1_Name 	= models.ForeignKey(group1,on_delete=models.CASCADE,null=True)
+	Opening_Balance = models.DecimalField(default=0.00,max_digits=19,decimal_places=2,null=True)	
 	User_Name 		= models.CharField(max_length=100,blank=True)
 	Address 		= models.TextField(blank=True)
 	State_Name 		= (

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from stockkeeping.models import Stockgroup,Simpleunits,Compoundunits,Stockdata,Purchase,Stock_Total,Sales
+from stockkeeping.models import Stockgroup,Simpleunits,Compoundunits,Stockdata,Purchase,Stock_Total,Sales,Stock_Total_sales
 
 # Register your models here.
 
@@ -29,12 +29,20 @@ class Stock_Totaladmin(admin.ModelAdmin):
 	list_display = ['purchases','stockitem','Quantity','rate','Total']
 	search_fields = ['stockitem']
 
+class Stock_Total_salesadmin(admin.ModelAdmin):
+	model = Stock_Total_sales
+	list_display = ['sales','stockitem','Quantity','rate','Total']
+	search_fields = ['stockitem']
+
 class Stock_Totalinline(admin.TabularInline):
 	model = Stock_Total
 
+class Stock_Total_salesinline(admin.TabularInline):
+	model = Stock_Total_sales
+
 class Purchaseadmin(admin.ModelAdmin):
 	model = Purchase
-	list_display = ['User', 'Company','ref_no','Party_ac','purchase','Total_Amount']
+	list_display = ['User', 'Company','ref_no','Party_ac','purchase','Total_Purchase']
 	search_fields = ['stock_name','hsn']
 	inlines = [Stock_Totalinline]
 
@@ -42,7 +50,7 @@ class Salesadmin(admin.ModelAdmin):
 	model = Sales
 	list_display = ['User', 'Company','ref_no','Party_ac','sales','Total_Amount']
 	search_fields = ['stock_name','hsn']
-	inlines = [Stock_Totalinline]
+	inlines = [Stock_Total_salesinline]
 
 
 admin.site.register(Stockgroup, Stockgroupadmin)

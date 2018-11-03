@@ -72,7 +72,10 @@
 </div>
 
 
-<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+
+        <div class="row">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
           <!-- Horizontal Form -->
           <div class="box">
             <div class="box-header with-border">
@@ -114,16 +117,23 @@
                      </div>
 
                     <div class="form-group">
-                       <label for="Seller2" class="col-md-4 control-label" style="font-size: x-small;">Name of Party</label>
+                       <label for="Seller2" class="col-md-4 control-label" style="font-size: x-small;">Name of Party<i class="material-icons" style="font-size:16px;color:red">*</i></label>
                        <div class="col-md-8">
                         {{form.Party_ac}}
                       </div>
                     </div> 
 
                     <div class="form-group">
-                       <label for="Seller2" class="col-md-4 control-label" style="font-size: x-small;">Sales Ledger</label>
+                       <label for="Seller2" class="col-md-4 control-label" style="font-size: x-small;">Sales Ledger<i class="material-icons" style="font-size:16px;color:red">*</i></label>
                        <div class="col-md-8">
                         {{form.sales}}
+                      </div>
+                    </div>
+
+                     <div class="form-group">
+                       <label for="Seller2" class="col-md-4 control-label" style="font-size: x-small;">Billing Name<i class="material-icons" style="font-size:16px;color:red">*</i></label>
+                       <div class="col-md-8">
+                        {{form.billname}}
                       </div>
                     </div>
 
@@ -148,8 +158,17 @@
                       </div>
                     </div> 
 
-                     <div class="form-group">
-                       <label for="State1" class="col-md-4 control-label" style="font-size: x-small;">State Name</label>
+
+
+                  
+                 </div> 
+
+                 <div class="col-md-8">
+                   
+                     <br>
+
+                    <div class="form-group">
+                       <label for="State1" class="col-md-4 control-label" style="font-size: x-small;">State Name<i class="material-icons" style="font-size:16px;color:red">*</i></label>
                        <div class="col-md-8">
                         {{form.State}}
                       </div>
@@ -162,15 +181,8 @@
 
                       </div>
                     </div> 
-
-                  
-                 </div> 
-
-                 <div class="col-md-8">
-                   
-                     <br>
                     <div class="form-group">
-                       <label for="Invoice1" class="col-md-4 control-label" style="font-size: x-small;">Invoice No</label>
+                       <label for="Invoice1" class="col-md-4 control-label" style="font-size: x-small;">Invoice No<i class="material-icons" style="font-size:16px;color:red">*</i></label>
                        <div class="col-md-8">
                          {{form.ref_no}}
                        </div>
@@ -191,7 +203,7 @@
                     </div>
 
                      <div class="form-group">
-                       <label for="Date3" class="col-md-4 control-label" style="font-size: x-small;">Dated</label>
+                       <label for="Date3" class="col-md-4 control-label" style="font-size: x-small;">Dated<i class="material-icons" style="font-size:16px;color:red">*</i></label>
                        <div class="col-md-8">
                         {{form.date}}
                        </div>
@@ -222,43 +234,38 @@
              </div>
 
               <div class="box-body table-responsive no-padding">
-                      <table class="table">
+        <table class="table">
                     {{ stocksales.management_form }}
 
-            {% for form in stocksales.forms %}
-                {% if forloop.first %}
-                    <thead>
-                    <tr>
-                        {% for field in form.visible_fields %}
-                                                                
-                            <th class='col-md-2'>{{ field.label|capfirst }}</th>
-                          
-                        {% endfor %}
-                    </tr>
-                    </thead>
-                {% endif %}
-                <tr class='{% cycle "row1" "row2" %}  formset_row'>
-                    {% for field in form.visible_fields %}
-                        
-                            {# Include the hidden fields in the form #}
-                            {% if forloop.first %}
-                                {% for hidden in form.hidden_fields %}
-                                    {{ hidden }}
-                                {% endfor %}
-                            {% endif %}
-                            {{ field.errors.as_ul }}
+                        <thead>
+                        <tr>
+                          <th class="col-md-2">Product<i class="material-icons" style="font-size:16px;color:red">*</i></th>
+                          <th class="col-md-1">Quantity<i class="material-icons" style="font-size:16px;color:red">*</i></th>
+                          <th class="col-md-2">Rate<i class="material-icons" style="font-size:16px;color:red">*</i></th>
+                          <th class="col-md-1">Discount(%)</th>
+                          <th class="col-md-2">Sub Total(&#8377;)</th>
+                          <th class="col-md-1">GST Rate(%)<i class="material-icons" style="font-size:16px;color:red">*</i></th>
+                          <th class="col-md-2">Total</th>
+                        </tr>
+                        </thead>
 
-                            {% if forloop.first %}
-                               <td class="col-md-3"> {{ field }}</td>
-                            {% elif forloop.last %}
-                                <td class="col-md-1 btn btn-default btn-block">{{ field }}</td>
-                            {% else %}
-                              <td class='col-md-2'>{{ field }}</td>
-                            {% endif %}
+                    {% for form in stocksales.forms %}
+                      {{ form.id }}
+                
 
-                            {% endfor %}
-                </tr>
-            {% endfor %}
+                      
+                        <tr class='{% cycle "row1" "row2" %}  formset_row'>
+                          <td class="col-md-2">{{ form.stockitem}}</td>
+                          <td class="col-md-1">{{ form.Quantity}}</td>
+                          <td class="col-md-2">{{ form.rate}}</td>
+                          <td class="col-md-1">{{ form.Disc}}</td>
+                          <td class="col-md-2">{{ form.Total}}</td>
+                          <td class="col-md-1">{{ form.gst_rate}}</td>
+                          <td class="col-md-2"><input class="form-control" type="text" placeholder="Readonly input here…" readonly></td>
+                        </tr>  
+                      
+
+                    {% endfor %}
         </table>
                 
               </div>
@@ -281,6 +288,7 @@
               <!-- /.box-footer -->
             </form>
           </div>
+        </div>
         </div>
 
 

@@ -52,6 +52,6 @@ urlpatterns = [
 	url(r'^company/(?P<pk>\d+)/date/(?P<pk3>\d+)/sales$',views.Sales_listview.as_view(),name='saleslist'),
 	url(r'^company/(?P<pk1>\d+)/salesdetail/(?P<pk2>\d+)/date/(?P<pk3>\d+)/$',views.Sales_detailsview.as_view(),name='salesdetail'),
 	url(r'^company/(?P<pk>\d+)/date/(?P<pk3>\d+)/salescreate/$',views.Sales_createview.as_view(),name='salescreate'),
-	url(r'^company/(?P<pk1>\d+)/salesupdate/(?P<pk2>\d+)/date/(?P<pk3>\d+)/$',views.Sales_updateview.as_view(),name='purchaseupdate'),
+	url(r'^company/(?P<pk1>\d+)/salesupdate/(?P<pk2>\d+)/date/(?P<pk3>\d+)/$',views.Sales_updateview.as_view(),name='salesupdate'),
 	url(r'^company/(?P<pk>\d+)/salesdelete/(?P<pk2>\d+)/date/(?P<pk3>\d+)/$',views.Sales_deleteview.as_view(),name='salesdelete'),
 ]

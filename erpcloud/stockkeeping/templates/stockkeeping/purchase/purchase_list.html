@@ -101,8 +101,8 @@
 
                     <tr>
                       <th>Sl no</th>
-                      <th>Party A/c</th> 
-                      <th>Purchase Ledger</th>
+                      <th>Purchase Type</th> 
+                      <th>Supplier Name</th>
                       <th>Total Amount</th>
                     </tr>
 
@@ -112,8 +112,8 @@
                         {{ forloop.counter0|add:page_obj.start_index }}
                       </a></td>
                       <td><a href="{% url 'stockkeeping:purchasedetail' pk2=purchase.pk pk1=company_details.pk pk3=selectdatefield_details.pk %}"">{{ purchase.Party_ac }}</a></td>
-                      <td> <a href="{% url 'stockkeeping:purchasedetail' pk2=purchase.pk pk1=company_details.pk pk3=selectdatefield_details.pk %}">{{ purchase.purchase }}</a></td>
-                      <td> <a href="{% url 'stockkeeping:purchasedetail' pk2=purchase.pk pk1=company_details.pk pk3=selectdatefield_details.pk %}">{{ purchase.Total_Amount }}</a></td>
+                      <td> <a href="{% url 'stockkeeping:purchasedetail' pk2=purchase.pk pk1=company_details.pk pk3=selectdatefield_details.pk %}">{{ purchase.billname }}</a></td>
+                      <td> <a href="{% url 'stockkeeping:purchasedetail' pk2=purchase.pk pk1=company_details.pk pk3=selectdatefield_details.pk %}">{{ purchase.Total_Purchase }}</a></td>
                      
                     </tr>
                     {% endfor %}
