@@ -4,6 +4,7 @@ from django.views.generic import (ListView,DetailView,
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from accounting_double_entry.models import group1,ledger1,journal,selectdatefield
+from stockkeeping.models import Stockgroup,Simpleunits,Compoundunits,Stockdata,Purchase,Sales,Stock_Total,Stock_Total_sales
 from accounting_double_entry.forms import journalForm,group1Form,Ledgerform,DateRangeForm
 from userprofile.models import Profile
 from django.db.models import Sum
@@ -12,7 +13,8 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from django.db.models import F
+from django.db.models import F, ExpressionWrapper
+from django.db.models.fields import DecimalField
 import datetime
 from django.db.models import Value
 from django.db.models.functions import Coalesce
@@ -35,6 +37,7 @@ class group1ListView(LoginRequiredMixin,ListView):
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
 		return context
+
 
 class group1DetailView(LoginRequiredMixin,DetailView):
 	context_object_name = 'group1_details'
@@ -172,7 +175,7 @@ def ledger1_detail_view(request, pk, pk2, pk3):
 	total_debitob = qsob.aggregate(the_sum=Coalesce(Sum('Debit'), Value(0)))['the_sum']
 	total_creditob = qsob2.aggregate(the_sum=Coalesce(Sum('Credit'), Value(0)))['the_sum']
 
-	# opening balance
+	# closing balance
 	qscb  = journal.objects.filter(User=request.user, Company=company_details.pk, By=ledger1_details.pk, Date__gte=selectdatefield_details.Start_Date, Date__lte=selectdatefield_details.End_Date)
 	qscb2 = journal.objects.filter(User=request.user, Company=company_details.pk, To=ledger1_details.pk, Date__gte=selectdatefield_details.Start_Date, Date__lte=selectdatefield_details.End_Date)	
 
@@ -181,16 +184,21 @@ def ledger1_detail_view(request, pk, pk2, pk3):
 	
 	if(ledger1_details.Creation_Date!=selectdatefield_details.Start_Date):
 		if(ledger1_details.group1_Name.balance_nature == 'Debit'):
-			opening_balance = ledger1_details.Opening_Balance + total_debitob - total_creditob
+			opening_balance = abs(ledger1_details.Opening_Balance) + abs(total_debitob) - abs(total_creditob)
 		else:
-			opening_balance = ledger1_details.Opening_Balance + total_creditob - total_debitob 
+			opening_balance = abs(ledger1_details.Opening_Balance) + abs(total_creditob) - abs(total_debitob) 
 	else:
-		opening_balance = ledger1_details.Opening_Balance
+		opening_balance = abs(ledger1_details.Opening_Balance)
 
 	if(ledger1_details.group1_Name.balance_nature == 'Debit'):
-		closing_balance = opening_balance + total_debitcb - total_creditcb
+		closing_balance = abs(opening_balance) + abs(total_debitcb) - abs(total_creditcb)
 	else:
-		closing_balance = opening_balance + total_creditcb - total_debitcb 
+		closing_balance = abs(opening_balance) + abs(total_creditcb) - abs(total_debitcb)
+
+	ledger1_detail = ledger1.objects.get(pk=ledger1_details.pk)
+	ledger1_detail.Closing_balance = closing_balance
+	ledger1_detail.Balance_opening = opening_balance
+	ledger1_detail.save(update_fields=['Closing_balance', 'Balance_opening'])
 
 
 	context = {
@@ -198,8 +206,8 @@ def ledger1_detail_view(request, pk, pk2, pk3):
 		'company_details' : company_details,
 		'ledger1_details' : ledger1_details,
 		'selectdatefield_details' : selectdatefield_details,
-		'total_debit'     : total_debitcb,
-		'total_credit'    : total_creditcb,
+		'total_debit'     : abs(total_debitcb),
+		'total_credit'    : abs(total_creditcb),
 		'journal_debit'   : qscb,
 		'journal_credit'  : qscb2,
 		'closing_balance' : closing_balance,
@@ -460,6 +468,103 @@ class dateupdateview(LoginRequiredMixin,UpdateView):
 
 	def get_success_url(self,**kwargs):
 		return reverse('company:list')
+
+################## Views For Trial Balance Display ###################################
+
+@login_required
+def trial_balance_condensed_view(request,pk,pk3):
+	company_details = get_object_or_404(company, pk=pk)
+	selectdatefield_details = get_object_or_404(selectdatefield, pk=pk3)
+
+	# opening stock
+	qo = Stockdata.objects.filter(User=request.user, Company=company_details.pk, Date__lte=selectdatefield_details.Start_Date)
+	totalo = qo.annotate(the_sum=Coalesce(Sum('salestock__Quantity'),0)).values('the_sum')
+	totalo2 = qo.annotate(the_sum2=Coalesce(Sum('purchasestock__Quantity_p'),0)).values('the_sum2')
+	qo = qo.annotate(
+    	sales_sum = Coalesce(Sum('salestock__Quantity'),0),
+    	purchase_sum = Coalesce(Sum('purchasestock__Quantity_p'),0),
+    	purchase_tot = Coalesce(Sum('purchasestock__Total_p'),0)
+	)
+	qo1 = qo.annotate(
+    	difference = ExpressionWrapper(F('purchase_sum') - F('sales_sum'), output_field=DecimalField()),
+    	total = ExpressionWrapper((F('purchase_tot') / F('purchase_sum')) * (F('purchase_sum') - F('sales_sum')), output_field=DecimalField())
+		) 
+
+	qo2 = qo1.aggregate(the_sum=Coalesce(Sum('total'), Value(0)))['the_sum']
+
+	groups = group1.objects.filter(User=request.user, Company=company_details.pk, ledgergroups__Creation_Date__gte=selectdatefield_details.Start_Date, ledgergroups__Creation_Date__lte=selectdatefield_details.End_Date)
+	groups_cb = groups.annotate(
+				closing = Coalesce(Sum('ledgergroups__Closing_balance'), 0),
+				opening = Coalesce(Sum('ledgergroups__Balance_opening'), 0),
+			)
+
+	# groups with debit balance nature
+	groupsdebit = group1.objects.filter(User=request.user, Company=company_details.pk, balance_nature__icontains='Debit', ledgergroups__Creation_Date__gte=selectdatefield_details.Start_Date, ledgergroups__Creation_Date__lte=selectdatefield_details.End_Date)
+	groups_cbc = groupsdebit.annotate(
+				closing = Coalesce(Sum('ledgergroups__Closing_balance'), 0)).filter(closing__gt = 0)
+
+	groupcbl = groupsdebit.annotate(
+			closing = Coalesce(Sum('ledgergroups__Closing_balance'), 0)).filter(closing__lt = 0)
+
+	group_ob = groupsdebit.annotate(
+			opening = Coalesce(Sum('ledgergroups__Balance_opening'), 0)).filter(opening__gt = 0)
+
+	group_obl = groupsdebit.annotate(
+			opening = Coalesce(Sum('ledgergroups__Balance_opening'), 0)).filter(opening__lt = 0)
+
+	posdebcb = groups_cbc.aggregate(the_sum=Coalesce(Sum('closing'), Value(0)))['the_sum']
+	negdbcl = groupcbl.aggregate(the_sum=Coalesce(Sum('closing'), Value(0)))['the_sum']
+	posdebob = group_ob.aggregate(the_sum=Coalesce(Sum('opening'), Value(0)))['the_sum']
+	negdebob = group_obl.aggregate(the_sum=Coalesce(Sum('opening'), Value(0)))['the_sum']
+
+
+	# groups with credit balance nature
+	groupscredit = group1.objects.filter(User=request.user, Company=company_details.pk, balance_nature__icontains='Credit', ledgergroups__Creation_Date__gte=selectdatefield_details.Start_Date, ledgergroups__Creation_Date__lte=selectdatefield_details.End_Date)
+
+	groups_ccb = groupscredit.annotate(
+				closing = Coalesce(Sum('ledgergroups__Closing_balance'), 0)).filter(closing__gt = 0)
+
+	groupcbcl = groupscredit.annotate(
+			closing = Coalesce(Sum('ledgergroups__Closing_balance'), 0)).filter(closing__lt = 0)
+
+	group_cob = groupscredit.annotate(
+			opening = Coalesce(Sum('ledgergroups__Balance_opening'), 0)).filter(opening__gt = 0)
+
+	group_ocbl = groupscredit.annotate(
+			opening = Coalesce(Sum('ledgergroups__Balance_opening'), 0)).filter(opening__lt = 0)
+
+
+	poscrcl = groups_ccb.aggregate(the_sum=Coalesce(Sum('closing'), Value(0)))['the_sum']
+	necrcl = groupcbcl.aggregate(the_sum=Coalesce(Sum('closing'), Value(0)))['the_sum']
+	pocrob = group_cob.aggregate(the_sum=Coalesce(Sum('opening'), Value(0)))['the_sum']
+	necrob = group_ocbl.aggregate(the_sum=Coalesce(Sum('opening'), Value(0)))['the_sum']
+
+
+	total_debit_closing = posdebcb + abs(necrcl)
+	total_credit_closing = poscrcl + abs(negdbcl)
+
+	total_debit_opening = posdebob + abs(necrob)
+	total_credit_opening = pocrob + abs(negdebob)
+
+
+
+
+
+	context = {
+		'company_details' : company_details,
+		'selectdatefield_details' : selectdatefield_details,
+		'opening_stock' : qo2,
+		'groups' : groups,
+		'groups_closing' : groups_cb,
+
+		'total_debit_closing' : total_debit_closing,
+		'total_debit_opening' : total_debit_opening,
+
+		'total_credit_closing' : total_credit_closing,
+		'total_credit_opening' : total_credit_opening,
+	}
+
+	return render(request, 'accounting_double_entry/trial_bal_condendensed.html', context)
 
 
 

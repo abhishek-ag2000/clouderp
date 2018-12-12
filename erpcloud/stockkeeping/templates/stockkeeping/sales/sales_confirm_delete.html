@@ -55,10 +55,9 @@
           <div class="box box-default">
           <div class="box-body">
 
-          <a href="{% url 'stockkeeping:purchaselist' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-success" role="button">Select Purchase Invoice</a>
+           <a href="{% url 'stockkeeping:saleslist' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-success" role="button">Select Sales Invoice</a>
           
-          <a href="{% url 'stockkeeping:purchasecreate' pk=company_details.pk pk3=selectdatefield_details.pk  %}" class="btn btn-warning" role="button">Create Purchase Invoice</a>
-              
+          <a href="{% url 'stockkeeping:salescreate' pk=company_details.pk pk3=selectdatefield_details.pk  %}" class="btn btn-warning" role="button">Create Sales Invoice</a>
 
         
         
@@ -77,7 +76,7 @@
           <div class="box-body">
               <div class="col-md-12">
               <h1>
-              <strong>Delete {{purchase.Name }}?</strong>
+              <strong>Delete {{sales.Name }}?</strong>
               </h1>
               </div>
           </div>

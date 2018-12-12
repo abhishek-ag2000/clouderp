@@ -51,7 +51,7 @@ class Blog(models.Model):
 
 	def save(self, *args, **kwargs):
 		if self.Blog_image:
-			self.Blog_image = get_thumbnail(self.Blog_image, '900x300', quality=600, format='JPEG')
+			self.Blog_image = get_thumbnail(self.Blog_image, '900x300', quality=600, format='JPEG').url
 			super(Blog, self).save(*args, **kwargs)
 
 	class Meta:

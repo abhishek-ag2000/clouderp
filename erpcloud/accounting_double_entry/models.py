@@ -11,6 +11,7 @@ from company.models import company
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
+
 class selectdatefield(models.Model):
 	User       = models.OneToOneField(settings.AUTH_USER_MODEL,related_name="Users",on_delete=models.CASCADE,null=True,blank=True)
 	Start_Date = models.DateField(default=datetime.date(2018,4,1),blank=True, null=True)
@@ -21,8 +22,7 @@ class selectdatefield(models.Model):
 
 	def clean(self):
 		if self.Start_Date > self.End_Date:
-			raise ValidationError('Start Date Cannot Be Greater Than End Date')
-
+			raise ValidationError({'Start_Date':["Start Date Cannot Be Greater Than End Date"],'End_Date':["Start Date Cannot Be Greater Than End Date"]})
 
 
 class group1(models.Model):
@@ -167,8 +167,9 @@ class ledger1(models.Model):
 	Company 		= models.ForeignKey(company,on_delete=models.CASCADE,null=True,blank=True,related_name='Companys')
 	Creation_Date	= models.DateField(default=datetime.date.today,blank=True, null=True)
 	name 			= models.CharField(max_length=32)
-	group1_Name 	= models.ForeignKey(group1,on_delete=models.CASCADE,null=True)
-	Opening_Balance = models.DecimalField(default=0.00,max_digits=19,decimal_places=2,null=True)	
+	group1_Name 	= models.ForeignKey(group1,on_delete=models.CASCADE,null=True,related_name='ledgergroups')
+	Opening_Balance = models.DecimalField(default=0.00,max_digits=19,decimal_places=2,null=True)
+	Balance_opening = models.DecimalField(default=0.00,max_digits=19,decimal_places=2,null=True)
 	User_Name 		= models.CharField(max_length=100,blank=True)
 	Address 		= models.TextField(blank=True)
 	State_Name 		= (
@@ -207,7 +208,7 @@ class ledger1(models.Model):
 	Pin_Code 		= models.BigIntegerField(blank=True,null=True)
 	PanIt_No 		= models.CharField(max_length=100,blank=True)
 	GST_No 			= models.CharField(max_length=100,blank=True)
-	# Closing_balance = models.DecimalField(max_digits=10,decimal_places=2,blank=True,null=True)
+	Closing_balance = models.DecimalField(default=0.00,max_digits=10,decimal_places=2,blank=True)
 	
 	def __str__(self):
 		return self.name
@@ -236,8 +237,6 @@ class journal(models.Model):
 	Debit      = models.DecimalField(max_digits=10,decimal_places=2,null=True)
 	Credit     = models.DecimalField(max_digits=10,decimal_places=2,null=True)
 	narration  = models.TextField(blank=True)
-	#purchases  = models.ForeignKey(Purchase,on_delete=models.CASCADE,related_name='purchasejournal',null=True,blank=True) 
-
 
 
 	def __str__(self):
@@ -251,105 +250,5 @@ class journal(models.Model):
 			raise ValidationError('Debit Amount Should Be Equal To Credit Amount')
 		elif self.To == self.By:
 			raise ValidationError('Paricular Entry Cannot be same')
-
-
-
-# check passed dates - if strting date == ledger creation date && closing date == ledger creation date:
-#							return opening balance + debit count - credit count (on that date only)
-#							return debit count on strting date							
-#							return credit count on strting date
-
-#						elif(strting date not equal to ledger creation date):
-#							return opening balance + debit count - credit count (till that opening date only)
-#							return debit count from strting date to ending date
-#							return credit count from strting date to closing date
-#							calculate closing balance = opn balanace + debit count + credit count
-#
-
-
-
-# @receiver(pre_save, sender=ledger1)
-# def update_user_closing_balance(sender,instance,*args,**kwargs):
-#     debit 	= instance.Debitledgers.aggregate(debit=Sum('Debit'))['debit']
-#     credit 	= instance.Creditledgers.aggregate(credit=Sum('Credit'))['credit']
-#     instance.Closing_balance = instance.Opening_Balance + debit - credit
-
-# @receiver(post_save, sender=journal)
-# def trigger_pre_save(sender, instance, *args, **kwargs):
-# 	instance.By.save()
-# 	instance.To.save()
-
-# @receiver(post_delete, sender=journal)
-# def trigger_post_save(sender, instance, *args, **kwargs):
-# 	instance.By.save()
-# 	instance.To.save()
-
-
-
-
-
-
-
-
-
-
-
-# class closing_balance:
-# 	name=
-# 	date= # TILL TODAY
-# 	balance = #EACH DAYS BALANCE
-
-
-# 	def calculation:# signal
-# 	use functions
-# 	get_or_create (data_from_functions)
-# 	pass
-
-# class difference_in_opening_balance:
-	
-# 	date = 
-# 	balance =
-# 	def calculation:# signal
-# 	use functions
-# 	get_or_create (data_from_functions)
-# 	pass
-
-
-# class netprofit:
-# 	date=
-# 	balance=
-# 	def 
-# 	def calculation:# signal
-# 	use functions
-# 	get_or_create (data_from_functions)
-# 	pass
-
-
-
-
-
-
-
-
-
-
-		
-
-
-
-
-	
-
-
-
-
-
-
-
-
-
-
-
-
 
 

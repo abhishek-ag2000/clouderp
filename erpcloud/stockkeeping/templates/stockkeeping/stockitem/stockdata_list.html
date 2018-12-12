@@ -40,6 +40,20 @@
               <a href="{% url 'company:delete' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-danger" role="button">Delete Company</a>
 
 				
+                {% if not selectdatefield_details %}
+
+                   <a type="button" class="btn btn-primary pull-right" href="{% url 'accounting_double_entry:datecreate' %}">Select Date Range</a>
+
+                {% else %} 
+              
+  
+                      <a type="button" class='btn btn-warning pull-right'  href="{% url 'accounting_double_entry:dateupdate' pk=selectdatefield_details.pk %}">Update Date Range</a>
+
+                      <a class="pull-right"><strong>Selected Period: From</strong> {{ selectdatefield_details.Start_Date|date }} <strong>To</strong> {{ selectdatefield_details.End_Date|date }}  &nbsp;</a> 
+
+                 
+
+                {% endif %} 
 				
 				
 				</div>
@@ -55,11 +69,11 @@
           <div class="box box-default">
           <div class="box-body">
 
-          <a href="{% url 'stockkeeping:stockdatalist' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-success" role="button">Select Stockitems</a>
+          <a href="{% url 'stockkeeping:stockdatalist' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-success" role="button">Select Stockitem</a>
           
-          <a href="{% url 'stockkeeping:stockdatacreate' pk=company_details.pk pk3=selectdatefield_details.pk  %}" class="btn btn-warning" role="button">Create Stockitems</a>
+          <a href="{% url 'stockkeeping:stockdatacreate' pk=company_details.pk pk3=selectdatefield_details.pk  %}" class="btn btn-warning" role="button">Create Stockitem</a>
               
-        
+         <a href="{% url 'stockkeeping:closingstock' pk=company_details.pk pk3=selectdatefield_details.pk  %}" class="btn btn-warning" role="button">See Closing Balance</a>
         
         
         
@@ -115,12 +129,12 @@
                       </a></td>
                       <td><a href="{% url 'stockkeeping:stockdatadetail' pk2=stockdata.pk pk1=company_details.pk pk3=selectdatefield_details.pk %}"">{{stockdata.stock_name}}</a></td>
                       <td> <a href="{% url 'stockkeeping:stockdatadetail' pk2=stockdata.pk pk1=company_details.pk pk3=selectdatefield_details.pk %}">{{stockdata.under}}</a></td>
-                      {% if unitsimple %}
+                      {% if stockdata.unitsimple %}
                         <td> <a href="{% url 'stockkeeping:stockdatadetail' pk2=stockdata.pk pk1=company_details.pk pk3=selectdatefield_details.pk %}">{{stockdata.unitsimple}}</a></td>
                       {% else %}
                         <td> <a href="{% url 'stockkeeping:stockdatadetail' pk2=stockdata.pk pk1=company_details.pk pk3=selectdatefield_details.pk %}">{{stockdata.unitcomplex}}</a></td>
                       {% endif %}
-                      <td> <a href="{% url 'stockkeeping:stockdatadetail' pk2=stockdata.pk pk1=company_details.pk pk3=selectdatefield_details.pk %}">{{stockdata.rate}}</a></td>
+                      <td> <a href="{% url 'stockkeeping:stockdatadetail' pk2=stockdata.pk pk1=company_details.pk pk3=selectdatefield_details.pk %}">{{stockdata.gst_rate}}</a></td>
                       <td> <a href="{% url 'stockkeeping:stockdatadetail' pk2=stockdata.pk pk1=company_details.pk pk3=selectdatefield_details.pk %}">{{stockdata.hsn}}</a></td>
                      
                     </tr>

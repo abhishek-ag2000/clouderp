@@ -15,4 +15,4 @@ STATICFILES_DIRS =(
 
 ) 
 
-https://stackoverflow.com/questions/15771973/multiply-by-1-in-a-django-template
+

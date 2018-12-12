@@ -43,7 +43,20 @@
               <a href="{% url 'company:create' %}" class="btn btn-warning" role="button">Create Company details</a>
               <a href="{% url 'company:delete' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-danger" role="button">Delete Company</a>
 
-        
+                {% if not selectdatefield_details %}
+
+                   <a type="button" class="btn btn-primary pull-right" href="{% url 'accounting_double_entry:datecreate' %}">Select Date Range</a>
+
+                {% else %} 
+              
+  
+                      <a type="button" class='btn btn-warning pull-right'  href="{% url 'accounting_double_entry:dateupdate' pk=selectdatefield_details.pk %}">Update Date Range</a>
+
+                      <a class="pull-right"><strong>Selected Period: From</strong> {{ selectdatefield_details.Start_Date|date }} <strong>To</strong> {{ selectdatefield_details.End_Date|date }}  &nbsp;</a> 
+
+                 
+
+                {% endif %} 
         
         
         </div>
@@ -62,6 +75,10 @@
          <a href="{% url 'stockkeeping:purchaselist' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-success" role="button">Select Purchase Invoice</a>
           
           <a href="{% url 'stockkeeping:purchasecreate' pk=company_details.pk pk3=selectdatefield_details.pk  %}" class="btn btn-warning" role="button">Create Purchase Invoice</a>
+
+          <a href="" class="btn btn-success pull-right" role="button">Upload via Excel</a>
+          <a href="" class="btn btn-info pull-right" role="button">Upload via Image</a>
+          <a href="" class="btn btn-warning pull-right" role="button">Multiple Image Upload</a>
                   
         </div>
       
@@ -71,8 +88,8 @@
 
 </div>
 
-
-<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+<div class="row">
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
           <!-- Horizontal Form -->
           <div class="box">
             <div class="box-header with-border">
@@ -292,6 +309,8 @@
             </form>
           </div>
         </div>
+</div>
+
 
 
 

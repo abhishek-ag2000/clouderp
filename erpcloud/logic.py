@@ -83,3 +83,53 @@
 #                         <td>{{purchase_details.Total_Amount|mul:1|add:purchase_details.stockitem.gst_rate|div:100}}</td>
 #                       </tr>
 #                 {% endif %}
+
+
+# @login_required
+# def ledger1_detail_view(request, pk, pk2, pk3):
+# 	company_details = get_object_or_404(company, pk=pk)
+# 	purchase_details = get_object_or_404(purchase, pk=pk2)
+# 	sale_details = get_object_or_404(sale, pk=pk2)
+# 	selectdatefield_details = get_object_or_404(selectdatefield, pk=pk3)
+# 	# existing opening stock = all purchase of all stock items till starting date 
+# 	qspur  = purchase.objects.filter(User=request.user, Company=company_details.pk, Date__gte=purchase_details.purchase.Creation_Date, Date__lte=selectdatefield_details.Start_Date)
+# 	qsstock = qspur.objects.filter(User=request.user, Company=company_details.pk)
+
+# 	qssale  = sale.objects.filter(User=request.user, Company=company_details.pk, Date__gte=sale_details.sales.Creation_Date, Date__lte=selectdatefield_details.Start_Date)
+# 	qsstock = qssale.objects.filter(User=request.user, Company=company_details.pk)
+
+# 	total_purchase = qspur.aggregate(the_sum=Coalesce(Sum('total'), Value(0)))['the_sum']
+# 	total_sale = qssale.aggregate(the_sum=Coalesce(Sum('total'), Value(0)))['the_sum']
+
+# 	opening_stock = total_purchase - total_sale
+
+#   clsing stock
+
+# 	qspur  = purchase.objects.filter(User=request.user, Company=company_details.pk, Date__gte=selectdatefield_details.Start_Date, Date__lte=selectdatefield_details.End_Date)
+# 	qsstock = qspur.objects.filter(User=request.user, Company=company_details.pk)
+
+# 	qssale  = sale.objects.filter(User=request.user, Company=company_details.pk, Date__gte=selectdatefield_details.Start_Date, Date__lte=selectdatefield_details.Start_Date)
+# 	qsstock = qssale.objects.filter(User=request.user, Company=company_details.pk)
+
+# 	total_purchase = qspur.aggregate(the_sum=Coalesce(Sum('total'), Value(0)))['the_sum']
+# 	total_sale = qssale.aggregate(the_sum=Coalesce(Sum('total'), Value(0)))['the_sum']
+
+# 	closing_stock = opening_stock + total_purchase - total_sale
+
+# 	context = {
+
+# 		'company_details' : company_details,
+# 		'ledger1_details' : ledger1_details,
+# 		'selectdatefield_details' : selectdatefield_details,
+# 		'total_debit'     : total_debitcb,
+# 		'total_credit'    : total_creditcb,
+# 		'journal_debit'   : qscb,
+# 		'journal_credit'  : qscb2,
+# 		'closing_balance' : closing_balance,
+# 		'opening_balance' : opening_balance,		
+# 		'company_list'    : company.objects.all(),
+# 		'selectdate' 	  : selectdatefield.objects.filter(User=request.user),
+				
+# 	}	
+
+# 	return render(request, 'accounting_double_entry/ledger1_details.html', context)

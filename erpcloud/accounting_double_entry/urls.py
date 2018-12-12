@@ -7,8 +7,7 @@ urlpatterns = [
 
 ####### Groups Urls ########################################
 
-    url(r'^company/(?P<pk>\d+)/date/(?P<pk3>\d+)/grouplist$',views.group1ListView.as_view(),name='grouplist'),
-    url(r'^company/(?P<pk1>\d+)/groupdetail/(?P<pk2>\d+)/date/(?P<pk3>\d+)/$',views.group1DetailView.as_view(),name='groupdetail'),
+    url(r'^company/(?P<pk>\d+)/date/(?P<pk3>\d+)/grouplist$',views.group1ListView.as_view(),name='grouplist'),    url(r'^company/(?P<pk1>\d+)/groupdetail/(?P<pk2>\d+)/date/(?P<pk3>\d+)/$',views.group1DetailView.as_view(),name='groupdetail'),
     url(r'^company/(?P<pk>\d+)/date/(?P<pk3>\d+)/groupcreate/$',views.group1CreateView.as_view(),name='groupcreate'),
     url(r'^company/(?P<pk1>\d+)/groupupdate/(?P<pk2>\d+)/date/(?P<pk3>\d+)/$',views.group1UpdateView.as_view(),name='groupupdate'),
     url(r'^company/(?P<pk>\d+)/groupdelete/(?P<pk2>\d+)/date/(?P<pk3>\d+)/$',views.group1DeleteView.as_view(),name='groupdelete'),
@@ -35,5 +34,10 @@ urlpatterns = [
   
     url(r'^daterangecreate/$',views.datecreateview.as_view(),name='datecreate'),
     url(r'^daterangeupdate/(?P<pk>\d+)/$',views.dateupdateview.as_view(),name='dateupdate'),
+
+
+
+    url(r'^company/(?P<pk>\d+)/trialbalance/date/(?P<pk3>\d+)/$',views.trial_balance_condensed_view,name='trialbalcond'),
+
   
 ]

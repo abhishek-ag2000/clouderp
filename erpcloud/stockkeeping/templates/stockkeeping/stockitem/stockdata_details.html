@@ -41,6 +41,20 @@
               <a href="{% url 'company:delete' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-danger" role="button">Delete Company</a>
 
         
+                {% if not selectdatefield_details %}
+
+                   <a type="button" class="btn btn-primary pull-right" href="{% url 'accounting_double_entry:datecreate' %}">Select Date Range</a>
+
+                {% else %} 
+              
+  
+                      <a type="button" class='btn btn-warning pull-right'  href="{% url 'accounting_double_entry:dateupdate' pk=selectdatefield_details.pk %}">Update Date Range</a>
+
+                      <a class="pull-right"><strong>Selected Period: From</strong> {{ selectdatefield_details.Start_Date|date }} <strong>To</strong> {{ selectdatefield_details.End_Date|date }}  &nbsp;</a> 
+
+                 
+
+                {% endif %} 
         
         
         </div>
@@ -56,9 +70,9 @@
           <div class="box box-default">
           <div class="box-body">
 
-          <a href="{% url 'stockkeeping:stockgrouplist' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-success" role="button">Stockgroup List</a>
+          <a href="{% url 'stockkeeping:stockdatalist' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-success" role="button">Select Stockitem</a>
           
-          <a href="{% url 'stockkeeping:stockgroupcreate' pk=company_details.pk pk3=selectdatefield_details.pk  %}" class="btn btn-warning" role="button">Create Stockgroup</a>
+          <a href="{% url 'stockkeeping:stockdatacreate' pk=company_details.pk pk3=selectdatefield_details.pk  %}" class="btn btn-warning" role="button">Create Stockitem</a>
 
           
         
@@ -83,11 +97,29 @@
           <div class="box-body table-responsive no-padding">
             <table class="table table-striped">
               <tr>
+                <th>Creation Date</th>
+                <th>{{ stockdata_details.Date }}</th>
+              </tr>
+
+              <tr>
                 <th>Stock Name</th>
                 <th>{{ stockdata_details.stock_name }}</th>
               </tr>
 
-              
+              <tr>
+                <th>Batch No</th>
+                <th>{{ stockdata_details.batch_no }}</th>
+              </tr>
+
+              <tr>
+                <th>Manufacturing Date</th>
+                <th>{{ stockdata_details.mnf_date }}</th>
+              </tr>
+
+              <tr>
+                <th>Expiry Date</th>
+                <th>{{ stockdata_details.exp_date }}</th>
+              </tr>
 
               <tr>
                 <th>Under</th>
@@ -111,7 +143,7 @@
 
               <tr>
                   <th>Rate</th>
-                  <th>{{ stockdata_details.rate }}</th>
+                  <th>{{ stockdata_details.gst_rate }}</th>
               </tr>
 
               <tr>
@@ -119,8 +151,31 @@
                   <th>{{ stockdata_details.hsn }}</th>
               </tr>
 
+             <tr>
+                <th>Batch No</th>
+                <th>{{ stockdata_details.batch_no }}</th>
+              </tr>
+
+              <tr>
+                <th>Manufacturing Date</th>
+                <th>{{ stockdata_details.mnf_date }}</th>
+              </tr>
+
+              <tr>
+                <th>Expiry Date</th>
+                <th>{{ stockdata_details.exp_date }}</th>
+              </tr>
 
 
+              <tr>
+                  <th>Bar Code</th>
+                  {% if stockdata_details.bar_code %}
+                    <th>                
+                      <img class="user-image" src="{{ stockdata_details.bar_code.url }}/" alt="Bar-Code">
+
+                    </th>
+                {% endif %}
+              </tr>
 
 
               
@@ -130,7 +185,7 @@
           </div>
 
           <div class="box-footer">
-              <p><a class='btn btn-warning' href="{% url 'stockkeeping:stockdataupdate' pk1=company_details.pk pk2=stockdata_details.pk pk3=selectdatefield_details.pk %}">Update StockGroup</a><a class='btn btn-danger pull-right' href="{% url 'stockkeeping:stockdatadelete' pk=company_details.pk pk2=stockdata_details.pk pk3=selectdatefield_details.pk %}">Delete Stockgroup</a></p>
+              <p><a class='btn btn-warning' href="{% url 'stockkeeping:stockdataupdate' pk1=company_details.pk pk2=stockdata_details.pk pk3=selectdatefield_details.pk %}">Update StockItem</a><a class='btn btn-danger pull-right' href="{% url 'stockkeeping:stockdatadelete' pk=company_details.pk pk2=stockdata_details.pk pk3=selectdatefield_details.pk %}">Delete StockItem</a></p>
 
             </div>
 

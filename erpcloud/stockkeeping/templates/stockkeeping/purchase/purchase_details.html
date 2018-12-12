@@ -45,7 +45,20 @@
               <a href="{% url 'company:create' %}" class="btn btn-warning" role="button">Create Company details</a>
               <a href="{% url 'company:delete' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-danger" role="button">Delete Company</a>
 
-        
+                {% if not selectdatefield_details %}
+
+                   <a type="button" class="btn btn-primary pull-right" href="{% url 'accounting_double_entry:datecreate' %}">Select Date Range</a>
+
+                {% else %} 
+              
+  
+                      <a type="button" class='btn btn-warning pull-right'  href="{% url 'accounting_double_entry:dateupdate' pk=selectdatefield_details.pk %}">Update Date Range</a>
+
+                      <a class="pull-right"><strong>Selected Period: From</strong> {{ selectdatefield_details.Start_Date|date }} <strong>To</strong> {{ selectdatefield_details.End_Date|date }}  &nbsp;</a> 
+
+                 
+
+                {% endif %} 
         
         
         </div>
@@ -159,21 +172,21 @@
               <tr>
                 <td>{{forloop.counter}}</td>
                 <td>{{stock_total.stockitem}}</td>
-                <td>{{stock_total.Quantity}}</td>
-                <td>{{stock_total.rate}}</td>
-                <td>{{stock_total.Disc}}</td>
-                <td>{{stock_total.Total}}</td>
+                <td>{{stock_total.Quantity_p}}</td>
+                <td>{{stock_total.rate_p}}</td>
+                <td>{{stock_total.Disc_p}}</td>
+                <td>{{stock_total.Total_p}}</td>
                 {% if company_details.State == purchase_details.State %}
 
-                {% with stock_total.stockitem.gst_rate|div:200|mul:stock_total.Total|floatformat:2 as name %} 
+                
 
                   <td>{{name}}-({{stock_total.stockitem.gst_rate|div:2}}%)</td>
-                  <td>{{stock_total.stockitem.gst_rate|div:200|mul:stock_total.Total|floatformat:2}}-({{stock_total.stockitem.gst_rate|div:2}}%)</td>
-                {% endwith %}
+                  <td>{{stock_total.stockitem.gst_rate|div:200|mul:stock_total.Total_p|floatformat:2}}-({{stock_total.stockitem.gst_rate|div:2}}%)</td>
+                
                 {% else %}
-                  <td>{{stock_total.stockitem.gst_rate|div:100|mul:stock_total.Total|floatformat:2}}-{{stock_total.stockitem.gst_rate}}%</td>
+                  <td>{{stock_total.stockitem.gst_rate|div:100|mul:stock_total.Total_p|floatformat:2}}-{{stock_total.stockitem.gst_rate}}%</td>
                 {% endif %}
-                <td>{{stock_total.stockitem.gst_rate|div:100|addition:1|mul:stock_total.Total|floatformat:2}}</td>
+                <td>{{stock_total.stockitem.gst_rate|div:100|addition:1|mul:stock_total.Total_p|floatformat:2}}</td>
               </tr>
 
 
@@ -237,10 +250,6 @@
                 <th style="width:50%">Total:(&#8377;)</th>
                 <td>{{purchase_details.Total_Purchase}}</td>
               </tr>
-
-              
-              
-              
             </table>
           </div>
         </div>
@@ -255,6 +264,8 @@
       <div class="box-footer">
         
           <a href="invoice-print.html" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</a>
+
+          <a class='btn btn-warning' href="{% url 'stockkeeping:purchaseupdate' pk1=company_details.pk pk2=purchase_details.pk pk3=selectdatefield_details.pk %}">Update Purchase Invoice</a><a class='btn btn-danger pull-right' href="{% url 'stockkeeping:purchasedelete' pk=company_details.pk pk2=purchase_details.pk pk3=selectdatefield_details.pk %}">Delete Purchase Invoice</a>
           <button type="button" class="btn btn-primary pull-right" style="margin-right: 5px;">
             <i class="fa fa-download"></i> Generate PDF
           </button>

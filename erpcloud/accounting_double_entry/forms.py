@@ -50,6 +50,29 @@ class Ledgerform(forms.ModelForm):
 		self.fields['PanIt_No'].widget.attrs = {'class': 'form-control',}
 		self.fields['GST_No'].widget.attrs = {'class': 'form-control',}
 
+class Ledgerformadmin(forms.ModelForm):
+
+	class Meta:
+		model = ledger1
+		fields = ('Creation_Date', 'name', 'group1_Name', 'Opening_Balance', 'User_Name', 'Address', 'State', 'Pin_Code', 'PanIt_No', 'GST_No', 'Closing_balance')
+		widgets = {
+            'Creation_Date': DateInput(),
+        }
+
+	def __init__(self,  *args, **kwargs):
+		super(Ledgerformadmin, self).__init__(*args, **kwargs)
+		self.fields['Creation_Date'].widget.attrs = {'class': 'form-control',}
+		self.fields['name'].widget.attrs = {'class': 'form-control',}
+		self.fields['group1_Name'].queryset = group1.objects.exclude(group_Name__icontains='Primary')
+		self.fields['group1_Name'].widget.attrs = {'class': 'form-control select2', 'placeholder':"Select Group",}
+		self.fields['Opening_Balance'].widget.attrs = {'class': 'form-control',}
+		self.fields['User_Name'].widget.attrs = {'class': 'form-control',}
+		self.fields['Address'].widget.attrs = {'class': 'form-control',}
+		self.fields['State'].widget.attrs = {'class': 'form-control select2',}
+		self.fields['Pin_Code'].widget.attrs = {'class': 'form-control',}
+		self.fields['PanIt_No'].widget.attrs = {'class': 'form-control',}
+		self.fields['GST_No'].widget.attrs = {'class': 'form-control',}
+
 
 
 class journalForm(forms.ModelForm):

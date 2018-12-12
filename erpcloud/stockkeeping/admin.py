@@ -1,5 +1,6 @@
 from django.contrib import admin
 from stockkeeping.models import Stockgroup,Simpleunits,Compoundunits,Stockdata,Purchase,Stock_Total,Sales,Stock_Total_sales
+from stockkeeping.forms import Stockgroup_form,Simpleunits_form,Compoundunits_form,Stockdata_form,Purchase_form,Sales_form,Purchase_formSet,Sales_formSet,Sales_formadmin,Purchase_formadmin
 
 # Register your models here.
 
@@ -26,7 +27,7 @@ class Stockdataadmin(admin.ModelAdmin):
 
 class Stock_Totaladmin(admin.ModelAdmin):
 	model = Stock_Total
-	list_display = ['purchases','stockitem','Quantity','rate','Total']
+	list_display = ['purchases','stockitem','Quantity_p','rate_p','Total_p']
 	search_fields = ['stockitem']
 
 class Stock_Total_salesadmin(admin.ModelAdmin):
@@ -41,13 +42,13 @@ class Stock_Total_salesinline(admin.TabularInline):
 	model = Stock_Total_sales
 
 class Purchaseadmin(admin.ModelAdmin):
-	model = Purchase
+	form = Purchase_formadmin
 	list_display = ['User', 'Company','ref_no','Party_ac','purchase','Total_Purchase']
 	search_fields = ['stock_name','hsn']
 	inlines = [Stock_Totalinline]
 
 class Salesadmin(admin.ModelAdmin):
-	model = Sales
+	form = Sales_formadmin
 	list_display = ['User', 'Company','ref_no','Party_ac','sales','Total_Amount']
 	search_fields = ['stock_name','hsn']
 	inlines = [Stock_Total_salesinline]
@@ -60,3 +61,4 @@ admin.site.register(Stockdata, Stockdataadmin)
 admin.site.register(Purchase, Purchaseadmin)
 admin.site.register(Sales, Salesadmin)
 admin.site.register(Stock_Total, Stock_Totaladmin)
+admin.site.register(Stock_Total_sales, Stock_Total_salesadmin)
