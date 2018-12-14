@@ -40,9 +40,9 @@ urlpatterns = [
     url(r'^select2/', include('django_select2.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
     url(r"^consultancy/", include("consultancy.urls", namespace="consultancy")),
+    url(r"^stockkeeping/", include("stockkeeping.urls", namespace="stockkeeping")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-urlpatterns += staticfiles_urlpatterns()
 
 
 handler404 = 'erpcloud.views.custom_404'

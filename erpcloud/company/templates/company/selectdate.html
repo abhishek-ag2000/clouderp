@@ -130,7 +130,13 @@ Select Date
 
 
           <div class="box-body">
+            <style type="text/css">
+              .textcolour{
 
+                  color: red;
+                  
+              }
+            </style>
              
                    
                           {% csrf_token %}
@@ -139,8 +145,10 @@ Select Date
                             <label for="input" class="col-sm-2 control-label">Start Date</label>
                                
                               <div class="col-sm-10">
-                                    
-                                  {{ form.Start_Date.errors }}
+                                  <div class="textcolour">
+                                    {{ form.Start_Date.errors }}
+                                  </div>
+                                  
                                   {{ form.Start_Date }}
                                 <div><small> current format - mm / dd / yyyy </small></div>
                               </div>
@@ -150,8 +158,10 @@ Select Date
                             <label for="input" class="col-sm-2 control-label">End Date</label>
                             
                               <div class="col-sm-10">
-                                    
-                                  {{ form.End_Date.errors }}
+                                  <div class="textcolour">
+                                    {{ form.End_Date.errors }}
+                                  </div>
+                                  
                                   {{ form.End_Date }}
                                 <div><small> current format - mm / dd / yyyy </small></div>
                               </div>

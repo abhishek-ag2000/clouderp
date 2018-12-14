@@ -117,9 +117,9 @@
                       <tr>
                         <td><a href="{% url 'accounting_double_entry:ledgerdetail' pk=company_details.pk pk2=ledger1.pk pk3=selectdatefield_details.pk %}">{{ forloop.counter0|add:page_obj.start_index }}</a></td>
                         <td><a href="{% url 'accounting_double_entry:ledgerdetail' pk=company_details.pk pk2=ledger1.pk pk3=selectdatefield_details.pk %}">{{ledger1.name}}</a></td>
-                        <td><a href="{% url 'accounting_double_entry:ledgerdetail' pk=company_details.pk pk2=ledger1.pk pk3=selectdatefield_details.pk %}s">{{ledger1.Creation_Date}}</a></td>
-                        <td><a href="{% url 'accounting_double_entry:ledgerdetail' pk=company_details.pk pk2=ledger1.pk pk3=selectdatefield_details.pk %}}">{{ledger1.group1_Name}}</a></td>
-                        <td><a href="{% url 'accounting_double_entry:ledgerdetail' pk=company_details.pk pk2=ledger1.pk pk3=selectdatefield_details.pk %}}">{{ledger1.Opening_Balance}}</a></td>
+                        <td><a href="{% url 'accounting_double_entry:ledgerdetail' pk=company_details.pk pk2=ledger1.pk pk3=selectdatefield_details.pk %}">{{ledger1.Creation_Date}}</a></td>
+                        <td><a href="{% url 'accounting_double_entry:ledgerdetail' pk=company_details.pk pk2=ledger1.pk pk3=selectdatefield_details.pk %}">{{ledger1.group1_Name}}</a></td>
+                        <td><a href="{% url 'accounting_double_entry:ledgerdetail' pk=company_details.pk pk2=ledger1.pk pk3=selectdatefield_details.pk %}">{{ledger1.Opening_Balance}}</a></td>
                       </tr>
                       {% endfor %}
                      

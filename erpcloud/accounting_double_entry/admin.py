@@ -1,6 +1,6 @@
 from django.contrib import admin
 from accounting_double_entry.models import group1,ledger1,journal,selectdatefield
-
+from accounting_double_entry.forms import Ledgerformadmin
 # Register your models here.
 
 class group1admin(admin.ModelAdmin):
@@ -35,7 +35,8 @@ class journaltransactionscredit(admin.TabularInline):
 
 class ledgerAdmin(admin.ModelAdmin):
 	model = ledger1
-	ledger1_display = ['Creation_Date', 'name','Opening_Balance']
+	form = Ledgerformadmin
+	list_display = ['Creation_Date', 'name','Opening_Balance']
 	search_fields = ['name']
 	readonly_fields = ('User',)
 	inlines = [

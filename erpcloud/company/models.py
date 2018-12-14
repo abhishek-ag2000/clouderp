@@ -77,8 +77,10 @@ class company(models.Model):
 	Pincode = models.CharField(max_length=32)
 	Telephone_No = models.BigIntegerField(blank=True,null=True)
 	Mobile_No = models.BigIntegerField(blank=True,null=True)
-	Financial_Year_From = models.DateTimeField(default=datetime.date(2018,4,1), blank=False)
-	Books_Begining_From = models.DateTimeField(default=datetime.date(2018,4,1), blank=False)
+	Financial_Year_From = models.DateField(default=datetime.date(2018,4,1), blank=False)
+	Books_Begining_From = models.DateField(default=datetime.date(2018,4,1), blank=False)
+	gst  = models.CharField(max_length=20,blank=True,null=True)
+	pan  = models.CharField(max_length=18,blank=True,null=True)
 
 
 	def __str__(self):
