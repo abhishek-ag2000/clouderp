@@ -8,7 +8,6 @@ from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
 import datetime
 
-
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -77,7 +76,14 @@ class company(models.Model):
 	Pincode = models.CharField(max_length=32)
 	Telephone_No = models.BigIntegerField(blank=True,null=True)
 	Mobile_No = models.BigIntegerField(blank=True,null=True)
-	Financial_Year_From = models.DateField(default=datetime.date(2018,4,1), blank=False)
+
+	financial_date = (
+		(datetime.date(int(datetime.datetime.now().year),4,1),datetime.date(int(datetime.datetime.now().year),4,1)),
+		(datetime.date(int(datetime.datetime.now().year),1,1),datetime.date(int(datetime.datetime.now().year),1,1))
+		)
+
+
+	Financial_Year_From = models.DateField(choices=financial_date,default=datetime.date(int(datetime.datetime.now().year),4,1), blank=False)
 	Books_Begining_From = models.DateField(default=datetime.date(2018,4,1), blank=False)
 	gst  = models.CharField(max_length=20,blank=True,null=True)
 	pan  = models.CharField(max_length=18,blank=True,null=True)

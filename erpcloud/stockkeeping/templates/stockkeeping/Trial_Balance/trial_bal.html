@@ -71,9 +71,9 @@
           <div class="box box-default">
           <div class="box-body">
 
-          <a href="{% url 'stockkeeping:profitloss' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-success" role="button">Profit & Loss Overview</a>
+          <a href="{% url 'accounting_double_entry:P&Lcond' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-success" role="button">Profit & Loss Overview</a>
           
-          <a href="{% url 'stockkeeping:stockdatacreate' pk=company_details.pk pk3=selectdatefield_details.pk  %}" class="btn btn-warning" role="button">Balance Sheet Overview</a>
+          <a href="{% url 'accounting_double_entry:blsht' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-warning" role="button">Balance Sheet Overview</a>
 
           <a href="{% url 'accounting_double_entry:trialbalcond' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-warning" role="button">Trial Balance Condensed View</a>
 
@@ -140,7 +140,7 @@
                 {% if group1.group_Name == 'Current Assets' %}
 
 
-                                      <tr>
+                    <tr>
                     <th><center>{{ group1.group_Name }}</center></th>
                       {% if group1.opening >= 0 %}
                         <th>{{ group1.opening|floatformat:2|abs }}</th>
@@ -316,26 +316,26 @@
                           {% if total_credit_opening > total_debit_opening %}
                             <th>{{ total_credit_opening|sub:total_debit_opening|floatformat:2|abs }}</th>
                           {% else %}
-                            <th>0.00</th>
+                            <th></th>
                           {% endif %}  
                            
                           {% if total_debit_opening > total_credit_opening %}
                             <th>{{ total_debit_opening|sub:total_credit_opening|floatformat:2|abs }}</th>
                           {% else %}
-                            <th>0.00</th>
+                            <th></th>
                           {% endif %}
 
                           
                           {% if total_credit_closing > total_debit_closing %} 
                             <th>{{ total_credit_closing|sub:total_debit_closing|floatformat:2|abs }}</th>
                           {% else %}
-                            <th>0.00</th> 
+                            <th></th> 
                           {% endif %}
 
                           {% if total_debit_closing > total_credit_closing %}
                             <th>{{ total_debit_closing|sub:total_credit_closing|floatformat:2|abs }}</th>
                           {% else %}
-                            <th>0.00</th>
+                            <th></th>
                           {% endif %}
                           
                       </tr>

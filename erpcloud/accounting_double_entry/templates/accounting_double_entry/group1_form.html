@@ -114,14 +114,6 @@
                   </div>
                 </div>
 
-                <div class="form-group">
-                  <label for="input" class="col-sm-2 control-label">Nature of group<i class="material-icons" style="font-size:16px;color:red">*</i></label>
-
-                  <div class="col-sm-10">
-                     {{ form.Nature_of_group1 }}
-                     <small>(to be specified only when group is primary)</small>
-                  </div>
-                </div>
 
                 <div class="form-group">
                   <label for="input" class="col-sm-2 control-label">Balance nature<i class="material-icons" style="font-size:16px;color:red">*</i></label>
@@ -133,10 +125,19 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="input" class="col-sm-4 control-label">Group behaves like a Sub Ledger?</label>
+                  <label for="input" class="col-sm-2 control-label">Nature of Group<i class="material-icons" style="font-size:16px;color:red">*</i></label>
+
+                  <div class="col-sm-10">
+                     {{ form.Nature_of_group1}}
+                     <small> </small>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="input" class="col-sm-4 control-label">Group behaves like a Sub Groups?</label>
 
                   <div class="col-sm-8">
-                     {{ form.Group_behaves_like_a_Sub_Ledger }}
+                     {{ form.Group_behaves_like_a_Sub_Group }}
                   </div>
                 </div>
 

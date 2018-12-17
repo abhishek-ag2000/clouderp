@@ -58,6 +58,10 @@ INSTALLED_APPS = [
     'select2',                                  #pip install django-select2-forms
     'sorl.thumbnail',                           #pip install sorl-thumbnail
 
+    # argon2 = pip install django[argon2]
+    # bcrypt = pip install bcrypt
+    # pillow = pip install pillow
+
 
 
 ######### Django Inbuild Apps ########

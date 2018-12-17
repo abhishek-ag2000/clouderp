@@ -136,12 +136,6 @@ class Purchase(models.Model):
 	def __str__(self):
 		return str(self.Party_ac)
 
-@receiver(post_save, sender=Purchase)
-def create_purchase_journal(sender, instance, created, **kwargs):
-	if created:
-		journal.objects.create(User=instance.User,Company=instance.Company,By=instance.Party_ac,To=instance.purchase,Debit=instance.Total_Purchase,Credit=instance.Total_Purchase)
-
-
 class Sales(models.Model):
 	User         = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,null=True,blank=True)
 	Company      = models.ForeignKey(company,on_delete=models.CASCADE,null=True,blank=True)
@@ -248,18 +242,17 @@ def update_total_sales(sender,instance,*args,**kwargs):
 	total1 = instance.saletotal.aggregate(the_sum=Coalesce(Sum('Total'), Value(0)))['the_sum']
 	instance.Total_Amount = total1
 
-@receiver(post_save, sender=Stock_Total)
-def trigger_pre_save_purchase(sender, instance, *args, **kwargs):
-	instance.purchases.save()
 
-@receiver(post_save, sender=Stock_Total_sales)
-def trigger_pre_save_sale(sender, instance, *args, **kwargs):
-	instance.sales.save()
+@receiver(pre_save, sender=Purchase)
+def user_created(sender,instance,*args,**kwargs):
+	if instance.Total_Purchase != None:
+		journal.objects.create(User=instance.User,Company=instance.Company,Date=instance.date,By=instance.purchase,To=instance.Party_ac,Debit=instance.Total_Purchase,Credit=instance.Total_Purchase)
 
 
-@receiver(post_delete, sender=Stock_Total_sales)
-def trigger_post_save_sale(sender, instance, *args, **kwargs):
-	instance.sales.save()
+@receiver(pre_save, sender=Sales)
+def user_created_sales(sender,instance,*args,**kwargs):
+	if instance.Total_Amount != None:
+		journal.objects.create(User=instance.User,Company=instance.Company,Date=instance.date,By=instance.Party_ac,To=instance.sales,Debit=instance.Total_Amount,Credit=instance.Total_Amount)
 
 # for stock calculations in stock summary
 

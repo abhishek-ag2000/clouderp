@@ -39,5 +39,8 @@ urlpatterns = [
 
     url(r'^company/(?P<pk>\d+)/trialbalance/date/(?P<pk3>\d+)/$',views.trial_balance_condensed_view,name='trialbalcond'),
 
+    url(r'^company/(?P<pk>\d+)/P&L/date/(?P<pk3>\d+)/$',views.profit_and_loss_condensed_view,name='P&Lcond'),
+
+    url(r'^company/(?P<pk>\d+)/balancesheet/date/(?P<pk3>\d+)/$',views.balance_sheet_condensed_view,name='blsht'),
   
 ]

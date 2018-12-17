@@ -71,7 +71,7 @@
           <div class="box box-default">
           <div class="box-body">
 
-          <a href="{% url 'accounting_double_entry:P&Lcond' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-success" role="button">Profit & Loss Condensed View</a>
+          <a href="{% url 'stockkeeping:profitloss' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-success" role="button">Profit & Loss Expanded View</a>
           
           <a href="{% url 'accounting_double_entry:blsht' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-warning" role="button">Balance Sheet Overview</a>
 
@@ -149,34 +149,7 @@
                   <th>{{ total_sales_ledger|floatformat:2|abs }}</th>
                 </tr>
 
-                {% for ledger1 in sales_ledger %}
-                <tr>
-                  <td></td>
-                  <th></th>
-                  <td></td>
-                  <th></th>
-                  <th></th>
-                  <td>{{ ledger1.name}}</td> 
-                  <td>{{ ledger1.Closing_balance|floatformat:2|abs }}</td>
-                  <th></th>
-                </tr>
-                {% endfor %}
 
-            {% if opening_stock %}
-              {% for stockdata in each_opening_stock %}
-
-               <tr>
-                 <td></td>
-                 <td>{{ stockdata.stock_name }}</td>
-                  <td>{{ stockdata.total|floatformat:2|abs }}</td>
-                  <td></td>
-                  <td></td>
-                  <th></th>
-                  <td></td>
-                  <th></th>
-                </tr>
-              {% endfor %}
-            {% endif %}
 
                 <tr>
                   <td>2</td>
@@ -188,19 +161,6 @@
                   <td></td>
                   <td></td>
                 </tr>
-
-                {% for ledger1 in purchase_ledger %}
-                <tr>
-                  <td></td>
-                  <td><em>{{ ledger1.name }}</em></td>
-                  <td>{{ ledger1.Closing_balance|floatformat:2|abs }}</td>
-                  <td></td>
-                  <td></td>
-                  <td><em></em></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                {% endfor %}
                 
                 <tr>
                   <td></td>
@@ -215,20 +175,7 @@
                   {% endif %}
                 </tr>
 
-            {% if closing_stock %}
-              {% for stockdata in each_closing_stock %}
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <th></th>
-                  <td></td>
-                  <td>{{ stockdata.stock_name }}</td>
-                  <td>{{ stockdata.total|floatformat:2|abs }}</td>
-                  <th></th>
-                </tr>
-              {% endfor %}
-            {% endif %}
+         
 
                 <tr>
                   <td>3</td>
@@ -241,18 +188,6 @@
                   <th></th>
                 </tr>
 
-                {% for ledger1 in direct_expenses %}
-                 <tr>
-                  <td></td>
-                  <td><em>{{ ledger1.name }}</em></td>
-                  <td>{{ ledger1.Closing_balance|floatformat:2|abs }}</td>
-                  <th></th>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <th></th>
-                </tr>
-                {% endfor %}
 
                  <tr>
                   <td></td>
@@ -265,18 +200,6 @@
                   <th>{{ total_direct_incomes|abs }}</th>
                 </tr>
 
-                {% for ledger1 in direct_incomes %}
-                 <tr>
-                  <td></td>
-                  <th></th>
-                  <td></td>
-                  <th></th>
-                  <td></td>
-                  <td><em>{{ ledger1.name }}</em></td>
-                  <td>{{ ledger1.Closing_balance|floatformat:2|abs }}</td>
-                  <th></th>
-                </tr>
-                {% endfor %}
             {% if gross_profit > 0 %}
               <tr>
                   <td>4</td>
@@ -313,7 +236,7 @@
 
                 </tr>
 
-                 {% if gross_profit > 0 %}
+            {% if gross_profit > 0 %}
               <tr>
                 
                   <td></td>
@@ -351,20 +274,7 @@
                   <td></td>
                   <th></th>
                 </tr>
-                {% for ledger1 in indirectexp_ledger %}
-                <tr>
-                  <td></td>
-                  <td>{{ ledger1.name }}</td>
-                  <td>{{ ledger1.Closing_balance|floatformat:2|abs }}</td>
-                  <th></th>
-                  <td></td>
-                  <th></th>
-                  <td></td>
-                  <th></th>
-                </tr>
-                {% endfor %}
-
-              
+    
            
                 <tr>
                   <td></td>
@@ -377,18 +287,6 @@
                   <th>{{ total_indirectinc_ledger|floatformat:2|abs }}</th>
                 </tr>
 
-                {% for ledger1 in indirectinc_ledger %}
-                 <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <th></th>
-                  <td></td>
-                  <td>{{ ledger1.name }}</td>
-                  <td>{{ ledger1.Closing_balance|floatformat:2|abs }}</td>
-                  <th></th>
-                </tr>
-                 {% endfor %}
 
               {% if gross_profit > 0 %}
                 {% if nett_profit >= 0 %}

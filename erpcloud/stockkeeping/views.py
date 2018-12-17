@@ -930,6 +930,7 @@ class Sales_deleteview(LoginRequiredMixin,DeleteView):
 
 ##################################### Profit & Loss A/c #####################################
 
+
 @login_required
 def profit_and_loss_view(request,pk,pk3):
 	company_details = get_object_or_404(company, pk=pk)
@@ -973,8 +974,8 @@ def profit_and_loss_view(request,pk,pk3):
 	ldd = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Direct Expenses', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)
 	lddt = ldd.aggregate(the_sum=Coalesce(Sum('Closing_balance'), Value(0)))['the_sum']
 
-	ldi = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Direct Incomes', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)
-	lddi = ldi.aggregate(the_sum=Coalesce(Sum('Closing_balance'), Value(0)))['the_sum']
+	ldii = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Direct Incomes', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)
+	lddi = ldii.aggregate(the_sum=Coalesce(Sum('Closing_balance'), Value(0)))['the_sum']
 
 	lds = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Sales Account', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)
 	ldsc = lds.aggregate(the_sum=Coalesce(Sum('Closing_balance'), Value(0)))['the_sum']
@@ -987,34 +988,40 @@ def profit_and_loss_view(request,pk,pk3):
 
 	# qo1 means opening stock exists
 
-	if qo1:
-		gp = (abs(ldsc) + abs(qs2) + abs(lddt)) - (abs(qo2) + abs(ldc) + abs(lddi))
-	else:
-		gp = abs(ldsc) + abs(qs2) - abs(ldc)
+	
+	gp = abs(ldsc) + abs(qs2) + abs(lddi) - abs(qo2) - abs(ldc) - abs(lddt)
+
 
 	if gp >=0:
-		if qo1 :
-			tradingp  =  abs(qo2) + abs(ldc) + abs(lddt) + abs(gp)
-			tradingp2 = abs(qs2) + abs(ldsi) + abs(ldsc) 
-		else:
-			tradingp =  abs(ldc) + abs(lddt) + abs(gp)
-			tradingp2 = abs(qs2) + abs(ldsi) + abs(ldsc)
+		tradingp  =  abs(qo2) + abs(ldc) + abs(lddt) + (gp)
+		tgp = abs(qs2) + abs(lddi) + abs(ldsc) 
 
 	else: # gp <0
-		if qo1 :
-			tradingp =  abs(qo2) + abs(ldc) + abs(lddt) 
-			tradingp2 = abs(qs2) + abs(ldsi) + abs(ldsc) + abs(gp) 
+		tradingp =  abs(qo2) + abs(ldc) + abs(lddt) 
+		tgp = abs(qs2) + abs(lddi) + abs(ldsc) + abs(gp) 
+
+	
+
+	if gp >=0:
+		np = (gp) + abs(ldsi) - abs(ldse)
+	else:
+		np = abs(ldsi) - abs(ldse) - abs(gp)  
+
+
+	if gp >= 0:
+		if np >= 0:
+			tp = abs(ldse) + np
+			tc = abs(ldsi) + (gp)
 		else:
-			tradingp =  abs(ldc) + abs(lddt)
-			tradingp2 = abs(qs2) + abs(ldsi) + abs(ldsc) + abs(gp)
-
-	tgp = abs(qs2) + abs(ldsi) + abs(ldsc)
-
-	np = abs(gp) + abs(ldsi) - abs(ldse)
-
-	tp = abs(ldse) + abs(np)
-
-	tc = abs(ldsi) + abs(gp)
+			tp = abs(ldse) 
+			tc = gp + np + abs(ldsi)
+	else: # gp<0
+		if np >= 0:
+			tp = abs(ldse) + np + abs(gp)
+			tc = abs(ldsi) 
+		else:
+			tp = abs(ldse) + abs(gp)
+			tc = abs(np) + abs(ldsi)
 
 	context = {
 
@@ -1035,7 +1042,7 @@ def profit_and_loss_view(request,pk,pk3):
 		'total_direct_expenses': lddt,
 		'direct_expenses': ldd,
 		'total_direct_incomes': lddi,
-		'direct_incomes': ldi,
+		'direct_incomes': ldii,
 		'gross_profit' : gp,
 		'nett_profit' : np,
 		'tradingprofit': tradingp,
@@ -1043,6 +1050,7 @@ def profit_and_loss_view(request,pk,pk3):
 		'totalpl' : tp,
 		'totalplright' : tc
 	}
+
 
 	return render(request, 'stockkeeping/P&L.html', context)
 
@@ -1069,14 +1077,14 @@ def trial_balance_view(request,pk,pk3):
 
 	qo2 = qo1.aggregate(the_sum=Coalesce(Sum('total'), Value(0)))['the_sum']
 
-	groups = group1.objects.filter(User=request.user, Company=company_details.pk, ledgergroups__Creation_Date__gte=selectdatefield_details.Start_Date, ledgergroups__Creation_Date__lte=selectdatefield_details.End_Date)
+	groups = group1.objects.filter(User=request.user, Company=company_details.pk, ledgergroups__Creation_Date__gte=selectdatefield_details.Start_Date, ledgergroups__Creation_Date__lte=selectdatefield_details.End_Date).exclude(group_Name__icontains='Primary')
 	groups_cb = groups.annotate(
 				closing = Coalesce(Sum('ledgergroups__Closing_balance'), 0),
 				opening = Coalesce(Sum('ledgergroups__Balance_opening'), 0),
 			)
 
 	# groups with debit balance nature
-	groupsdebit = group1.objects.filter(User=request.user, Company=company_details.pk, balance_nature__icontains='Debit', ledgergroups__Creation_Date__gte=selectdatefield_details.Start_Date, ledgergroups__Creation_Date__lte=selectdatefield_details.End_Date)
+	groupsdebit = group1.objects.filter(User=request.user, Company=company_details.pk, balance_nature__icontains='Debit', ledgergroups__Creation_Date__gte=selectdatefield_details.Start_Date, ledgergroups__Creation_Date__lte=selectdatefield_details.End_Date).exclude(group_Name__icontains='Primary')
 	groups_cbc = groupsdebit.annotate(
 				closing = Coalesce(Sum('ledgergroups__Closing_balance'), 0)).filter(closing__gt = 0)
 
@@ -1096,7 +1104,7 @@ def trial_balance_view(request,pk,pk3):
 
 
 	# groups with credit balance nature
-	groupscredit = group1.objects.filter(User=request.user, Company=company_details.pk, balance_nature__icontains='Credit', ledgergroups__Creation_Date__gte=selectdatefield_details.Start_Date, ledgergroups__Creation_Date__lte=selectdatefield_details.End_Date)
+	groupscredit = group1.objects.filter(User=request.user, Company=company_details.pk, balance_nature__icontains='Credit', ledgergroups__Creation_Date__gte=selectdatefield_details.Start_Date, ledgergroups__Creation_Date__lte=selectdatefield_details.End_Date).exclude(group_Name__icontains='Primary')
 
 	groups_ccb = groupscredit.annotate(
 				closing = Coalesce(Sum('ledgergroups__Closing_balance'), 0)).filter(closing__gt = 0)
@@ -1124,9 +1132,6 @@ def trial_balance_view(request,pk,pk3):
 	total_credit_opening = pocrob + abs(negdebob)
 
 
-
-
-
 	context = {
 		'company_details' : company_details,
 		'selectdatefield_details' : selectdatefield_details,
@@ -1142,6 +1147,314 @@ def trial_balance_view(request,pk,pk3):
 	}
 
 	return render(request, 'stockkeeping/Trial_Balance/trial_bal.html', context)
+
+##################################### Balance Sheet #####################################
+
+@login_required
+def balance_sheet_view(request,pk,pk3):
+	company_details = get_object_or_404(company, pk=pk)
+	selectdatefield_details = get_object_or_404(selectdatefield, pk=pk3)
+
+	# Branch/Divisions
+	groupbrch = group1.objects.filter(User=request.user, Company=company_details.pk, Master__group_Name__icontains='Branch/Divisions', ledgergroups__Creation_Date__gte=selectdatefield_details.Start_Date, ledgergroups__Creation_Date__lte=selectdatefield_details.End_Date)
+	groupbrchcb = groupbrch.annotate(
+			closing = Coalesce(Sum('ledgergroups__Closing_balance'), 0))
+
+	groupbrchtcb = groupbrchcb.aggregate(the_sum=Coalesce(Sum('closing'), Value(0)))['the_sum']
+	
+	ledbrch = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Branch/Divisions', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)	
+	ledbrchcb = ledbrch.aggregate(the_sum=Coalesce(Sum('Closing_balance'), Value(0)))['the_sum']
+
+	total_brchtcb = ledbrchcb + groupbrchtcb
+
+	# Capital A/c 
+	groupcach = group1.objects.filter(User=request.user, Company=company_details.pk, Master__group_Name__icontains='Capital A/c', ledgergroups__Creation_Date__gte=selectdatefield_details.Start_Date, ledgergroups__Creation_Date__lte=selectdatefield_details.End_Date)
+	groupcacb = groupbrch.annotate(
+			closing = Coalesce(Sum('ledgergroups__Closing_balance'), 0))
+
+	groupcstcb = groupcacb.aggregate(the_sum=Coalesce(Sum('closing'), Value(0)))['the_sum']
+	
+	ledcah = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Capital A/c', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)	
+	ledcacb = ledcah.aggregate(the_sum=Coalesce(Sum('Closing_balance'), Value(0)))['the_sum']
+
+	total_cacb = groupcstcb + ledcacb
+
+
+	# Current Liabilities
+
+	groupculiach = group1.objects.filter(User=request.user, Company=company_details.pk, Master__group_Name__icontains='Current Liabilities', ledgergroups__Creation_Date__gte=selectdatefield_details.Start_Date, ledgergroups__Creation_Date__lte=selectdatefield_details.End_Date)
+	groupculiacb = groupculiach.annotate(
+			closing = Coalesce(Sum('ledgergroups__Closing_balance'), 0))
+
+	groupculiagbcb = groupculiacb.aggregate(the_sum=Coalesce(Sum('closing'), Value(0)))['the_sum']
+	
+	ledculiah = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Current Liabilities', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)	
+	ledculiacb = ledculiah.aggregate(the_sum=Coalesce(Sum('Closing_balance'), Value(0)))['the_sum']
+
+	total_culiacb = groupculiagbcb + ledculiacb
+
+	# Loans (Liability)
+
+	grouplonch = group1.objects.filter(User=request.user, Company=company_details.pk, Master__group_Name__icontains='Loans (Liability)', ledgergroups__Creation_Date__gte=selectdatefield_details.Start_Date, ledgergroups__Creation_Date__lte=selectdatefield_details.End_Date)
+	grouploncb = grouplonch.annotate(
+			closing = Coalesce(Sum('ledgergroups__Closing_balance'), 0))
+
+	grouplacb = grouploncb.aggregate(the_sum=Coalesce(Sum('closing'), Value(0)))['the_sum']
+	
+	ledlonh = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Loans (Liability)', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)	
+	ledloncb = ledlonh.aggregate(the_sum=Coalesce(Sum('Closing_balance'), Value(0)))['the_sum']
+
+	total_loncb = grouplacb + ledloncb
+
+	# Suspense A/c
+
+	groupsusch = group1.objects.filter(User=request.user, Company=company_details.pk, Master__group_Name__icontains='Suspense A/c', ledgergroups__Creation_Date__gte=selectdatefield_details.Start_Date, ledgergroups__Creation_Date__lte=selectdatefield_details.End_Date)
+	groupsuscb = groupsusch.annotate(
+			closing = Coalesce(Sum('ledgergroups__Closing_balance'), 0))
+
+	groupsustcb = groupsuscb.aggregate(the_sum=Coalesce(Sum('closing'), Value(0)))['the_sum']
+	
+	ledsusnh = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Suspense A/c', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)	
+	ledsuscb = ledsusnh.aggregate(the_sum=Coalesce(Sum('Closing_balance'), Value(0)))['the_sum']
+
+	total_suscb = groupsustcb + ledsuscb	
+
+
+	# closing stock
+	qs = Stockdata.objects.filter(User=request.user, Company=company_details.pk, Date__lte=selectdatefield_details.End_Date)
+	total = qs.annotate(the_sum=Coalesce(Sum('salestock__Quantity'),0)).values('the_sum')
+	total2 = qs.annotate(the_sum2=Coalesce(Sum('purchasestock__Quantity_p'),0)).values('the_sum2')
+	qs = qs.annotate(
+    	sales_sum = Coalesce(Sum('salestock__Quantity'),0),
+    	purchase_sum = Coalesce(Sum('purchasestock__Quantity_p'),0),
+    	purchase_tot = Coalesce(Sum('purchasestock__Total_p'),0)
+	)
+	qs1 = qs.annotate(
+    	difference = ExpressionWrapper(F('purchase_sum') - F('sales_sum'), output_field=DecimalField()),
+    	total = ExpressionWrapper((F('purchase_tot') / F('purchase_sum')) * (F('purchase_sum') - F('sales_sum')), output_field=DecimalField())
+		) 
+
+	qs2 = qs1.aggregate(the_sum=Coalesce(Sum('total'), Value(0)))['the_sum']
+
+
+	# opening stock
+	qo = Stockdata.objects.filter(User=request.user, Company=company_details.pk, Date__lte=selectdatefield_details.Start_Date)
+	totalo = qo.annotate(the_sum=Coalesce(Sum('salestock__Quantity'),0)).values('the_sum')
+	totalo2 = qo.annotate(the_sum2=Coalesce(Sum('purchasestock__Quantity_p'),0)).values('the_sum2')
+	qo = qo.annotate(
+    	sales_sum = Coalesce(Sum('salestock__Quantity'),0),
+    	purchase_sum = Coalesce(Sum('purchasestock__Quantity_p'),0),
+    	purchase_tot = Coalesce(Sum('purchasestock__Total_p'),0)
+	)
+	qo1 = qo.annotate(
+    	difference = ExpressionWrapper(F('purchase_sum') - F('sales_sum'), output_field=DecimalField()),
+    	total = ExpressionWrapper((F('purchase_tot') / F('purchase_sum')) * (F('purchase_sum') - F('sales_sum')), output_field=DecimalField())
+		) 
+
+	qo2 = qo1.aggregate(the_sum=Coalesce(Sum('total'), Value(0)))['the_sum']
+
+
+
+
+	# Current Assets
+
+	groupcurastch = group1.objects.filter(User=request.user, Company=company_details.pk, Master__group_Name__icontains='Current Assets', ledgergroups__Creation_Date__gte=selectdatefield_details.Start_Date, ledgergroups__Creation_Date__lte=selectdatefield_details.End_Date)
+	groupcurastcb = groupcurastch.annotate(
+			closing = Coalesce(Sum('ledgergroups__Closing_balance'), 0))
+
+	groupcurascb = groupcurastcb.aggregate(the_sum=Coalesce(Sum('closing'), Value(0)))['the_sum']
+	
+	ledcurastnh = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Current Assets', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)	
+	ledcurastcb = ledcurastnh.aggregate(the_sum=Coalesce(Sum('Closing_balance'), Value(0)))['the_sum']
+
+	total_curastcb = groupcurascb + ledcurastcb	 + qs2
+
+	# Fixed Asset
+
+	groupfxdastch = group1.objects.filter(User=request.user, Company=company_details.pk, Master__group_Name__icontains='Fixed Assets', ledgergroups__Creation_Date__gte=selectdatefield_details.Start_Date, ledgergroups__Creation_Date__lte=selectdatefield_details.End_Date)
+	groupfxdastcb = groupfxdastch.annotate(
+			closing = Coalesce(Sum('ledgergroups__Closing_balance'), 0))
+
+	groupfxdascb = groupfxdastcb.aggregate(the_sum=Coalesce(Sum('closing'), Value(0)))['the_sum']
+	
+	ledfxdastnh = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Fixed Assets', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)	
+	ledfxdastcb = ledfxdastnh.aggregate(the_sum=Coalesce(Sum('Closing_balance'), Value(0)))['the_sum']
+
+	total_fxdastcb = groupfxdascb + ledfxdastcb	 
+
+
+
+	# Profit & Loss A/c Calculations
+
+
+
+	ld = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Purchase Accounts', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)
+	ldc = ld.aggregate(the_sum=Coalesce(Sum('Closing_balance'), Value(0)))['the_sum']
+
+	ldd = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Direct Expenses', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)
+	lddt = ldd.aggregate(the_sum=Coalesce(Sum('Closing_balance'), Value(0)))['the_sum']
+
+	ldii = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Direct Incomes', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)
+	lddi = ldii.aggregate(the_sum=Coalesce(Sum('Closing_balance'), Value(0)))['the_sum']
+
+	lds = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Sales Account', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)
+	ldsc = lds.aggregate(the_sum=Coalesce(Sum('Closing_balance'), Value(0)))['the_sum']
+
+	lde = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Indirect Expenses', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)
+	ldse = lde.aggregate(the_sum=Coalesce(Sum('Closing_balance'), Value(0)))['the_sum']
+
+	ldi = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Indirect Incomes', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)
+	ldsi = ldi.aggregate(the_sum=Coalesce(Sum('Closing_balance'), Value(0)))['the_sum']
+
+	# qo1 means opening stock exists
+
+	
+	gp = abs(ldsc) + abs(qs2) + abs(lddi) - abs(qo2) - abs(ldc) - abs(lddt)
+
+
+	if gp >=0:
+		tradingp  =  abs(qo2) + abs(ldc) + abs(lddt) + (gp)
+		tgp = abs(qs2) + abs(lddi) + abs(ldsc) 
+
+	else: # gp <0
+		tradingp =  abs(qo2) + abs(ldc) + abs(lddt) 
+		tgp = abs(qs2) + abs(lddi) + abs(ldsc) + abs(gp) 
+
+	
+
+	if gp >=0:
+		np = (gp) + abs(ldsi) - abs(ldse)
+	else:
+		np = abs(ldsi) - abs(ldse) - abs(gp)  
+
+
+	if gp >= 0:
+		if np >= 0:
+			tp = abs(ldse) + np
+			tc = abs(ldsi) + (gp)
+		else:
+			tp = abs(ldse) 
+			tc = gp + np + abs(ldsi)
+	else: # gp<0
+		if np >= 0:
+			tp = abs(ldse) + np + abs(gp)
+			tc = abs(ldsi) 
+		else:
+			tp = abs(ldse) + abs(gp)
+			tc = abs(np) + abs(ldsi)
+
+
+
+
+	# From Trial Balance
+
+	# groups with debit balance nature
+	groupsdebit = group1.objects.filter(User=request.user, Company=company_details.pk, balance_nature__icontains='Debit', ledgergroups__Creation_Date__gte=selectdatefield_details.Start_Date, ledgergroups__Creation_Date__lte=selectdatefield_details.End_Date).exclude(group_Name__icontains='Primary')
+	groups_cbc = groupsdebit.annotate(
+				closing = Coalesce(Sum('ledgergroups__Closing_balance'), 0)).filter(closing__gt = 0)
+
+	groupcbl = groupsdebit.annotate(
+			closing = Coalesce(Sum('ledgergroups__Closing_balance'), 0)).filter(closing__lt = 0)
+
+
+	posdebcb = groups_cbc.aggregate(the_sum=Coalesce(Sum('closing'), Value(0)))['the_sum']
+	negdbcl = groupcbl.aggregate(the_sum=Coalesce(Sum('closing'), Value(0)))['the_sum']
+
+
+
+	# groups with credit balance nature
+	groupscredit = group1.objects.filter(User=request.user, Company=company_details.pk, balance_nature__icontains='Credit', ledgergroups__Creation_Date__gte=selectdatefield_details.Start_Date, ledgergroups__Creation_Date__lte=selectdatefield_details.End_Date).exclude(group_Name__icontains='Primary')
+
+	groups_ccb = groupscredit.annotate(
+				closing = Coalesce(Sum('ledgergroups__Closing_balance'), 0)).filter(closing__gt = 0)
+
+	groupcbcl = groupscredit.annotate(
+			closing = Coalesce(Sum('ledgergroups__Closing_balance'), 0)).filter(closing__lt = 0)
+
+	poscrcl = groups_ccb.aggregate(the_sum=Coalesce(Sum('closing'), Value(0)))['the_sum']
+	necrcl = groupcbcl.aggregate(the_sum=Coalesce(Sum('closing'), Value(0)))['the_sum']
+
+
+	total_debit_closing = posdebcb + abs(necrcl) + qo2
+	total_credit_closing = poscrcl + abs(negdbcl)	
+
+
+
+	total_liabilities = total_brchtcb + total_cacb + total_culiacb + total_loncb + total_suscb + tp + total_credit_closing - total_debit_closing
+
+	total_asset = total_curastcb + total_fxdastcb
+
+
+
+	
+
+	context = {
+
+		'company_details' : company_details,
+		'selectdatefield_details' : selectdatefield_details,
+		'closing_stock' : qs2,
+
+		# Branch/Divisions
+		'branch' : groupbrchcb,
+		'branchled' : ledbrch,
+		'total_branch' : total_brchtcb,
+
+		# Capital A/c
+		'capital' : groupcacb,
+		'capitalled' : ledcah,
+		'total_capital' : total_cacb,
+
+		# Current Liabilities
+		'current' : groupculiacb,
+		'currentled' : ledculiah,
+		'total_current' : total_culiacb,
+
+		# Loans (Liability)
+		'loan' : grouploncb,
+		'loanled' : ledlonh,
+		'total_loan' : total_loncb,
+
+		# Suspense A/c
+		'suspnse' : groupsuscb,
+		'suspnseled' : ledsusnh,
+		'total_suspnse' : total_suscb,
+
+		# Current Assets
+		'current_asset' : groupcurastcb,
+		'current_assetled' : ledcurastnh,
+		'total_current_asset' : total_curastcb,
+
+		# Fixed Asset
+		'fixed_asset' : groupfxdastcb,
+		'fixed_assetled' : ledfxdastnh,
+		'total_fixed_asset' : total_fxdastcb,
+
+
+		# P&L A/c
+
+		'gross_profit' : gp,		
+		'nett_profit' : np,
+		'totalpl' : tp,
+		'totalplright' : tc,
+
+
+		# From Trial Balance
+		'total_debit_closing' : total_debit_closing,
+		'total_credit_closing' : total_credit_closing,
+
+
+		# Total
+		'total_liabilities' : total_liabilities,
+		'total_asset' : total_asset,
+
+
+	}
+
+
+	return render(request, 'stockkeeping/balance_sheet.html', context)
+
+
+
 
 
 
