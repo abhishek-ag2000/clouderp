@@ -134,6 +134,8 @@
                   <th>Total Amount(&#8377)</th>
                 </tr>
 
+
+
                 {% if total_branch >= 0 %}
 
                     <tr>
@@ -146,28 +148,61 @@
                     </tr>
 
                   {% for group1 in branch %}
-                    <tr>
-                      <td>{{ group1.group_Name }}</td>
-                      <td>{{ group1.closing }}</td>
-                      <th></th>
-                      <th></th>
-                      <th></th>
-                      <th></th>
-                    </tr>
+
+                      {% if group1.closing >= 0 %}
+                        <tr>
+                          <td>{{ group1.group_Name }}</td>
+                          <td>{{ group1.closing|floatformat:2|abs }}</td>
+                          <th></th>
+                          <th></th>
+                          <th></th>
+                          <th></th>
+                        </tr>
+
+                      {% else %}
+
+                        <tr>
+                          <td>{{ group1.group_Name }}</td>
+                          <td>(-){{ group1.closing|floatformat:2|abs }}</td>
+                          <th></th>
+                          <th></th>
+                          <th></th>
+                          <th></th>
+                        </tr>
+
+                      {% endif %}
+
                   {% endfor %}
 
                   {% for ledger1 in branchled %}
-                    <tr>
-                      <td>{{ ledger1.name }}</td>
-                      <td>{{ ledger1.Closing_balance }}</td>
-                      <th></th>
-                      <th></th>
-                      <th></th>
-                      <th></th>
-                    </tr>
+
+                      {% if ledger1.Closing_balance >= 0 %}
+                          <tr>
+                            <td><em>{{ ledger1.name }}</em></td>
+                            <td><em>{{ ledger1.Closing_balance|floatformat:2|abs }}</em></td>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                          </tr>
+
+                        {% else %}
+
+                          <tr>
+                            <td><em>{{ ledger1.name }}</em></td>
+                            <td><em>(-){{ ledger1.Closing_balance|floatformat:2|abs }}</em></td>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                          </tr>
+
+                        {% endif %}
+
                   {% endfor %}
 
                 {% else %}
+
                      <tr>
                       <th></th>
                       <th></th>
@@ -178,27 +213,334 @@
                     </tr>
 
                   {% for group1 in branch %}
-                    <tr>
-                      <td></td>
-                      <td></td>
-                      <th></th>
-                      <td>{{ group1.group_Name }}</td>
-                      <th></th>
-                      <td>{{ group1.closing }}</td>
-                    </tr>
+
+                      {% if group1.closing >= 0 %}
+                          <tr>
+                            <td></td>
+                            <td></td>
+                            <th></th>
+                            <td>{{ group1.group_Name }}</td>
+                            <td>{{ group1.closing|floatformat:2|abs }}</td>
+                            <td></td>
+                          </tr>
+
+                      {% else %}
+
+                          <tr>
+                            <td></td>
+                            <td></td>
+                            <th></th>
+                            <td>{{ group1.group_Name }}</td>
+                            <td>(-){{ group1.closing|floatformat:2|abs }}</td>
+                            <td></td>
+                          </tr>
+                      {% endif %}
+
                   {% endfor %}
 
                   {% for ledger1 in branchled %}
-                    <tr>
-                      <td></td>
-                      <td></td>
-                      <th></th>
-                      <td>{{ ledger1.name }}</td>
-                      <td>{{ ledger1.Closing_balance }}</td>
-                      <th></th>
-                    </tr>
+
+                      {% if ledger1.Closing_balance >= 0 %}
+
+                        <tr>
+                          <td></td>
+                          <td></td>
+                          <th></th>
+                          <td><em>{{ ledger1.name }}</em></td>
+                          <td><em>{{ ledger1.Closing_balance|floatformat:2|abs}}</em></td>
+                          <th></th>
+                        </tr>
+
+                      {% else %}
+
+                        <tr>
+                          <td></td>
+                          <td></td>
+                          <th></th>
+                          <td><em>{{ ledger1.name }}</em></td>
+                          <td><em>(-){{ ledger1.Closing_balance|floatformat:2|abs }}</em></td>
+                          <th></th>
+                        </tr>
+
+                      {% endif %}
+
                   {% endfor %}
 
+                {% endif %}
+
+
+
+
+
+
+
+
+
+                  {% if total_fixed_asset >= 0 %}
+
+                      <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>Fixed Asset</th>
+                        <th></th>
+                        <th>{{ total_fixed_asset|floatformat:2|abs }}</th>
+                      </tr>
+
+
+
+
+                    {% for group1 in fixed_asset %}
+
+                      {% if group1.closing >= 0 %}
+                        <tr>
+                          <td></td>
+                          <td></td>
+                          <th></th>
+                          <td>{{ group1.group_Name }}</td>
+                          <td>{{ group1.closing|floatformat:2|abs }}</td>
+                          <th></th>
+                        </tr>
+
+                      {% else %}
+
+                        <tr>
+                          <td></td>
+                          <td></td>
+                          <th></th>
+                          <td>{{ group1.group_Name }}</td>
+                          <td>(-){{ group1.closing|floatformat:2|abs }}</td>
+                          <th></th>
+                        </tr>
+
+                      {% endif %} 
+
+                    {% endfor %}
+
+                    {% for ledger1 in fixed_assetled %}
+
+                      {% if ledger1.Closing_balance >= 0 %}
+                          <tr>
+                            <td></td>
+                            <td></td>
+                            <th></th>
+                            <td><em>{{ ledger1.name }}</em></td>
+                            <td><em>{{ ledger1.Closing_balance|floatformat:2|abs }}</em></td>
+                            <th></th>
+                          </tr>
+
+                        {% else %}
+
+                          <tr>
+                            <td></td>
+                            <td></td>
+                            <th></th>
+                            <td><em>{{ ledger1.name }}</em></td>
+                            <td><em>(-){{ ledger1.Closing_balance|floatformat:2|abs }}</em></td>
+                            <th></th>
+                          </tr>
+
+                        {% endif %}
+
+                    {% endfor %}
+
+                  {% else %}
+                       <tr>
+                        <th>Fixed Asset</th>
+                        <th></th>
+                        <th>{{ total_fixed_asset|floatformat:2|abs }}</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                      </tr>
+
+                    {% for group1 in fixed_asset %}
+
+                      {% if group1.closing >= 0 %}
+                          <tr>
+                            <td>{{ group1.group_Name }}</td>
+                            <td>{{ group1.closing|floatformat:2|abs }}</td>
+                            <th></th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+
+                      {% else %}
+
+                          <tr>
+                            <td>{{ group1.group_Name }}</td>
+                            <td>(-){{ group1.closing|floatformat:2|abs }}</td>
+                            <th></th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                      {% endif %}
+                    {% endfor %}
+
+                    {% for ledger1 in fixed_assetled %}
+
+                      {% if ledger1.Closing_balance >= 0 %}
+
+                        <tr>
+                          <td><em>{{ ledger1.name }}</em></td>
+                          <td><em>{{ ledger1.Closing_balance|floatformat:2|abs}}</em></td>
+                          <th></th>
+                          <td></td>
+                          <td></td>
+                          <th></th>
+                        </tr>
+
+                      {% else %}
+
+                        <tr>
+                          <td><em>{{ ledger1.name }}</em></td>
+                          <td><em>(-){{ ledger1.Closing_balance|floatformat:2|abs }}</em></td>
+                          <th></th>
+                          <td></td>
+                          <td></td>
+                          <th></th>
+                        </tr>
+
+                      {% endif %}
+
+                    {% endfor %}
+                    
+                {% endif %}
+
+
+
+
+
+                 {% if total_capital >= 0 %}
+
+                      <tr>
+                        <th>Capital A/c</th>
+                        <th></th>
+                        <th>{{ total_capital|floatformat:2|abs }}</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                      </tr>
+
+                    {% for group1 in capital %}
+
+                      {% if group1.closing >= 0 %}
+                        <tr>
+                          <td>{{ group1.group_Name }}</td>
+                          <td>{{ group1.closing|floatformat:2|abs }}</td>
+                          <th></th>
+                          <th></th>
+                          <th></th>
+                          <th></th>
+                        </tr>
+
+                      {% else %}
+
+                        <tr>
+                          <td>{{ group1.group_Name }}</td>
+                          <td>(-){{ group1.closing|floatformat:2|abs }}</td>
+                          <th></th>
+                          <th></th>
+                          <th></th>
+                          <th></th>
+                        </tr>
+
+                      {% endif %} 
+
+                    {% endfor %}
+
+                    {% for ledger1 in capitalled %}
+
+                      {% if ledger1.Closing_balance >= 0 %}
+                          <tr>
+                            <td><em>{{ ledger1.name }}</em></td>
+                            <td><em>{{ ledger1.Closing_balance|floatformat:2|abs }}</em></td>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                          </tr>
+
+                        {% else %}
+
+                          <tr>
+                            <td><em>{{ ledger1.name }}</em></td>
+                            <td><em>(-){{ ledger1.Closing_balance|floatformat:2|abs }}</em></td>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                          </tr>
+
+                        {% endif %}
+
+                    {% endfor %}
+
+                  {% else %}
+                       <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>Capital A/c</th>
+                        <th></th>
+                        <th>{{ total_capital|floatformat:2|abs }}</th>
+                      </tr>
+
+                    {% for group1 in capital %}
+
+                      {% if group1.closing >= 0 %}
+                          <tr>
+                            <td></td>
+                            <td></td>
+                            <th></th>
+                            <td>{{ group1.group_Name }}</td>
+                            <td>{{ group1.closing|floatformat:2|abs }}</td>
+                            <td></td>
+                          </tr>
+
+                      {% else %}
+
+                          <tr>
+                            <td></td>
+                            <td></td>
+                            <th></th>
+                            <td>{{ group1.group_Name }}</td>
+                            <td>(-){{ group1.closing|floatformat:2|abs }}</td>
+                            <td></td>
+                          </tr>
+                      {% endif %}
+                    {% endfor %}
+
+                    {% for ledger1 in capitalled %}
+
+                      {% if ledger1.Closing_balance >= 0 %}
+
+                        <tr>
+                          <td></td>
+                          <td></td>
+                          <th></th>
+                          <td><em>{{ ledger1.name }}</em></td>
+                          <td><em>{{ ledger1.Closing_balance|floatformat:2|abs}}</em></td>
+                          <th></th>
+                        </tr>
+
+                      {% else %}
+
+                        <tr>
+                          <td></td>
+                          <td></td>
+                          <th></th>
+                          <td><em>{{ ledger1.name }}</em></td>
+                          <td><em>(-){{ ledger1.Closing_balance|floatformat:2|abs }}</em></td>
+                          <th></th>
+                        </tr>
+
+                      {% endif %}
+
+                    {% endfor %}
+                    
                 {% endif %}
 
 
@@ -263,8 +605,8 @@
                             <td></td>
                             <td></td>
                             <th></th>
-                            <td>{{ ledger1.name }}</td>
-                            <td>{{ ledger1.Closing_balance|floatformat:2|abs }}</td>
+                            <td><em>{{ ledger1.name }}</em></td>
+                            <td><em>{{ ledger1.Closing_balance|floatformat:2|abs }}</em></td>
                             <th></th>
                           </tr>
 
@@ -274,8 +616,8 @@
                             <td></td>
                             <td></td>
                             <th></th>
-                            <td>{{ ledger1.name }}</td>
-                            <td>(-){{ ledger1.Closing_balance|floatformat:2|abs }}</td>
+                            <td><em>{{ ledger1.name }}</em></td>
+                            <td><em>(-){{ ledger1.Closing_balance|floatformat:2|abs }}</em></td>
                             <th></th>
                           </tr>
 
@@ -323,8 +665,8 @@
                       {% if ledger1.Closing_balance >= 0 %}
 
                         <tr>
-                          <td>{{ ledger1.name }}</td>
-                          <td>{{ ledger1.Closing_balance|floatformat:2|abs}}</td>
+                          <td><em>{{ ledger1.name }}</em></td>
+                          <td><em>{{ ledger1.Closing_balance|floatformat:2|abs}}</em></td>
                           <th></th>
                           <td></td>
                           <td></td>
@@ -334,8 +676,8 @@
                       {% else %}
 
                         <tr>
-                          <td>{{ ledger1.name }}</td>
-                          <td>(-){{ ledger1.Closing_balance|floatformat:2|abs }})</td>
+                          <td><em>{{ ledger1.name }}</em></td>
+                          <td><em>(-){{ ledger1.Closing_balance|floatformat:2|abs }}</em></td>
                           <th></th>
                           <td></td>
                           <td></td>
@@ -351,273 +693,6 @@
 
 
 
-
-
-                 {% if total_capital >= 0 %}
-
-                      <tr>
-                        <th>Capital A/c</th>
-                        <th></th>
-                        <th>{{ total_capital|floatformat:2|abs }}</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                      </tr>
-
-                    {% for group1 in capital %}
-
-                      {% if group1.closing >= 0 %}
-                        <tr>
-                          <td>{{ group1.group_Name }}</td>
-                          <td>{{ group1.closing|floatformat:2|abs }}</td>
-                          <th></th>
-                          <th></th>
-                          <th></th>
-                          <th></th>
-                        </tr>
-
-                      {% else %}
-
-                        <tr>
-                          <td>{{ group1.group_Name }}</td>
-                          <td>(-){{ group1.closing|floatformat:2|abs }}</td>
-                          <th></th>
-                          <th></th>
-                          <th></th>
-                          <th></th>
-                        </tr>
-
-                      {% endif %} 
-
-                    {% endfor %}
-
-                    {% for ledger1 in capitalled %}
-
-                      {% if ledger1.Closing_balance >= 0 %}
-                          <tr>
-                            <td>{{ ledger1.name }}</td>
-                            <td>{{ ledger1.Closing_balance|floatformat:2|abs }}</td>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                          </tr>
-
-                        {% else %}
-
-                          <tr>
-                            <td>{{ ledger1.name }}</td>
-                            <td>(-){{ ledger1.Closing_balance|floatformat:2|abs }}</td>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                          </tr>
-
-                        {% endif %}
-
-                    {% endfor %}
-
-                  {% else %}
-                       <tr>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th>Capital A/c</th>
-                        <th></th>
-                        <th>{{ total_capital|floatformat:2|abs }}</th>
-                      </tr>
-
-                    {% for group1 in capital %}
-
-                      {% if group1.closing >= 0 %}
-                          <tr>
-                            <td></td>
-                            <td></td>
-                            <th></th>
-                            <td>{{ group1.group_Name }}</td>
-                            <td>{{ group1.closing|floatformat:2|abs }}</td>
-                            <td></td>
-                          </tr>
-
-                      {% else %}
-
-                          <tr>
-                            <td></td>
-                            <td></td>
-                            <th></th>
-                            <td>{{ group1.group_Name }}</td>
-                            <td>(-){{ group1.closing|floatformat:2|abs }}</td>
-                            <td></td>
-                          </tr>
-                      {% endif %}
-                    {% endfor %}
-
-                    {% for ledger1 in capitalled %}
-
-                      {% if ledger1.Closing_balance >= 0 %}
-
-                        <tr>
-                          <td></td>
-                          <td></td>
-                          <th></th>
-                          <td>{{ ledger1.name }}</td>
-                          <td>{{ ledger1.Closing_balance|floatformat:2|abs}}</td>
-                          <th></th>
-                        </tr>
-
-                      {% else %}
-
-                        <tr>
-                          <td></td>
-                          <td></td>
-                          <th></th>
-                          <td>{{ ledger1.name }}</td>
-                          <td>(-){{ ledger1.Closing_balance|floatformat:2|abs }})</td>
-                          <th></th>
-                        </tr>
-
-                      {% endif %}
-
-                    {% endfor %}
-                    
-                {% endif %}
-
-
-
-
-                  {% if total_current_asset >= 0 %}
-
-                      <tr>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th>Fixed Asset</th>
-                        <th></th>
-                        <th>{{ total_fixed_asset|floatformat:2|abs }}</th>
-                      </tr>
-
-
-
-
-                    {% for group1 in fixed_asset %}
-
-                      {% if group1.closing >= 0 %}
-                        <tr>
-                          <td></td>
-                          <td></td>
-                          <th></th>
-                          <td>{{ group1.group_Name }}</td>
-                          <td>{{ group1.closing|floatformat:2|abs }}</td>
-                          <th></th>
-                        </tr>
-
-                      {% else %}
-
-                        <tr>
-                          <td></td>
-                          <td></td>
-                          <th></th>
-                          <td>{{ group1.group_Name }}</td>
-                          <td>(-){{ group1.closing|floatformat:2|abs }}</td>
-                          <th></th>
-                        </tr>
-
-                      {% endif %} 
-
-                    {% endfor %}
-
-                    {% for ledger1 in fixed_assetled %}
-
-                      {% if ledger1.Closing_balance >= 0 %}
-                          <tr>
-                            <td></td>
-                            <td></td>
-                            <th></th>
-                            <td>{{ ledger1.name }}</td>
-                            <td>{{ ledger1.Closing_balance|floatformat:2|abs }}</td>
-                            <th></th>
-                          </tr>
-
-                        {% else %}
-
-                          <tr>
-                            <td></td>
-                            <td></td>
-                            <th></th>
-                            <td>{{ ledger1.name }}</td>
-                            <td>(-){{ ledger1.Closing_balance|floatformat:2|abs }}</td>
-                            <th></th>
-                          </tr>
-
-                        {% endif %}
-
-                    {% endfor %}
-
-                  {% else %}
-                       <tr>
-                        <th>Fixed Asset</th>
-                        <th></th>
-                        <th>{{ total_fixed_asset|floatformat:2|abs }}</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                      </tr>
-
-                    {% for group1 in fixed_asset %}
-
-                      {% if group1.closing >= 0 %}
-                          <tr>
-                            <td>{{ group1.group_Name }}</td>
-                            <td>{{ group1.closing|floatformat:2|abs }}</td>
-                            <th></th>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                          </tr>
-
-                      {% else %}
-
-                          <tr>
-                            <td>{{ group1.group_Name }}</td>
-                            <td>(-){{ group1.closing|floatformat:2|abs }}</td>
-                            <th></th>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                          </tr>
-                      {% endif %}
-                    {% endfor %}
-
-                    {% for ledger1 in fixed_assetled %}
-
-                      {% if ledger1.Closing_balance >= 0 %}
-
-                        <tr>
-                          <td>{{ ledger1.name }}</td>
-                          <td>{{ ledger1.Closing_balance|floatformat:2|abs}}</td>
-                          <th></th>
-                          <td></td>
-                          <td></td>
-                          <th></th>
-                        </tr>
-
-                      {% else %}
-
-                        <tr>
-                          <td>{{ ledger1.name }}</td>
-                          <td>(-){{ ledger1.Closing_balance|floatformat:2|abs }})</td>
-                          <th></th>
-                          <td></td>
-                          <td></td>
-                          <th></th>
-                        </tr>
-
-                      {% endif %}
-
-                    {% endfor %}
-                    
-                {% endif %}
 
 
 
@@ -667,8 +742,8 @@
 
                       {% if ledger1.Closing_balance >= 0 %}
                           <tr>
-                            <td>{{ ledger1.name }}</td>
-                            <td>{{ ledger1.Closing_balance|floatformat:2|abs }}</td>
+                            <td><em>{{ ledger1.name }}</em></td>
+                            <td><em>{{ ledger1.Closing_balance|floatformat:2|abs }}</em></td>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -678,8 +753,8 @@
                         {% else %}
 
                           <tr>
-                            <td>{{ ledger1.name }}</td>
-                            <td>(-){{ ledger1.Closing_balance|floatformat:2|abs }}</td>
+                            <td><em>{{ ledger1.name }}</em></td>
+                            <td><em>(-){{ ledger1.Closing_balance|floatformat:2|abs }}</em></td>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -733,8 +808,8 @@
                           <td></td>
                           <td></td>
                           <th></th>
-                          <td>{{ ledger1.name }}</td>
-                          <td>{{ ledger1.Closing_balance|floatformat:2|abs}}</td>
+                          <td><em>{{ ledger1.name }}</em></td>
+                          <td><em>{{ ledger1.Closing_balance|floatformat:2|abs}}</em></td>
                           <th></th>
                         </tr>
 
@@ -744,8 +819,8 @@
                           <td></td>
                           <td></td>
                           <th></th>
-                          <td>{{ ledger1.name }}</td>
-                          <td>(-){{ ledger1.Closing_balance|floatformat:2|abs }})</td>
+                          <td><em>{{ ledger1.name }}</em></td>
+                          <td><em>(-){{ ledger1.Closing_balance|floatformat:2|abs }}</em></td>
                           <th></th>
                         </tr>
 
@@ -802,8 +877,8 @@
 
                       {% if ledger1.Closing_balance >= 0 %}
                           <tr>
-                            <td>{{ ledger1.name }}</td>
-                            <td>{{ ledger1.Closing_balance|floatformat:2|abs }}</td>
+                            <td><em>{{ ledger1.name }}</em></td>
+                            <td><em>{{ ledger1.Closing_balance|floatformat:2|abs }}</em></td>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -813,8 +888,8 @@
                         {% else %}
 
                           <tr>
-                            <td>{{ ledger1.name }}</td>
-                            <td>(-){{ ledger1.Closing_balance|floatformat:2|abs }}</td>
+                            <td><em>{{ ledger1.name }}</em></td>
+                            <td><em>(-){{ ledger1.Closing_balance|floatformat:2|abs }}</em></td>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -868,8 +943,8 @@
                           <td></td>
                           <td></td>
                           <th></th>
-                          <td>{{ ledger1.name }}</td>
-                          <td>{{ ledger1.Closing_balance|floatformat:2|abs}}</td>
+                          <td><em>{{ ledger1.name }}</em></td>
+                          <td><em>{{ ledger1.Closing_balance|floatformat:2|abs}}</em></td>
                           <th></th>
                         </tr>
 
@@ -879,8 +954,8 @@
                           <td></td>
                           <td></td>
                           <th></th>
-                          <td>{{ ledger1.name }}</td>
-                          <td>(-){{ ledger1.Closing_balance|floatformat:2|abs }})</td>
+                          <td><em>{{ ledger1.name }}</em></td>
+                          <td><em>(-){{ ledger1.Closing_balance|floatformat:2|abs }}</em></td>
                           <th></th>
                         </tr>
 
@@ -938,8 +1013,8 @@
 
                       {% if ledger1.Closing_balance >= 0 %}
                           <tr>
-                            <td>{{ ledger1.name }}</td>
-                            <td>{{ ledger1.Closing_balance|floatformat:2|abs }}</td>
+                            <td><em>{{ ledger1.name }}</em></td>
+                            <td><em>{{ ledger1.Closing_balance|floatformat:2|abs }}</em></td>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -949,8 +1024,8 @@
                         {% else %}
 
                           <tr>
-                            <td>{{ ledger1.name }}</td>
-                            <td>(-){{ ledger1.Closing_balance|floatformat:2|abs }}</td>
+                            <td><em>{{ ledger1.name }}</em></td>
+                            <td><em>(-){{ ledger1.Closing_balance|floatformat:2|abs }}</em></td>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -1004,8 +1079,8 @@
                           <td></td>
                           <td></td>
                           <th></th>
-                          <td>{{ ledger1.name }}</td>
-                          <td>{{ ledger1.Closing_balance|floatformat:2|abs}}</td>
+                          <td><em>{{ ledger1.name }}</em></td>
+                          <td><em>{{ ledger1.Closing_balance|floatformat:2|abs}}</em></td>
                           <th></th>
                         </tr>
 
@@ -1015,8 +1090,8 @@
                           <td></td>
                           <td></td>
                           <th></th>
-                          <td>{{ ledger1.name }}</td>
-                          <td>(-){{ ledger1.Closing_balance|floatformat:2|abs }})</td>
+                          <td><em>{{ ledger1.name }}</em></td>
+                          <td><em>(-){{ ledger1.Closing_balance|floatformat:2|abs }}</em></td>
                           <th></th>
                         </tr>
 
@@ -1042,7 +1117,7 @@
                         </tr>                    
 
                         <tr>
-                          <td>Opening Balance</td>
+                          <td><em> Opening Balance</em></td>
                           <td></td>
                           <th></th>
                           <td></td>
@@ -1052,7 +1127,7 @@
 
 
                         <tr>
-                          <td>Current Period</td>
+                          <td><em>Current Period</em></td>
                           <td>{{ nett_profit|floatformat:2|abs }}</td>
                           <td></td>
                           <td></td>
@@ -1075,7 +1150,7 @@
                           <td></td>
                           <td></td>
                           <th></th>
-                          <td>Opening Balance</td>
+                          <td><em> Opening Balance</em></td>
                           <td></td>
                           <th></th>
                         </tr>   
@@ -1085,7 +1160,7 @@
                           <td></td>
                           <td></td>
                           <td></td>
-                          <td>Current Period</td>
+                          <td><em> Current Period</em></td>
                           <td>{{ nett_profit|floatformat:2|abs }}</td>
                           <th></th>
                         </tr>   
@@ -1098,7 +1173,7 @@
                         <tr>
                           <th>Diffrence in opening Balance</th>
                           <td></td>
-                          <th>{{ total_credit_closing|sub:total_debit_closing|floatformat:2|abs }}</th>
+                          <th>{{ total_debit_closing|sub:total_credit_closing|floatformat:2|abs }}</th>
                           <td></td>
                           <td></td>
                           <th></th>
@@ -1118,6 +1193,17 @@
                       {% endif %}
 
 
+                      {% if total_credit_closing < total_debit_closing or nett_profit >= 0 %}
+                        <tr>
+                          <th>Grand Total</th>
+                          <td></td>
+                          <th>______________<br>{{total_debit_closing|sub:total_credit_closing|add:total_liabilities|add:nett_profit|floatformat:2|abs }}<br>______________</th>
+                          <th>Grand Total</th>
+                          <td></td>
+                          <th>______________<br>{{ total_asset|floatformat:2|abs }}<br>______________</th>
+                        </tr>
+
+                      {% else %}
 
                         <tr>
                           <th>Grand Total</th>
@@ -1125,8 +1211,10 @@
                           <th>______________<br>{{ total_liabilities|floatformat:2|abs }}<br>______________</th>
                           <th>Grand Total</th>
                           <td></td>
-                          <th>______________<br>{{ total_asset|floatformat:2|abs }}<br>______________</th>
+                          <th>______________<br>{{ total_asset|add:total_credit_closing|sub:total_debit_closing|add:nett_profit|floatformat:2|abs }}<br>______________</th>
                         </tr>
+
+                      {% endif %}
 
 
 

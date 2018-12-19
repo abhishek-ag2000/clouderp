@@ -158,8 +158,7 @@
                 <div class="box-body table-responsive no-padding">
                   <table class="table table-hover">
 
-                    <tr>
-                      <th>Sl no</th>
+                    <tr>                      
                       <th>Name</th>
                       <th>Date Created</th>
                       <th>Capital</th>
@@ -175,10 +174,9 @@
                       {% for selectdatefield in selectdates %}
 
                         <tr>
-                          <td><a href="{% url 'company:Dashboard' pk=company.pk pk3=selectdatefield.pk %}">{{forloop.counter}}</a></td>
                           <td><a href="{% url 'company:Dashboard' pk=company.pk pk3=selectdatefield.pk %}">{{company.Name}}</a></td>
-                          <td>11-7-2014</td>
-                          <td>75800</td>
+                          <td><a href="{% url 'company:Dashboard' pk=company.pk pk3=selectdatefield.pk %}">{{company.Books_Begining_From}}</a></td>
+                          <td><a href="{% url 'company:Dashboard' pk=company.pk pk3=selectdatefield.pk %}">{{capital}}</a></td>
                           <td>Private equity firm</td>
                           <td>1259000</td>
                           <td>11-7-2014</td>

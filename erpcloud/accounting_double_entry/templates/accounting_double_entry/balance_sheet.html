@@ -160,31 +160,33 @@
                 {% endif %}
 
 
-
-
-                {% if total_current_asset >= 0 %}
+                  {% if total_fixed_asset >= 0 %}
 
                       <tr>
                         <th></th>
                         <th></th>
                         <th></th>
-                        <th>Current Assets</th>
+                        <th>Fixed Asset</th>
                         <th></th>
-                        <th>{{ total_current_asset|floatformat:2|abs }}</th>
+                        <th>{{ total_fixed_asset|floatformat:2|abs }}</th>
                       </tr>
-
 
                   {% else %}
                        <tr>
-                        <th>Current Assets</th>
+                        <th>Fixed Asset</th>
                         <th></th>
-                        <th>{{ total_current_asset|floatformat:2|abs }}</th>
+                        <th>{{ total_fixed_asset|floatformat:2|abs }}</th>
                         <th></th>
                         <th></th>
                         <th></th>
                       </tr>
                     
                 {% endif %}
+
+
+
+
+
 
 
 
@@ -218,30 +220,34 @@
                 {% endif %}
 
 
-
-
                   {% if total_current_asset >= 0 %}
 
                       <tr>
                         <th></th>
                         <th></th>
                         <th></th>
-                        <th>Fixed Asset</th>
+                        <th>Current Assets</th>
                         <th></th>
-                        <th>{{ total_fixed_asset|floatformat:2|abs }}</th>
+                        <th>{{ total_current_asset|floatformat:2|abs }}</th>
                       </tr>
+
 
                   {% else %}
                        <tr>
-                        <th>Fixed Asset</th>
+                        <th>Current Assets</th>
                         <th></th>
-                        <th>{{ total_fixed_asset|floatformat:2|abs }}</th>
+                        <th>{{ total_current_asset|floatformat:2|abs }}</th>
                         <th></th>
                         <th></th>
                         <th></th>
                       </tr>
                     
                 {% endif %}
+
+
+
+
+
 
 
 
@@ -333,33 +339,8 @@
                         <th>{{ total_suspnse|floatformat:2|abs }}</th>
                       </tr>
 
-                    {% for group1 in suspnse %}
-
-                      {% if group1.closing >= 0 %}
-                          <tr>
-                            <td></td>
-                            <td></td>
-                            <th></th>
-                            <td>{{ group1.group_Name }}</td>
-                            <td>{{ group1.closing|floatformat:2|abs }}</td>
-                            <td></td>
-                          </tr>
-
-                      {% else %}
-
-                          <tr>
-                            <td></td>
-                            <td></td>
-                            <th></th>
-                            <td>{{ group1.group_Name }}</td>
-                            <td>(-){{ group1.closing|floatformat:2|abs }}</td>
-                            <td></td>
-                          </tr>
-                      {% endif %}
-                    {% endfor %}
-
                     
-                {% endif %}
+                  {% endif %}
 
 
 
@@ -382,10 +363,10 @@
                         <tr>
                           <th></th>
                           <td></td>
-                          <th>{{ nett_profit|floatformat:2|abs }}</th>
+                          <th></th>
                           <th>Profit & Loss A/c</th>
                           <td></td>
-                          <th></th>
+                          <th>{{ nett_profit|floatformat:2|abs }}</th>
                         </tr>                    
   
 
@@ -418,15 +399,28 @@
 
 
 
+                      {% if total_credit_closing < total_debit_closing or nett_profit >= 0 %}
+                        <tr>
+                          <th>Grand Total</th>
+                          <td></td>
+                          <th>______________<br>{{total_debit_closing|sub:total_credit_closing|add:total_liabilities|add:nett_profit|floatformat:2|abs }}<br>______________</th>
+                          <th>Grand Total</th>
+                          <td></td>
+                          <th>______________<br>{{ total_asset|floatformat:2|abs }}<br>______________</th>
+                        </tr>
+
+                      {% else %}
+
                         <tr>
                           <th>Grand Total</th>
                           <td></td>
                           <th>______________<br>{{ total_liabilities|floatformat:2|abs }}<br>______________</th>
                           <th>Grand Total</th>
                           <td></td>
-                          <th>______________<br>{{ total_asset|floatformat:2|abs }}<br>______________</th>
+                          <th>______________<br>{{ total_asset|add:total_credit_closing|sub:total_debit_closing|add:nett_profit|floatformat:2|abs }}<br>______________</th>
                         </tr>
 
+                      {% endif %}
 
 
 

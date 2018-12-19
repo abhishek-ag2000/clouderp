@@ -931,9 +931,82 @@ def balance_sheet_condensed_view(request,pk,pk3):
 
 
 
-	total_liabilities = total_brchtcb + total_cacb + total_culiacb + total_loncb + total_suscb + tp + total_credit_closing - total_debit_closing
 
-	total_asset = total_curastcb + total_fxdastcb
+	if total_brchtcb < 0 and total_cacb < 0 and total_culiacb < 0 and total_loncb < 0 and total_suscb < 0 and total_curastcb < 0 and total_fxdastcb < 0:
+		total_liabilities = abs(total_curastcb) + abs(total_fxdastcb)
+		total_asset = abs(total_brchtcb) + abs(total_cacb) + abs(total_culiacb) + abs(total_loncb) + abs(total_suscb)		
+	
+	elif total_brchtcb < 0:
+		total_liabilities = total_cacb + total_culiacb + total_loncb + total_suscb
+		total_asset = abs(total_brchtcb) + total_curastcb + total_fxdastcb
+
+	elif total_brchtcb < 0 and total_fxdastcb < 0:
+		total_liabilities = total_cacb + total_culiacb + total_loncb + total_suscb + abs(total_fxdastcb)
+		total_asset = abs(total_brchtcb) + total_curastcb 
+
+	elif total_brchtcb < 0 and total_curastcb < 0:
+		total_liabilities = total_cacb + total_culiacb + total_loncb + total_suscb + abs(total_curastcb)
+		total_asset = abs(total_brchtcb) + total_fxdastcb
+
+	elif total_cacb < 0:
+		total_liabilities = total_brchtcb + total_culiacb + total_loncb + total_suscb
+		total_asset = total_curastcb + total_fxdastcb + abs(total_cacb)
+
+	elif total_cacb < 0 and total_fxdastcb < 0:	
+		total_liabilities =  total_brchtcb + total_culiacb + total_loncb + total_suscb + abs(total_fxdastcb)
+		total_asset = abs(total_cacb) + total_curastcb 
+
+	elif total_cacb < 0 and total_curastcb < 0:
+		total_liabilities =  total_brchtcb + total_culiacb + total_loncb + total_suscb + abs(total_curastcb)
+		total_asset = abs(total_cacb) + total_fxdastcb
+
+	elif total_culiacb < 0:
+		total_liabilities = total_brchtcb + total_cacb + total_loncb + total_suscb
+		total_asset = total_curastcb + total_fxdastcb + abs(total_culiacb)
+
+	elif total_culiacb < 0 and total_fxdastcb < 0:	
+		total_liabilities =  total_brchtcb + total_cacb + total_loncb + total_suscb + abs(total_fxdastcb)
+		total_asset = abs(total_culiacb) + total_curastcb 
+
+	elif total_culiacb < 0 and total_curastcb < 0:
+		total_liabilities =  total_brchtcb + total_cacb + total_loncb + total_suscb + abs(total_curastcb)
+		total_asset = abs(total_culiacb) + total_fxdastcb
+
+	elif total_loncb < 0:
+		total_liabilities = total_brchtcb + total_cacb + total_culiacb + total_suscb
+		total_asset = total_curastcb + total_fxdastcb + abs(total_loncb)
+
+	elif total_loncb < 0 and total_fxdastcb < 0:	
+		total_liabilities =  total_brchtcb + total_cacb + total_culiacb + total_suscb + abs(total_fxdastcb)
+		total_asset = abs(total_loncb) + total_curastcb 
+
+	elif total_loncb < 0 and total_curastcb < 0:
+		total_liabilities =  total_brchtcb + total_cacb + total_culiacb + total_suscb + abs(total_curastcb)
+		total_asset = abs(total_loncb) + total_fxdastcb
+
+	elif total_suscb < 0:
+		total_liabilities = total_brchtcb + total_cacb + total_culiacb + total_loncb
+		total_asset = total_curastcb + total_fxdastcb + abs(total_suscb)
+
+	elif total_suscb < 0 and total_fxdastcb < 0:	
+		total_liabilities =  total_brchtcb + total_cacb + total_culiacb + total_loncb + abs(total_fxdastcb)
+		total_asset = abs(total_suscb) + total_curastcb 
+
+	elif total_suscb < 0 and total_curastcb < 0:
+		total_liabilities =  total_brchtcb + total_cacb + total_culiacb + total_loncb + abs(total_curastcb)
+		total_asset = abs(total_suscb) + total_fxdastcb
+
+	elif total_fxdastcb < 0:
+		total_liabilities = total_brchtcb + total_cacb + total_culiacb + total_loncb + total_suscb + abs(total_fxdastcb)
+		total_asset = total_curastcb
+
+	elif total_curastcb < 0:
+		total_liabilities = total_brchtcb + total_cacb + total_culiacb + total_loncb + total_suscb + abs(total_curastcb)
+		total_asset = total_fxdastcb
+
+	else:
+		total_liabilities = total_brchtcb + total_cacb + total_culiacb + total_loncb + total_suscb
+		total_asset = total_curastcb + total_fxdastcb
 
 
 
