@@ -8,7 +8,7 @@ import datetime
 class group1Form(forms.ModelForm):		
 	class Meta:
 		model = group1
-		fields = ('group_Name', 'Master', 'Nature_of_group1', 'balance_nature', 'Group_behaves_like_a_Sub_Group', 'Nett_Debit_or_Credit_Balances_for_Reporting')
+		fields = ('group_Name', 'Master', 'balance_nature','Nature_of_group1', 'Group_behaves_like_a_Sub_Group', 'Nett_Debit_or_Credit_Balances_for_Reporting')
 		widgets = {
 			'group_Name': forms.TextInput(attrs= {'class' : 'form-control'}),
 			

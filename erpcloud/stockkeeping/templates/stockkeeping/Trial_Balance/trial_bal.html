@@ -71,9 +71,9 @@
           <div class="box box-default">
           <div class="box-body">
 
-          <a href="{% url 'stockkeeping:profitloss' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-success" role="button">Profit & Loss Overview</a>
+          <a href="{% url 'accounting_double_entry:P&Lcond' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-success" role="button">Profit & Loss Overview</a>
           
-          <a href="{% url 'stockkeeping:stockdatacreate' pk=company_details.pk pk3=selectdatefield_details.pk  %}" class="btn btn-warning" role="button">Balance Sheet Overview</a>
+          <a href="{% url 'accounting_double_entry:blsht' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-warning" role="button">Balance Sheet Overview</a>
 
           <a href="{% url 'accounting_double_entry:trialbalcond' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-warning" role="button">Trial Balance Condensed View</a>
 
@@ -310,7 +310,7 @@
 
 
                       <tr>
-                            <th><center>Diffrence in Opening Balance</center></th>
+                            <th><center>Difference in Opening Balance</center></th>
 
 
                           {% if total_credit_opening > total_debit_opening %}

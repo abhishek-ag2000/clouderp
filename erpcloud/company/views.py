@@ -12,36 +12,19 @@ from accounting_double_entry.models import selectdatefield
 from accounting_double_entry.forms import DateRangeForm
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
+from accounting_double_entry.models import group1,ledger1,journal,selectdatefield
+from django.db.models.functions import Coalesce
+from django.db.models import Value, Sum, F, ExpressionWrapper
+from django.db.models.fields import DecimalField
 # Create your views here.
 
 
-class FormListView(FormMixin, ListView):
-    def get(self, request, *args, **kwargs):
-        # From ProcessFormMixin
-        form_class = self.get_form_class()
-        self.form = self.get_form(form_class)
-
-        # From BaseListView
-        self.object_list = self.get_queryset()
-        allow_empty = self.get_allow_empty()
-        if not allow_empty and len(self.object_list) == 0:
-            raise Http404(_(u"Empty list and '%(class_name)s.allow_empty' is False.")
-                          % {'class_name': self.__class__.__name__})
-
-        context = self.get_context_data(object_list=self.object_list, form=self.form)
-        return self.render_to_response(context)
-
-    def post(self, request, *args, **kwargs):
-        return self.get(request, *args, **kwargs)
-
-
-class companyListView(LoginRequiredMixin,FormListView):
+class companyListView(LoginRequiredMixin,ListView):
 	model = company
-	form_class  = DateRangeForm
 	paginate_by = 10
 
 	def get_queryset(self):
-		return company.objects.filter(User=self.request.user)
+		return company.objects.filter(User=self.request.user).order_by('id')
 
 	def get_context_data(self, **kwargs):
 		context = super(companyListView, self).get_context_data(**kwargs)

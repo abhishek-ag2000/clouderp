@@ -103,7 +103,7 @@
                       <th>Group Name</th>
                       <th>Category</th>
                       <th>Nature</th>
-                      <th>Balance Nature</th>
+                     
                       
                     </tr>
 
@@ -114,7 +114,6 @@
                       </a></td>
                       <td><a href="{% url 'accounting_double_entry:groupdetail' pk1=company_details.pk pk2=group1.pk pk3=selectdatefield_details.pk %}">{{group1.group_Name}}</a></td>
                       <td><a href="{% url 'accounting_double_entry:groupdetail' pk1=company_details.pk pk2=group1.pk pk3=selectdatefield_details.pk %}">{{group1.Master}}</a></td>
-                      <td><a href="{% url 'accounting_double_entry:groupdetail' pk1=company_details.pk pk2=group1.pk pk3=selectdatefield_details.pk %}">{{group1.Nature_of_group1}}</a></td>
                       <td><a href="{% url 'accounting_double_entry:groupdetail' pk1=company_details.pk pk2=group1.pk pk3=selectdatefield_details.pk %}">{{group1.balance_nature}}</a></td>
                     </tr>
                     {% endfor %}

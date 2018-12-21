@@ -391,9 +391,9 @@
 																<th><center></center></th>
 																<th><center>Total:</center></th>
 																<th><center></center></th>
-																
-																<th><center>{{ total_debit|floatformat:2|abs }}</center></th> 
-																
+																{% if total_debit %}
+																	<th><center>{{ total_debit|floatformat:2|abs }}</center></th> 
+																{% endif %}
 																
 
 																	
@@ -493,6 +493,7 @@
 															</tr>
 
 														{% endif %}
+														
 													{% else %}
 
 														{% if closing_balance > 0 %}
@@ -503,7 +504,7 @@
 																<th><center>Total:</center></th>
 																<th><center></center></th>
 																
-																<th><center>{{ total_credit|floatformat:2|abs }}</center></th> 
+																<th><center>{{ total_debit|floatformat:2|abs }}</center></th> 
 																
 																	
 
@@ -512,8 +513,8 @@
 																<th><center></center></th>
 																<th><center>Total:</center></th>
 																<th><center></center></th>
-																{% if total_debit %}
-																	<th><center>{{ total_debit|add:closing_balance|add:opening_balance|floatformat:2|abs }}</center></th>
+																{% if total_credit %}
+																	<th><center>{{ total_credit|add:closing_balance|add:opening_balance|floatformat:2|abs }}</center></th>
 																{% else %}
 
 																	<th><center>{{ closing_balance|add:opening_balance|floatformat:2|abs }}</center></th>

@@ -68,4 +68,10 @@ urlpatterns = [
 
 	url(r'^company/(?P<pk>\d+)/trialbalance/date/(?P<pk3>\d+)/$',views.trial_balance_view,name='trialbal'),
 
+################################### Balance Sheet Url #######################################
+
+	
+	url(r'^company/(?P<pk>\d+)/balancesheet/date/(?P<pk3>\d+)/$',views.balance_sheet_view,name='balsht'),
+
 ]
+

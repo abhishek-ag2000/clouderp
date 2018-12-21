@@ -585,9 +585,9 @@
                 </span>
               </a>
               <ul class="treeview-menu">
-                <li><a href="{% url 'stockkeeping:profitloss' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Profit & Loss Overview</a></li>
+                <li><a href="{% url 'accounting_double_entry:P&Lcond' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Profit & Loss Overview</a></li>
                 
-                  <li><a href="{% url 'accounting_double_entry:grouplist' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Profit & Loss Schedule III</a></li>
+                  <li><a href="{% url 'accounting_double_entry:P&Lcond' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Profit & Loss Schedule III</a></li>
                  
                    
               </ul>
@@ -601,7 +601,7 @@
               </a>
               <ul class="treeview-menu">
                
-                 <li><a href="{% url 'accounting_double_entry:create' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Balance Sheet Overview</a></li>
+                 <li><a href="{% url 'accounting_double_entry:blsht' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Balance Sheet Overview</a></li>
                    <li><a href="{% url 'accounting_double_entry:list' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Balance Sheet Schedule III</a></li>
                  
                    
@@ -697,7 +697,7 @@
 
 
 <aside class="control-sidebar control-sidebar-dark">
-{% block control-sidebar%}
+{% block control-sidebar %}
     <!-- Create the tabs -->
     <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
       <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
