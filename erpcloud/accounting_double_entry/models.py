@@ -223,37 +223,6 @@ def create_default_groups30(sender, instance, created, **kwargs):
 		group1.objects.create(User=instance.User,Company=instance,group_Name='Unsecured Loans',Master=instance.Company_group.get(group_Name='Loans (Liability)'),Nature_of_group1='Not Applicable',balance_nature='Credit',Group_behaves_like_a_Sub_Group=False,Nett_Debit_or_Credit_Balances_for_Reporting=False)
 
 
-# def balance_master(master_level):
-# 	if master_level == "Fixed Assets":
-# 		bal_nat = "Debit"
-# 	elif master_level == "Current Assets":
-# 		bal_nat = "Debit"
-# 	elif master_level == "Current Liabilities":
-# 		bal_nat = "Credit"
-# 	elif master_level == "Capital A/c":
-# 		bal_nat = "Credit"
-# 	elif master_level == "Loans (Liability)":
-# 		bal_nat = "Credit"
-# 	elif master_level == "Direct Incomes":
-# 		bal_nat = "Credit"
-# 	elif master_level == "Indirect Incomes":
-# 		bal_nat = "Credit"
-# 	elif master_level == "Indirect Expenses":
-# 		bal_nat = "Debit"
-# 	elif master_level == "Direct Expenses":
-# 		bal_nat = "Debit"
-# 	else:
-# 		bal_nat = "Not Applicable"
-# 	return bal_nat
-	
-
-# @receiver(pre_save, sender=group1)
-# def update_user_balance_nature(sender,instance,*args,**kwargs):
-# 	balance_nature = balance_master(instance.Master)
-# 	instance.balance_nature = balance_nature
-
-
-
 class ledger1(models.Model):
 	User 			= models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,null=True,blank=True)
 	Company 		= models.ForeignKey(company,on_delete=models.CASCADE,null=True,blank=True,related_name='Companys')

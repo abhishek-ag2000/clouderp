@@ -376,7 +376,7 @@
                       {% if total_credit_closing < total_debit_closing %} 
 
                         <tr>
-                          <th>Diffrence in opening Balance</th>
+                          <th>Difference in opening Balance</th>
                           <td></td>
                           <th>{{ total_credit_closing|sub:total_debit_closing|floatformat:2|abs }}</th>
                           <td></td>
@@ -390,7 +390,7 @@
                           <th></th>
                           <td></td>
                           <th></th>
-                          <th>Diffrence in opening Balance</th>
+                          <th>Difference in opening Balance</th>
                           <td></td>
                           <th>{{ total_credit_closing|sub:total_debit_closing|floatformat:2|abs }}</th>
                         </tr> 
@@ -399,26 +399,55 @@
 
 
 
-                      {% if total_credit_closing < total_debit_closing or nett_profit >= 0 %}
-                        <tr>
-                          <th>Grand Total</th>
-                          <td></td>
-                          <th>______________<br>{{total_debit_closing|sub:total_credit_closing|add:total_liabilities|add:nett_profit|floatformat:2|abs }}<br>______________</th>
-                          <th>Grand Total</th>
-                          <td></td>
-                          <th>______________<br>{{ total_asset|floatformat:2|abs }}<br>______________</th>
-                        </tr>
+                      {% if total_credit_closing < total_debit_closing %}
+
+                        {% if nett_profit >= 0 %}
+                          <tr>
+                            <th>Grand Total</th>
+                            <td></td>
+                            <th>______________<br>{{total_debit_closing|sub:total_credit_closing|add:total_liabilities|add:nett_profit|floatformat:2|abs }}<br>______________</th>
+                            <th>Grand Total</th>
+                            <td></td>
+                            <th>______________<br>{{ total_asset|floatformat:2|abs }}<br>______________</th>
+                          </tr>
+
+                        {% else %}
+
+                          <tr>
+                            <th>Grand Total</th>
+                            <td></td>
+                            <th>______________<br>{{total_debit_closing|sub:total_credit_closing|add:total_liabilities|floatformat:2|abs }}<br>______________</th>
+                            <th>Grand Total</th>
+                            <td></td>
+                            <th>______________<br>{{ total_asset|add:nett_profit|floatformat:2|abs }}<br>______________</th>
+                          </tr>
+
+                        {% endif %}
 
                       {% else %}
 
-                        <tr>
-                          <th>Grand Total</th>
-                          <td></td>
-                          <th>______________<br>{{ total_liabilities|floatformat:2|abs }}<br>______________</th>
-                          <th>Grand Total</th>
-                          <td></td>
-                          <th>______________<br>{{ total_asset|add:total_credit_closing|sub:total_debit_closing|add:nett_profit|floatformat:2|abs }}<br>______________</th>
-                        </tr>
+                        {% if nett_profit >= 0 %}
+
+                          <tr>
+                            <th>Grand Total</th>
+                            <td></td>
+                            <th>______________<br>{{ total_liabilities|add:nett_profit|floatformat:2|abs }}<br>______________</th>
+                            <th>Grand Total</th>
+                            <td></td>
+                            <th>______________<br>{{ total_asset|add:total_credit_closing|sub:total_debit_closing|floatformat:2|abs }}<br>______________</th>
+                          </tr>
+
+                        {% else %}
+
+                          <tr>
+                            <th>Grand Total</th>
+                            <td></td>
+                            <th>______________<br>{{ total_liabilities|floatformat:2|abs }}<br>______________</th>
+                            <th>Grand Total</th>
+                            <td></td>
+                            <th>______________<br>{{ total_asset|add:total_credit_closing|sub:total_debit_closing|add:nett_profit|floatformat:2|abs }}<br>______________</th>
+                          </tr>
+                        {% endif %}
 
                       {% endif %}
 

@@ -716,7 +716,7 @@ class Purchase_updateview(LoginRequiredMixin,UpdateView):
 		data = super(Purchase_updateview, self).get_form_kwargs()
 		data.update(
 			User=self.request.user,
-			Company=company.objects.get(pk=self.kwargs['pk'])
+			Company=company.objects.get(pk=self.kwargs['pk1'])
 			)
 		return data
 
@@ -891,7 +891,7 @@ class Sales_updateview(LoginRequiredMixin,UpdateView):
 			if stocksales.is_valid():
 				stocksales.instance = self.object
 				stocksales.save()
-		return super(Sales_createview, self).form_valid(form)
+		return super(Sales_updateview, self).form_valid(form)
 
 	def get_form_kwargs(self):
 		data = super(Sales_updateview, self).get_form_kwargs()

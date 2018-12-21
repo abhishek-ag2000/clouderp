@@ -269,12 +269,12 @@
                         </thead>
 
                     {% for form in stocksales.forms %}
-                      {{ form.id }}
+                      
                 
 
                       
                         <tr class='{% cycle "row1" "row2" %}  formset_row'>
-                          <td class="col-md-2">{{ form.stockitem}}</td>
+                          <td class="col-md-2">{{ form.id }} {{ form.stockitem}}</td>
                           <td class="col-md-1">{{ form.Quantity}}</td>
                           <td class="col-md-2">{{ form.rate}}</td>
                           <td class="col-md-1">{{ form.Disc}}</td>

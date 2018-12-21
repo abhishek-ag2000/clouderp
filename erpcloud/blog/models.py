@@ -50,9 +50,13 @@ class Blog(models.Model):
 
 
 	def save(self, *args, **kwargs):
-		if self.Blog_image:
-			self.Blog_image = get_thumbnail(self.Blog_image, '900x300', quality=600, format='JPEG').url
-			super(Blog, self).save(*args, **kwargs)
+		imageTemproary = Image.open(self.Blog_image)
+		outputIoStream = BytesIO()
+		imageTemproaryResized = imageTemproary.resize( (900,300) ) 
+		imageTemproaryResized.save(outputIoStream , format='JPEG', quality=150)
+		outputIoStream.seek(0)
+		self.Blog_image = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" %self.Blog_image.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
+		super(Blog, self).save(*args, **kwargs)
 
 	class Meta:
 		ordering = ['-id']
