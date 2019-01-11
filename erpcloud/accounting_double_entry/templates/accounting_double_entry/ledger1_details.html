@@ -218,6 +218,60 @@
 
 									{% endif %}
 
+								
+									{% if n %}
+
+										{% for i in n %}
+
+											<tr>
+												{% for j in i|slice:"0:1" %}
+													{% if j == None %}
+
+														<th><center></center></th>
+														<th><center></center></th>
+														<th><center></center></th>
+														<th><center></center></th>
+														<th><center></center></th>
+
+													{% else %}
+													
+														<th><center>{{ j.Date}}</center></th>
+														<th><center>To</center></th>
+														<th><center><a href="{% url 'accounting_double_entry:detail' pk1=company_details.pk pk2=j.pk pk3=selectdatefield_details.pk %}">{{j.To}}</a></center></th>
+														<th><center>{{ j.id }}</center></th>
+														<th><center>{{j.Debit}}</center></th>
+
+													{% endif %}
+												{% endfor %}
+
+												{% for k in i|slice:"1:2" %}
+
+													
+														{% if k == None %}
+
+															<th><center></center></th>
+															<th><center></center></th>
+															<th><center></center></th>
+															<th><center></center></th>
+															<th><center></center></th>
+
+														{% else %}
+
+															<th><center>{{ k.Date}}</center></th>
+															<th><center>By</center></th>
+															<th><center><a href="{% url 'accounting_double_entry:detail' pk1=company_details.pk pk2=k.pk pk3=selectdatefield_details.pk %}">{{k.By}}</a></center></th>
+															<th><center>{{ k.id }}</center></th>
+															<th><center>{{ k.Credit }}</center></th>
+															
+														{% endif %}
+										
+												{% endfor %}
+
+											</tr>
+										{% endfor %}
+
+									{% else %}
+
 										{% for journal in journal_debit %}
 		
 											<tr>
@@ -252,6 +306,10 @@
 												<th><center>{{journal.Credit}}</center></th>									
 											</tr>
 										{% endfor %}
+
+									{% endif %}
+								
+
 
 										{% if ledger1_details.group1_Name.balance_nature == 'Debit' %}
 
@@ -356,7 +414,7 @@
 																	<th><center>{{ closing_balance|floatformat:2|abs }}</center></th>
 																{% endif %} 
 															</tr>
-														{% else %}																													<tr>
+														{% else %}																										<tr>
 																<th><center></center></th>
 																<th><center></center></th>
 																<th><center>Total:</center></th>

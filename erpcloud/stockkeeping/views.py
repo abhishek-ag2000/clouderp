@@ -12,9 +12,10 @@ from userprofile.models import Profile
 from django.shortcuts import get_object_or_404
 from django.db import transaction
 from django.db.models.functions import Coalesce
-from django.db.models import Value, Sum, F, ExpressionWrapper
+from django.db.models import Value, Sum, F, ExpressionWrapper, Subquery, OuterRef
 from django.db.models.fields import DecimalField
 # Create your views here.
+
 
 
 ##################################### Simple Unit Views #####################################
@@ -446,19 +447,34 @@ class closing_list_view(LoginRequiredMixin,ListView):
 		context['selectdatefield_details'] = selectdatefield_details
 		qsstart = Stockdata.objects.filter(User=self.request.user, Company=company_details.pk, Date__lte=selectdatefield_details.Start_Date)
 		qs = Stockdata.objects.filter(User=self.request.user, Company=company_details.pk, Date__lte=selectdatefield_details.End_Date)
-		total = qs.annotate(the_sum=Coalesce(Sum('salestock__Quantity'),0)).values('the_sum')
-		total2 = qs.annotate(the_sum2=Coalesce(Sum('purchasestock__Quantity_p'),0)).values('the_sum2')
 		qs = qs.annotate(
-    		sales_sum = Coalesce(Sum('salestock__Quantity'),0),
-    		purchase_sum = Coalesce(Sum('purchasestock__Quantity_p'),0),
+    		sales_sum = Subquery(
+    			Stock_Total_sales.objects.filter(
+    				stockitem = OuterRef('pk')
+    				).values(
+    					'stockitem'
+    				).annotate(
+    					the_sum = Sum('Quantity')
+    				).values('the_sum')
+    			),
+    		purchase_sum = Subquery(
+    			Stock_Total.objects.filter(
+    				stockitem = OuterRef('pk')
+    				).values(
+    					'stockitem'
+    				).annotate(
+    					the_sum = Sum('Quantity_p')
+    				).values(
+    					'the_sum'
+    				)
+    			),
     		purchase_tot = Coalesce(Sum('purchasestock__Total_p'),0)
 		)
+
 		qs1 = qs.annotate(
-    		difference = ExpressionWrapper(F('purchase_sum') - F('sales_sum'), output_field=DecimalField()),
-    		total = ExpressionWrapper((F('purchase_tot') / F('purchase_sum')) * (F('purchase_sum') - F('sales_sum')), output_field=DecimalField())
+	    	difference = ExpressionWrapper(F('purchase_sum') - F('sales_sum'), output_field=DecimalField()),
+	    	total = ExpressionWrapper((F('purchase_tot') / F('purchase_sum')) * (F('purchase_sum') - F('sales_sum')), output_field=DecimalField())
 		) 
-		context['Totalquantitysales'] = total
-		context['Totalquantitypurchase'] = total2
 		context['Totalquantity'] = qs1.values()
 		return context
 
@@ -608,7 +624,7 @@ class Purchase_listview(LoginRequiredMixin,ListView):
 
 	def get_queryset(self):
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
-		return self.model.objects.filter(User=self.request.user, Company=self.kwargs['pk'], date__gte=selectdatefield_details.Start_Date, date__lte=selectdatefield_details.End_Date)
+		return self.model.objects.filter(User=self.request.user, Company=self.kwargs['pk'], date__gte=selectdatefield_details.Start_Date, date__lte=selectdatefield_details.End_Date).order_by('-id')
 
 	def get_context_data(self, **kwargs):
 		context = super(Purchase_listview, self).get_context_data(**kwargs) 
@@ -764,7 +780,7 @@ class Sales_listview(LoginRequiredMixin,ListView):
 
 	def get_queryset(self):
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
-		return self.model.objects.filter(User=self.request.user, Company=self.kwargs['pk'], date__gte=selectdatefield_details.Start_Date, date__lte=selectdatefield_details.End_Date)
+		return self.model.objects.filter(User=self.request.user, Company=self.kwargs['pk'], date__gte=selectdatefield_details.Start_Date, date__lte=selectdatefield_details.End_Date).order_by('-id')
 
 	def get_context_data(self, **kwargs):
 		context = super(Sales_listview, self).get_context_data(**kwargs) 
@@ -938,29 +954,42 @@ def profit_and_loss_view(request,pk,pk3):
 
 	# closing stock
 	qs = Stockdata.objects.filter(User=request.user, Company=company_details.pk, Date__lte=selectdatefield_details.End_Date)
-	total = qs.annotate(the_sum=Coalesce(Sum('salestock__Quantity'),0)).values('the_sum')
-	total2 = qs.annotate(the_sum2=Coalesce(Sum('purchasestock__Quantity_p'),0)).values('the_sum2')
 	qs = qs.annotate(
-    	sales_sum = Coalesce(Sum('salestock__Quantity'),0),
-    	purchase_sum = Coalesce(Sum('purchasestock__Quantity_p'),0),
-    	purchase_tot = Coalesce(Sum('purchasestock__Total_p'),0)
-	)
+    		sales_sum = Subquery(
+    			Stock_Total_sales.objects.filter(
+    				stockitem = OuterRef('pk')
+    				).values(
+    					'stockitem'
+    				).annotate(
+    					the_sum = Sum('Quantity')
+    				).values('the_sum')
+    			),
+    		purchase_sum = Coalesce(Sum('purchasestock__Quantity_p'),0),
+    		purchase_tot = Coalesce(Sum('purchasestock__Total_p'),0)
+		)
+
 	qs1 = qs.annotate(
-    	difference = ExpressionWrapper(F('purchase_sum') - F('sales_sum'), output_field=DecimalField()),
-    	total = ExpressionWrapper((F('purchase_tot') / F('purchase_sum')) * (F('purchase_sum') - F('sales_sum')), output_field=DecimalField())
+	    	difference = ExpressionWrapper(F('purchase_sum') - F('sales_sum'), output_field=DecimalField()),
+	    	total = ExpressionWrapper((F('purchase_tot') / F('purchase_sum')) * (F('purchase_sum') - F('sales_sum')), output_field=DecimalField())
 		) 
 
 	qs2 = qs1.aggregate(the_sum=Coalesce(Sum('total'), Value(0)))['the_sum']
 
 	# opening stock
 	qo = Stockdata.objects.filter(User=request.user, Company=company_details.pk, Date__lte=selectdatefield_details.Start_Date)
-	totalo = qo.annotate(the_sum=Coalesce(Sum('salestock__Quantity'),0)).values('the_sum')
-	totalo2 = qo.annotate(the_sum2=Coalesce(Sum('purchasestock__Quantity_p'),0)).values('the_sum2')
 	qo = qo.annotate(
-    	sales_sum = Coalesce(Sum('salestock__Quantity'),0),
-    	purchase_sum = Coalesce(Sum('purchasestock__Quantity_p'),0),
-    	purchase_tot = Coalesce(Sum('purchasestock__Total_p'),0)
-	)
+    		sales_sum = Subquery(
+    			Stock_Total_sales.objects.filter(
+    				stockitem = OuterRef('pk')
+    				).values(
+    					'stockitem'
+    				).annotate(
+    					the_sum = Sum('Quantity')
+    				).values('the_sum')
+    			),
+    		purchase_sum = Coalesce(Sum('purchasestock__Quantity_p'),0),
+    		purchase_tot = Coalesce(Sum('purchasestock__Total_p'),0)
+		)
 	qo1 = qo.annotate(
     	difference = ExpressionWrapper(F('purchase_sum') - F('sales_sum'), output_field=DecimalField()),
     	total = ExpressionWrapper((F('purchase_tot') / F('purchase_sum')) * (F('purchase_sum') - F('sales_sum')), output_field=DecimalField())
@@ -1063,13 +1092,19 @@ def trial_balance_view(request,pk,pk3):
 
 	# opening stock
 	qo = Stockdata.objects.filter(User=request.user, Company=company_details.pk, Date__lte=selectdatefield_details.Start_Date)
-	totalo = qo.annotate(the_sum=Coalesce(Sum('salestock__Quantity'),0)).values('the_sum')
-	totalo2 = qo.annotate(the_sum2=Coalesce(Sum('purchasestock__Quantity_p'),0)).values('the_sum2')
 	qo = qo.annotate(
-    	sales_sum = Coalesce(Sum('salestock__Quantity'),0),
-    	purchase_sum = Coalesce(Sum('purchasestock__Quantity_p'),0),
-    	purchase_tot = Coalesce(Sum('purchasestock__Total_p'),0)
-	)
+    		sales_sum = Subquery(
+    			Stock_Total_sales.objects.filter(
+    				stockitem = OuterRef('pk')
+    				).values(
+    					'stockitem'
+    				).annotate(
+    					the_sum = Sum('Quantity')
+    				).values('the_sum')
+    			),
+    		purchase_sum = Coalesce(Sum('purchasestock__Quantity_p'),0),
+    		purchase_tot = Coalesce(Sum('purchasestock__Total_p'),0)
+		)
 	qo1 = qo.annotate(
     	difference = ExpressionWrapper(F('purchase_sum') - F('sales_sum'), output_field=DecimalField()),
     	total = ExpressionWrapper((F('purchase_tot') / F('purchase_sum')) * (F('purchase_sum') - F('sales_sum')), output_field=DecimalField())
@@ -1222,30 +1257,42 @@ def balance_sheet_view(request,pk,pk3):
 
 	# closing stock
 	qs = Stockdata.objects.filter(User=request.user, Company=company_details.pk, Date__lte=selectdatefield_details.End_Date)
-	total = qs.annotate(the_sum=Coalesce(Sum('salestock__Quantity'),0)).values('the_sum')
-	total2 = qs.annotate(the_sum2=Coalesce(Sum('purchasestock__Quantity_p'),0)).values('the_sum2')
 	qs = qs.annotate(
-    	sales_sum = Coalesce(Sum('salestock__Quantity'),0),
-    	purchase_sum = Coalesce(Sum('purchasestock__Quantity_p'),0),
-    	purchase_tot = Coalesce(Sum('purchasestock__Total_p'),0)
-	)
+    		sales_sum = Subquery(
+    			Stock_Total_sales.objects.filter(
+    				stockitem = OuterRef('pk')
+    				).values(
+    					'stockitem'
+    				).annotate(
+    					the_sum = Sum('Quantity')
+    				).values('the_sum')
+    			),
+    		purchase_sum = Coalesce(Sum('purchasestock__Quantity_p'),0),
+    		purchase_tot = Coalesce(Sum('purchasestock__Total_p'),0)
+		)
+
 	qs1 = qs.annotate(
-    	difference = ExpressionWrapper(F('purchase_sum') - F('sales_sum'), output_field=DecimalField()),
-    	total = ExpressionWrapper((F('purchase_tot') / F('purchase_sum')) * (F('purchase_sum') - F('sales_sum')), output_field=DecimalField())
+	    	difference = ExpressionWrapper(F('purchase_sum') - F('sales_sum'), output_field=DecimalField()),
+	    	total = ExpressionWrapper((F('purchase_tot') / F('purchase_sum')) * (F('purchase_sum') - F('sales_sum')), output_field=DecimalField())
 		) 
 
 	qs2 = qs1.aggregate(the_sum=Coalesce(Sum('total'), Value(0)))['the_sum']
 
-
 	# opening stock
 	qo = Stockdata.objects.filter(User=request.user, Company=company_details.pk, Date__lte=selectdatefield_details.Start_Date)
-	totalo = qo.annotate(the_sum=Coalesce(Sum('salestock__Quantity'),0)).values('the_sum')
-	totalo2 = qo.annotate(the_sum2=Coalesce(Sum('purchasestock__Quantity_p'),0)).values('the_sum2')
 	qo = qo.annotate(
-    	sales_sum = Coalesce(Sum('salestock__Quantity'),0),
-    	purchase_sum = Coalesce(Sum('purchasestock__Quantity_p'),0),
-    	purchase_tot = Coalesce(Sum('purchasestock__Total_p'),0)
-	)
+    		sales_sum = Subquery(
+    			Stock_Total_sales.objects.filter(
+    				stockitem = OuterRef('pk')
+    				).values(
+    					'stockitem'
+    				).annotate(
+    					the_sum = Sum('Quantity')
+    				).values('the_sum')
+    			),
+    		purchase_sum = Coalesce(Sum('purchasestock__Quantity_p'),0),
+    		purchase_tot = Coalesce(Sum('purchasestock__Total_p'),0)
+		)
 	qo1 = qo.annotate(
     	difference = ExpressionWrapper(F('purchase_sum') - F('sales_sum'), output_field=DecimalField()),
     	total = ExpressionWrapper((F('purchase_tot') / F('purchase_sum')) * (F('purchase_sum') - F('sales_sum')), output_field=DecimalField())
@@ -1382,7 +1429,7 @@ def balance_sheet_view(request,pk,pk3):
 
 	if total_brchtcb < 0 and total_cacb < 0 and total_culiacb < 0 and total_loncb < 0 and total_suscb < 0 and total_curastcb < 0 and total_fxdastcb < 0:
 		total_liabilities = abs(total_curastcb) + abs(total_fxdastcb)
-		total_asset = abs(total_brchtcb) + abs(total_cacb) + abs(total_culiacb) + abs(total_loncb) + abs(total_suscb)		
+		total_asset = abs(total_brchtcb) + abs(total_cacb) + abs(total_culiacb) + abs(total_loncb) + abs(total_suscb)	
 	
 	elif total_brchtcb < 0:
 		total_liabilities = total_cacb + total_culiacb + total_loncb + total_suscb
@@ -1522,9 +1569,6 @@ def balance_sheet_view(request,pk,pk3):
 
 
 	return render(request, 'stockkeeping/balance_sheet.html', context)
-
-
-
 
 
 

@@ -205,7 +205,7 @@
 
           <hr>
     
-          {% if blog_details.User == request.user %}
+          {% if blog_details.User == user %}
               <p><a class='btn btn-warning' href="{% url 'blog:blogupdate' pk=blog_details.pk %}">Update This Blog</a>
                 <a class='btn btn-danger pull-right' href="{% url 'blog:blogdelete' pk=blog_details.pk %}">Delete This Blog</a></p>
 

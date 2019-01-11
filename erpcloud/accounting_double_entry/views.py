@@ -7,17 +7,19 @@ from accounting_double_entry.models import group1,ledger1,journal,selectdatefiel
 from stockkeeping.models import Stockgroup,Simpleunits,Compoundunits,Stockdata,Purchase,Sales,Stock_Total,Stock_Total_sales
 from accounting_double_entry.forms import journalForm,group1Form,Ledgerform,DateRangeForm
 from userprofile.models import Profile
-from django.db.models import Sum
 from company.models import company
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from django.db.models import F, ExpressionWrapper
+from django.db.models import F, ExpressionWrapper, Sum, Subquery, OuterRef
 from django.db.models.fields import DecimalField
 import datetime
 from django.db.models import Value
-from django.db.models.functions import Coalesce
+from django.db.models.functions import Coalesce 
+from itertools import zip_longest
+from bootstrap_modal_forms.mixins import PassRequestMixin, DeleteAjaxMixin          
+
 
 # Create your views here.
 ###################### Views For Group Display ############################################
@@ -31,7 +33,6 @@ class group1ListView(LoginRequiredMixin,ListView):
 
 	def get_context_data(self, **kwargs):
 		context = super(group1ListView, self).get_context_data(**kwargs) 
-		context['profile_details'] = Profile.objects.all()
 		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
@@ -56,7 +57,6 @@ class group1DetailView(LoginRequiredMixin,DetailView):
 
 	def get_context_data(self, **kwargs):
 		context = super(group1DetailView, self).get_context_data(**kwargs) 
-		context['profile_details'] = Profile.objects.all()
 		company_details = get_object_or_404(company, pk=self.kwargs['pk1'])
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
@@ -82,7 +82,6 @@ class group1CreateView(LoginRequiredMixin,CreateView):
 
 	def get_context_data(self, **kwargs):
 		context = super(group1CreateView, self).get_context_data(**kwargs) 
-		context['profile_details'] = Profile.objects.all()
 		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
@@ -111,15 +110,15 @@ class group1UpdateView(LoginRequiredMixin,UpdateView):
 
 	def get_context_data(self, **kwargs):
 		context = super(group1UpdateView, self).get_context_data(**kwargs) 
-		context['profile_details'] = Profile.objects.all()
 		company_details = get_object_or_404(company, pk=self.kwargs['pk1'])
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
 		return context
 
-class group1DeleteView(LoginRequiredMixin,DeleteView):
+class group1DeleteView(LoginRequiredMixin,DeleteAjaxMixin,DeleteView):
 	model = group1
+	success_message = 'This group is successfully deleted.'
 
 	def get_success_url(self,**kwargs):
 		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
@@ -136,7 +135,6 @@ class group1DeleteView(LoginRequiredMixin,DeleteView):
 
 	def get_context_data(self, **kwargs):
 		context = super(group1DeleteView, self).get_context_data(**kwargs) 
-		context['profile_details'] = Profile.objects.all()
 		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
@@ -175,13 +173,6 @@ def ledger1_detail_view(request, pk, pk2, pk3):
 	total_debitob = qsob.aggregate(the_sum=Coalesce(Sum('Debit'), Value(0)))['the_sum']
 	total_creditob = qsob2.aggregate(the_sum=Coalesce(Sum('Credit'), Value(0)))['the_sum']
 
-	# closing balance
-	qscb  = journal.objects.filter(User=request.user, Company=company_details.pk, By=ledger1_details.pk, Date__gte=selectdatefield_details.Start_Date, Date__lte=selectdatefield_details.End_Date)
-	qscb2 = journal.objects.filter(User=request.user, Company=company_details.pk, To=ledger1_details.pk, Date__gte=selectdatefield_details.Start_Date, Date__lte=selectdatefield_details.End_Date)	
-
-	total_debitcb = qscb.aggregate(the_sum=Coalesce(Sum('Debit'), Value(0)))['the_sum']
-	total_creditcb = qscb2.aggregate(the_sum=Coalesce(Sum('Credit'), Value(0)))['the_sum']
-	
 	if(ledger1_details.Creation_Date!=selectdatefield_details.Start_Date):
 		if(ledger1_details.group1_Name.balance_nature == 'Debit'):
 			opening_balance = abs(ledger1_details.Opening_Balance) + abs(total_debitob) - abs(total_creditob)
@@ -189,6 +180,15 @@ def ledger1_detail_view(request, pk, pk2, pk3):
 			opening_balance = abs(ledger1_details.Opening_Balance) + abs(total_creditob) - abs(total_debitob) 
 	else:
 		opening_balance = abs(ledger1_details.Opening_Balance)
+
+	# closing balance
+	qscb  = journal.objects.filter(User=request.user, Company=company_details.pk, By=ledger1_details.pk, Date__gte=selectdatefield_details.Start_Date, Date__lte=selectdatefield_details.End_Date)
+	qscb2 = journal.objects.filter(User=request.user, Company=company_details.pk, To=ledger1_details.pk, Date__gte=selectdatefield_details.Start_Date, Date__lte=selectdatefield_details.End_Date)	
+	new   = zip_longest(qscb,qscb2)
+
+	total_debitcb = qscb.aggregate(the_sum=Coalesce(Sum('Debit'), Value(0)))['the_sum']
+	total_creditcb = qscb2.aggregate(the_sum=Coalesce(Sum('Credit'), Value(0)))['the_sum']
+	
 
 	if(ledger1_details.group1_Name.balance_nature == 'Debit'):
 		closing_balance = abs(opening_balance) + abs(total_debitcb) - abs(total_creditcb)
@@ -210,6 +210,7 @@ def ledger1_detail_view(request, pk, pk2, pk3):
 		'total_credit'    : abs(total_creditcb),
 		'journal_debit'   : qscb,
 		'journal_credit'  : qscb2,
+		'n'				  : new,
 		'closing_balance' : closing_balance,
 		'opening_balance' : opening_balance,		
 		'company_list'    : company.objects.all(),
@@ -245,7 +246,6 @@ class ledger1CreateView(LoginRequiredMixin,CreateView):
 
 	def get_context_data(self, **kwargs):
 		context = super(ledger1CreateView, self).get_context_data(**kwargs) 
-		context['profile_details'] = Profile.objects.all()
 		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
@@ -282,7 +282,6 @@ class ledger1UpdateView(LoginRequiredMixin,UpdateView):
 
 	def get_context_data(self, **kwargs):
 		context = super(ledger1UpdateView, self).get_context_data(**kwargs) 
-		context['profile_details'] = Profile.objects.all()
 		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
@@ -309,7 +308,6 @@ class ledger1DeleteView(LoginRequiredMixin,DeleteView):
 
 	def get_context_data(self, **kwargs):
 		context = super(ledger1DeleteView, self).get_context_data(**kwargs) 
-		context['profile_details'] = Profile.objects.all()
 		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
@@ -327,7 +325,7 @@ class journalListView(LoginRequiredMixin,ListView):
 
 	def get_queryset(self):
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
-		return journal.objects.filter(User=self.request.user, Company=self.kwargs['pk'], Date__gte=selectdatefield_details.Start_Date, Date__lte=selectdatefield_details.End_Date)
+		return journal.objects.filter(User=self.request.user, Company=self.kwargs['pk'], Date__gte=selectdatefield_details.Start_Date, Date__lte=selectdatefield_details.End_Date).order_by('-id')
 
 
 	def get_context_data(self, **kwargs):
@@ -381,7 +379,6 @@ class journalCreateView(LoginRequiredMixin,CreateView):
 
 	def get_context_data(self, **kwargs):
 		context = super(journalCreateView, self).get_context_data(**kwargs) 
-		context['profile_details'] = Profile.objects.all()
 		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
@@ -416,7 +413,6 @@ class journalUpdateView(LoginRequiredMixin,UpdateView):
 
 	def get_context_data(self, **kwargs):
 		context = super(journalUpdateView, self).get_context_data(**kwargs) 
-		context['profile_details'] = Profile.objects.all()
 		company_details = get_object_or_404(company, pk=self.kwargs['pk1'])
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
@@ -441,7 +437,6 @@ class journalDeleteView(LoginRequiredMixin,DeleteView):
 
 	def get_context_data(self, **kwargs):
 		context = super(journalDeleteView, self).get_context_data(**kwargs) 
-		context['profile_details'] = Profile.objects.all()
 		company_details = get_object_or_404(company, pk=self.kwargs['pk1'])
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
@@ -469,6 +464,7 @@ class dateupdateview(LoginRequiredMixin,UpdateView):
 	def get_success_url(self,**kwargs):
 		return reverse('company:list')
 
+
 ################## Views For Profit & Loss Display ###################################
 
 @login_required
@@ -478,29 +474,42 @@ def profit_and_loss_condensed_view(request,pk,pk3):
 
 	# closing stock
 	qs = Stockdata.objects.filter(User=request.user, Company=company_details.pk, Date__lte=selectdatefield_details.End_Date)
-	total = qs.annotate(the_sum=Coalesce(Sum('salestock__Quantity'),0)).values('the_sum')
-	total2 = qs.annotate(the_sum2=Coalesce(Sum('purchasestock__Quantity_p'),0)).values('the_sum2')
 	qs = qs.annotate(
-    	sales_sum = Coalesce(Sum('salestock__Quantity'),0),
-    	purchase_sum = Coalesce(Sum('purchasestock__Quantity_p'),0),
-    	purchase_tot = Coalesce(Sum('purchasestock__Total_p'),0)
-	)
+    		sales_sum = Subquery(
+    			Stock_Total_sales.objects.filter(
+    				stockitem = OuterRef('pk')
+    				).values(
+    					'stockitem'
+    				).annotate(
+    					the_sum = Sum('Quantity')
+    				).values('the_sum')
+    			),
+    		purchase_sum = Coalesce(Sum('purchasestock__Quantity_p'),0),
+    		purchase_tot = Coalesce(Sum('purchasestock__Total_p'),0)
+		)
+
 	qs1 = qs.annotate(
-    	difference = ExpressionWrapper(F('purchase_sum') - F('sales_sum'), output_field=DecimalField()),
-    	total = ExpressionWrapper((F('purchase_tot') / F('purchase_sum')) * (F('purchase_sum') - F('sales_sum')), output_field=DecimalField())
+	    	difference = ExpressionWrapper(F('purchase_sum') - F('sales_sum'), output_field=DecimalField()),
+	    	total = ExpressionWrapper((F('purchase_tot') / F('purchase_sum')) * (F('purchase_sum') - F('sales_sum')), output_field=DecimalField())
 		) 
 
 	qs2 = qs1.aggregate(the_sum=Coalesce(Sum('total'), Value(0)))['the_sum']
 
 	# opening stock
 	qo = Stockdata.objects.filter(User=request.user, Company=company_details.pk, Date__lte=selectdatefield_details.Start_Date)
-	totalo = qo.annotate(the_sum=Coalesce(Sum('salestock__Quantity'),0)).values('the_sum')
-	totalo2 = qo.annotate(the_sum2=Coalesce(Sum('purchasestock__Quantity_p'),0)).values('the_sum2')
 	qo = qo.annotate(
-    	sales_sum = Coalesce(Sum('salestock__Quantity'),0),
-    	purchase_sum = Coalesce(Sum('purchasestock__Quantity_p'),0),
-    	purchase_tot = Coalesce(Sum('purchasestock__Total_p'),0)
-	)
+    		sales_sum = Subquery(
+    			Stock_Total_sales.objects.filter(
+    				stockitem = OuterRef('pk')
+    				).values(
+    					'stockitem'
+    				).annotate(
+    					the_sum = Sum('Quantity')
+    				).values('the_sum')
+    			),
+    		purchase_sum = Coalesce(Sum('purchasestock__Quantity_p'),0),
+    		purchase_tot = Coalesce(Sum('purchasestock__Total_p'),0)
+		)
 	qo1 = qo.annotate(
     	difference = ExpressionWrapper(F('purchase_sum') - F('sales_sum'), output_field=DecimalField()),
     	total = ExpressionWrapper((F('purchase_tot') / F('purchase_sum')) * (F('purchase_sum') - F('sales_sum')), output_field=DecimalField())
@@ -609,13 +618,19 @@ def trial_balance_condensed_view(request,pk,pk3):
 
 	# opening stock
 	qo = Stockdata.objects.filter(User=request.user, Company=company_details.pk, Date__lte=selectdatefield_details.Start_Date)
-	totalo = qo.annotate(the_sum=Coalesce(Sum('salestock__Quantity'),0)).values('the_sum')
-	totalo2 = qo.annotate(the_sum2=Coalesce(Sum('purchasestock__Quantity_p'),0)).values('the_sum2')
 	qo = qo.annotate(
-    	sales_sum = Coalesce(Sum('salestock__Quantity'),0),
-    	purchase_sum = Coalesce(Sum('purchasestock__Quantity_p'),0),
-    	purchase_tot = Coalesce(Sum('purchasestock__Total_p'),0)
-	)
+    		sales_sum = Subquery(
+    			Stock_Total_sales.objects.filter(
+    				stockitem = OuterRef('pk')
+    				).values(
+    					'stockitem'
+    				).annotate(
+    					the_sum = Sum('Quantity')
+    				).values('the_sum')
+    			),
+    		purchase_sum = Coalesce(Sum('purchasestock__Quantity_p'),0),
+    		purchase_tot = Coalesce(Sum('purchasestock__Total_p'),0)
+		)
 	qo1 = qo.annotate(
     	difference = ExpressionWrapper(F('purchase_sum') - F('sales_sum'), output_field=DecimalField()),
     	total = ExpressionWrapper((F('purchase_tot') / F('purchase_sum')) * (F('purchase_sum') - F('sales_sum')), output_field=DecimalField())
@@ -678,10 +693,8 @@ def trial_balance_condensed_view(request,pk,pk3):
 	total_credit_opening = pocrob + abs(negdebob)
 
 
-
-
-
 	context = {
+
 		'company_details' : company_details,
 		'selectdatefield_details' : selectdatefield_details,
 		'opening_stock' : qo2,
@@ -693,6 +706,7 @@ def trial_balance_condensed_view(request,pk,pk3):
 
 		'total_credit_closing' : total_credit_closing,
 		'total_credit_opening' : total_credit_opening,
+
 	}
 
 	return render(request, 'accounting_double_entry/trial_bal_condendensed.html', context)
@@ -773,37 +787,48 @@ def balance_sheet_condensed_view(request,pk,pk3):
 
 	# closing stock
 	qs = Stockdata.objects.filter(User=request.user, Company=company_details.pk, Date__lte=selectdatefield_details.End_Date)
-	total = qs.annotate(the_sum=Coalesce(Sum('salestock__Quantity'),0)).values('the_sum')
-	total2 = qs.annotate(the_sum2=Coalesce(Sum('purchasestock__Quantity_p'),0)).values('the_sum2')
 	qs = qs.annotate(
-    	sales_sum = Coalesce(Sum('salestock__Quantity'),0),
-    	purchase_sum = Coalesce(Sum('purchasestock__Quantity_p'),0),
-    	purchase_tot = Coalesce(Sum('purchasestock__Total_p'),0)
-	)
+    		sales_sum = Subquery(
+    			Stock_Total_sales.objects.filter(
+    				stockitem = OuterRef('pk')
+    				).values(
+    					'stockitem'
+    				).annotate(
+    					the_sum = Sum('Quantity')
+    				).values('the_sum')
+    			),
+    		purchase_sum = Coalesce(Sum('purchasestock__Quantity_p'),0),
+    		purchase_tot = Coalesce(Sum('purchasestock__Total_p'),0)
+		)
+
 	qs1 = qs.annotate(
-    	difference = ExpressionWrapper(F('purchase_sum') - F('sales_sum'), output_field=DecimalField()),
-    	total = ExpressionWrapper((F('purchase_tot') / F('purchase_sum')) * (F('purchase_sum') - F('sales_sum')), output_field=DecimalField())
+	    	difference = ExpressionWrapper(F('purchase_sum') - F('sales_sum'), output_field=DecimalField()),
+	    	total = ExpressionWrapper((F('purchase_tot') / F('purchase_sum')) * (F('purchase_sum') - F('sales_sum')), output_field=DecimalField())
 		) 
 
 	qs2 = qs1.aggregate(the_sum=Coalesce(Sum('total'), Value(0)))['the_sum']
 
-
 	# opening stock
 	qo = Stockdata.objects.filter(User=request.user, Company=company_details.pk, Date__lte=selectdatefield_details.Start_Date)
-	totalo = qo.annotate(the_sum=Coalesce(Sum('salestock__Quantity'),0)).values('the_sum')
-	totalo2 = qo.annotate(the_sum2=Coalesce(Sum('purchasestock__Quantity_p'),0)).values('the_sum2')
 	qo = qo.annotate(
-    	sales_sum = Coalesce(Sum('salestock__Quantity'),0),
-    	purchase_sum = Coalesce(Sum('purchasestock__Quantity_p'),0),
-    	purchase_tot = Coalesce(Sum('purchasestock__Total_p'),0)
-	)
+    		sales_sum = Subquery(
+    			Stock_Total_sales.objects.filter(
+    				stockitem = OuterRef('pk')
+    				).values(
+    					'stockitem'
+    				).annotate(
+    					the_sum = Sum('Quantity')
+    				).values('the_sum')
+    			),
+    		purchase_sum = Coalesce(Sum('purchasestock__Quantity_p'),0),
+    		purchase_tot = Coalesce(Sum('purchasestock__Total_p'),0)
+		)
 	qo1 = qo.annotate(
     	difference = ExpressionWrapper(F('purchase_sum') - F('sales_sum'), output_field=DecimalField()),
     	total = ExpressionWrapper((F('purchase_tot') / F('purchase_sum')) * (F('purchase_sum') - F('sales_sum')), output_field=DecimalField())
 		) 
 
 	qo2 = qo1.aggregate(the_sum=Coalesce(Sum('total'), Value(0)))['the_sum']
-
 
 
 

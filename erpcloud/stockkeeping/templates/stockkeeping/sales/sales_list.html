@@ -116,6 +116,7 @@
                       <th>Sale Type</th> 
                       <th>Billing Name</th>
                       <th>Total Amount</th>
+                      <th>Billed</th>
                     </tr>
 
                     {% for sales in sales_list %}
@@ -126,6 +127,7 @@
                       <td><a href="{% url 'stockkeeping:salesdetail' pk2=sales.pk pk1=company_details.pk pk3=selectdatefield_details.pk %}"">{{ sales.Party_ac }}</a></td>
                       <td> <a href="{% url 'stockkeeping:salesdetail' pk2=sales.pk pk1=company_details.pk pk3=selectdatefield_details.pk %}">{{ sales.billname }}</a></td>
                       <td> <a href="{% url 'stockkeeping:salesdetail' pk2=sales.pk pk1=company_details.pk pk3=selectdatefield_details.pk %}">{{ sales.Total_Amount }}</a></td>
+                      <td> <a href="{% url 'stockkeeping:salesdetail' pk2=sales.pk pk1=company_details.pk pk3=selectdatefield_details.pk %}">{{ sales.date|timesince }}</a></td>
                      
                     </tr>
                     {% endfor %}

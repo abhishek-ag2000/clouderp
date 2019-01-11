@@ -165,7 +165,7 @@
             <hr>
 
 
-            {% if consultancy_details.User == request.user %}
+            {% if consultancy_details.User == user %}
                <p><a class='btn btn-warning' href="{% url 'consultancy:consultancyupdate' pk=consultancy_details.pk %}">Update</a> <a class='btn btn-danger pull-right' href="{% url 'consultancy:consultancydelete' pk=consultancy_details.pk %}">Delete</a></p> 
             {% endif %}
             

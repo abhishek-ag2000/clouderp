@@ -150,16 +150,16 @@
                 </tr>
 
                 {% for ledger1 in sales_ledger %}
-                <tr>
-                  <td></td>
-                  <th></th>
-                  <td></td>
-                  <th></th>
-                  <th></th>
-                  <td>{{ ledger1.name}}</td> 
-                  <td>{{ ledger1.Closing_balance|floatformat:2|abs }}</td>
-                  <th></th>
-                </tr>
+                  <tr>
+                    <td></td>
+                    <th></th>
+                    <td></td>
+                    <th></th>
+                    <th></th>
+                    <td>{{ ledger1.name}}</td> 
+                    <td>{{ ledger1.Closing_balance|floatformat:2|abs }}</td>
+                    <th></th>
+                  </tr>
                 {% endfor %}
 
             {% if opening_stock %}
@@ -302,7 +302,8 @@
             {% endif %}
 
                 <tr>
-                 <td></td>
+
+                  <td></td>
                   <td></td>
                   <td></td>
                   <th>______________<br>{{ tradingprofit|floatformat:2|abs }}<br>______________</th>

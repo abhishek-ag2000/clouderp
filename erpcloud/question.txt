@@ -1,0 +1,42 @@
+DJANGO: The value of annotation is coming NONE after performing subquery.
+
+
+
+
+This are my models:
+
+    class Stockdata(models.Model):
+	    stock_name  = models.CharField(max_length=32,unique=True)
+
+    class Stock_Total_sales(models.Model):
+	    sales       = models.ForeignKey(Sales,on_delete=models.CASCADE,null=True,blank=False,related_name='saletotal')
+	    stockitem   = models.ForeignKey(Stockdata,on_delete=models.CASCADE,null=True,blank=True,related_name='salestock') 
+	    quantity    = models.PositiveIntegerField()
+
+    class Stock_Total(models.Model):
+	    purchases   = models.ForeignKey(Purchase,on_delete=models.CASCADE,null=True,blank=False,related_name='purchasetotal') 
+	    stockitem   = models.ForeignKey(Stockdata,on_delete=models.CASCADE,null=True,blank=True,related_name='purchasestock') 
+	    quantity_p  = models.PositiveIntegerField()
+
+I want to calculate the quantity of both purchase and sale and perform a Subtraction to the total quantity per Stockdata.
+
+I have done this:
+
+    		qs = Stockdata.objects.annotate(
+    		sales_sum = Subquery(
+    			Stock_Total_sales.objects.filter(
+    				sales = OuterRef('pk')
+    				).values(
+    					'sales'
+    				).annotate(
+    					the_sum = Sum('quantity')
+    				).values('the_sum')
+    			),
+    		purchase_sum = Coalesce(Sum('purchasestock__quantity_p'),0)
+		)
+		qs1 = qs.annotate(
+	    	difference = ExpressionWrapper(F('purchase_sum') - F('sales_sum'), output_field=DecimalField())
+
+But the value of sales_sum is coming null...
+
+Can anyone tell me what mistake I have done In my code.

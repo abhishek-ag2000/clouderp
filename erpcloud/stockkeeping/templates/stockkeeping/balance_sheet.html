@@ -967,10 +967,6 @@
 
 
 
-
-
-
-
                 {% if total_suspnse >= 0 %}
 
                       <tr>
@@ -1193,7 +1189,7 @@
                       {% endif %}
 
 
-                                           {% if total_credit_closing < total_debit_closing %}
+                    {% if total_credit_closing < total_debit_closing %}
 
                         {% if nett_profit >= 0 %}
                           <tr>
@@ -1241,6 +1237,7 @@
                             <td></td>
                             <th>______________<br>{{ total_asset|add:total_credit_closing|sub:total_debit_closing|add:nett_profit|floatformat:2|abs }}<br>______________</th>
                           </tr>
+
                         {% endif %}
 
                       {% endif %}
@@ -1260,10 +1257,10 @@
 
 
 
-                            <div class="box-footer">
+              <div class="box-footer">
                     <hr>
                      <div class="pull-left">
-                     <a href="invoice-print.html" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</a>
+                      <a href="invoice-print.html" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</a>
                     
                      </div>
 
@@ -1271,9 +1268,9 @@
                         <button type="button" class="btn btn-primary pull-right" style="margin-right: 5px;">
                                <i class="fa fa-download"></i> Generate PDF
                         </button>
-                    </div>
-
                   </div>
+
+              </div>
 
         </div>
 

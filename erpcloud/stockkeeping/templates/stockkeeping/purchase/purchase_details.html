@@ -168,7 +168,9 @@
             </tr>
             </thead>
             <tbody>
+
             {% for stock_total in stocklist %}
+
               <tr>
                 <td>{{forloop.counter}}</td>
                 <td>{{stock_total.stockitem}}</td>
@@ -176,21 +178,24 @@
                 <td>{{stock_total.rate_p}}</td>
                 <td>{{stock_total.Disc_p}}</td>
                 <td>{{stock_total.Total_p}}</td>
-                {% if company_details.State == purchase_details.State %}
-
-                
+                {% if company_details.State == purchase_details.State %}                
 
                   <td>{{name}}-({{stock_total.stockitem.gst_rate|div:2}}%)</td>
                   <td>{{stock_total.stockitem.gst_rate|div:200|mul:stock_total.Total_p|floatformat:2}}-({{stock_total.stockitem.gst_rate|div:2}}%)</td>
                 
                 {% else %}
+
                   <td>{{stock_total.stockitem.gst_rate|div:100|mul:stock_total.Total_p|floatformat:2}}-{{stock_total.stockitem.gst_rate}}%</td>
+
                 {% endif %}
+
                 <td>{{stock_total.stockitem.gst_rate|div:100|addition:1|mul:stock_total.Total_p|floatformat:2}}</td>
+                
               </tr>
 
 
               {% endfor %}
+
             </tbody>
           </table>
         </div>
@@ -245,7 +250,7 @@
                 <th style="width:50%">IGST:(&#8377;)</th>
                 <td>{{purchase_details.Total_Purchase}}</td>
               </tr>
-            {% endif %}
+          {% endif %}
               <tr>
                 <th style="width:50%">Total:(&#8377;)</th>
                 <td>{{purchase_details.Total_Purchase}}</td>

@@ -117,7 +117,7 @@ class allbloglistview(ListView):
 def post_detail(request, pk):
 	blog_details = get_object_or_404(Blog, pk=pk)
 
-	blog_details.blog_views=blog_details.blog_views+1
+	blog_details.blog_views=blog_details.blog_views + 1
 	blog_details.save()	
 
 	is_liked = False

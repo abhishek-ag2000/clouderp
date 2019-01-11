@@ -235,11 +235,11 @@ class ledger1(models.Model):
 	Address 		= models.TextField(blank=True)
 	State_Name 		= (
 		('Choose','Choose'),
-		('Andra Pradesh','Andra Pradesh'),
+		('Andhra Pradesh','Andhra Pradesh'),
 		('Arunachal Pradesh','Arunachal Pradesh'),
 		('Assam','Assam'),
 		('Bihar','Bihar'),
-		('Chhattisghar','Chhattisghar'),
+		('Chhattisgarh','Chhattisgarh'),
 		('Goa','Goa'),
 		('Gujrat','Gujrat'),
 		('Haryana','Haryana'),
@@ -249,7 +249,7 @@ class ledger1(models.Model):
 		('Karnataka','Karnataka'),
 		('Kerala','Kerala'),
 		('Madhya Pradesh','Madhya Pradesh'),
-		('Maharasthra','Maharasthra'),
+		('Maharashtra','Maharashtra'),
 		('Manipur','Manipur'),
 		('Meghalaya','Meghalaya'),
 		('Mizoram','Mizoram'),
@@ -259,7 +259,7 @@ class ledger1(models.Model):
 		('Rajasthan','Rajasthan'),
 		('Sikkim','Sikkim'),
 		('Tamil Nadu','Tamil Nadu'),
-		('Telengana','Telengana'),
+		('Telangana','Telangana'),
 		('Tripura','Tripura'),	
 		('Uttar Pradesh','Uttar Pradesh'),
 		('Uttarakhand','Uttarakhand'),
@@ -310,6 +310,6 @@ class journal(models.Model):
 		if self.Debit != self.Credit:
 			raise ValidationError('Debit Amount Should Be Equal To Credit Amount')
 		elif self.To == self.By:
-			raise ValidationError('Paricular Entry Cannot be same')
+			raise ValidationError('Particular Entry Cannot be same')
 
 
