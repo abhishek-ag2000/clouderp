@@ -124,18 +124,15 @@
             <table class="table table-bordered table-hover">
 
                 <tr>
-                  <th>Sl no</th>
                   <th>Particulars</th>
                   <th>Amount(&#8377)</th>
                   <th>Total Amount(&#8377)</th>
-                  <th>Sl no</th>
                   <th>Particulars</th>
                   <th>Amount(&#8377)</th>
                   <th>Total Amount(&#8377)</th>
                 </tr>
                 
                 <tr>
-                  <td>1</td>
                   <th>Opening Stock</th>
                   <td></td>
                   {% if each_opening_stock %}
@@ -143,7 +140,6 @@
                   {% else %}
                     <th>0.00</th>
                   {% endif %}
-                  <td>1</td>
                   <th>Sales Accounts</th>
                   <td></td>
                   <th>{{ total_sales_ledger|floatformat:2|abs }}</th>
@@ -152,22 +148,18 @@
 
 
                 <tr>
-                  <td>2</td>
                   <th>Purchase account</th>
                   <td></td>
                   <th>{{ total_purchase_ledger|floatformat:2|abs }}</th>
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td></td>
                 </tr>
                 
                 <tr>
-                  <td></td>
                   <th></th>
                   <td></td>
                   <th></th>
-                  <td>2</td>
                   <th>Closing Stock</th>
                   <td></td>
                   {% if closing_stock %}
@@ -176,48 +168,68 @@
                 </tr>
 
          
+              {% if total_direct_expenses > 0 %}
 
                 <tr>
-                  <td>3</td>
                   <th>Direct Expenses</th>
                   <td></td>
                   <th>{{ total_direct_expenses|floatformat:2|abs }}</th>
                   <td></td>
                   <td></td>
-                  <td></td>
                   <th></th>
                 </tr>
 
+              {% else %}
+
+                <tr>
+                  <th></th>
+                  <td></td>
+                  <th></th>
+                  <th>Direct Expenses</th>
+                  <td></td>
+                  <th>{{ total_direct_expenses|floatformat:2|abs }}</th>
+                </tr>
+              {% endif %}
+
+              {% if total_direct_incomes > 0 %}
 
                  <tr>
-                  <td></td>
                   <th></th>
                   <td></td>
                   <th></th>
-                  <td>3</td>
                   <th>Direct Incomes</th>
                   <td></td>
-                  <th>{{ total_direct_incomes|abs }}</th>
+                  <th>{{ total_direct_incomes|floatformat:2|abs }}</th>
                 </tr>
+
+              {% else %}
+
+                 <tr>
+                  <th>Direct Incomes</th>
+                  <td></td>
+                  <th>{{ total_direct_incomes|floatformat:2|abs }}</th>
+                  <th></th>
+                  <td></td>
+                  <th></th>
+                </tr>
+
+              {% endif %}
+
 
             {% if gross_profit > 0 %}
               <tr>
-                  <td>4</td>
                   <th>Gross Profit</th>
                   <td></td>
                   <th>{{ gross_profit|floatformat:2|abs }}</th> 
-                  <td></td>
                   <td> </td>
                   <td></td>
                   <th></th>
               </tr>
             {% else %}
               <tr>
-                <td></td>
                   <th></th>
                   <td></td>
                   <th></th>
-                  <td>4</td>
                   <th>Gross Loss</th>
                   <td></td>
                   <th>{{ gross_profit|floatformat:2|abs }}</th>
@@ -225,11 +237,9 @@
             {% endif %}
 
                 <tr>
-                 <td></td>
                   <td></td>
                   <td></td>
                   <th>______________<br>{{ tradingprofit|floatformat:2|abs }}<br>______________</th>
-                  <td></td>
                   <td></td>
                   <td></td>
                   <th>______________<br>{{ tradingprofit2|floatformat:2|abs }}<br>______________</th>
@@ -239,12 +249,10 @@
             {% if gross_profit > 0 %}
               <tr>
                 
-                  <td></td>
                   <th></th>
                   <td></td>
                   <th></th>
                 
-                  <td>4</td>
                   <th>Gross Profit b/f</th>
                   <td></td>
                   <th>{{ gross_profit|floatformat:2|abs }}</th>
@@ -252,11 +260,9 @@
               </tr>
             {% else %}
               <tr>
-                <td>4</td>
                   <th>Gross Loss b/f</th>
                   <td></td>
                   <th>{{ gross_profit|floatformat:2|abs }}</th>
-                  <td></td>
                   <th></th>
                   <td></td>
                   <th></th>
@@ -264,39 +270,63 @@
             {% endif %}
 
 
+              {% if total_indirectexp_ledger > 0 %}
+
                 <tr>
-                  <td>5</td>
                   <th>Indirect Expenses</th>
                   <td></td>
                   <th>{{ total_indirectexp_ledger|floatformat:2|abs }}</th>
                   <td></td>
                   <td></td>
-                  <td></td>
                   <th></th>
                 </tr>
+
+              {% else %}
     
-           
+                <tr>
+                  <th></th>
+                  <td></td>
+                  <th></th>
+                  <th>Indirect Expenses</th>
+                  <td></td>
+                  <th>{{ total_indirectexp_ledger|floatformat:2|abs }}</th>
+                </tr>
+
+              {% endif %}
+
+
+              {% if total_indirectinc_ledger > 0 %}
+
                 <tr>
                   <td></td>
                   <td></td>
-                  <td></td>
                   <th></th>
-                  <td>5</td>
                   <th>Indirect Incomes</th>
                   <td></td>
                   <th>{{ total_indirectinc_ledger|floatformat:2|abs }}</th>
                 </tr>
+
+              {% else %}
+
+                <tr>
+                  <th>Indirect Incomes</th>
+                  <td></td>
+                  <th>{{ total_indirectinc_ledger|floatformat:2|abs }}</th>
+                  <th></th>
+                  <td></td>
+                  <th></th>
+                </tr> 
+
+              {% endif %}             
 
 
               {% if gross_profit > 0 %}
                 {% if nett_profit >= 0 %}
 
                     <tr>
-                      <td></td>
                       <th>Nett Profit</th>
                       <td></td>
                       <th>{{ nett_profit|floatformat:2|abs }}</th>
-                      <td></td>
                       <th></th>
                       <td></td>
                       <th></th>
@@ -307,9 +337,7 @@
                      <tr>
                       <td></td>
                       <td></td>
-                      <td></td>
                       <th></th>
-                      <td></td>
                       <th>Nett Profit</th>
                       <td></td>
                       <th>{{ nett_profit|floatformat:2|abs }}</th>
@@ -321,11 +349,9 @@
                   {% if nett_profit >= 0 %}
 
                     <tr>
-                      <td></td>
                       <th>Nett Loss</th>
                       <td></td>
                       <th>{{ nett_profit|floatformat:2|abs }}</th>
-                      <td></td>
                       <th></th>
                       <td></td>
                       <th></th>
@@ -336,9 +362,7 @@
                     <tr>
                       <td></td>
                       <td></td>
-                      <td></td>
                       <th></th>
-                      <td></td>
                       <th>Nett Loss</th>
                       <td></td>
                       <th>{{ nett_profit|floatformat:2|abs }}</th>
@@ -348,22 +372,18 @@
               {% endif %}
 
                 <tr>
-                  <td></td>
                   <th></th>
                   <td></td>
                   <th></th>
                   <td></td>
-                  <th></th>
                   <td></td>
                   <th></th>
                 </tr>
 
                 <tr>
-                  <td></td>
                   <th>Total</th>
                   <td></td>
                   <th>______________<br>{{ totalpl|floatformat:2|abs }}<br>______________</th>
-                  <td></td>
                   <th>Total</th>
                   <td></td>
                   <th>______________<br>{{ totalplright|floatformat:2|abs }}<br>______________</th>

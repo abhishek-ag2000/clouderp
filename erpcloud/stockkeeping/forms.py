@@ -1,6 +1,7 @@
 from django import forms
 from stockkeeping.models import Stockgroup,Simpleunits,Compoundunits,Stockdata,Purchase,Sales,Stock_Total,Stock_Total_sales
 import datetime
+from company.models import company
 from django.db.models import Q
 from django.forms import inlineformset_factory
 from accounting_double_entry.models import ledger1
@@ -222,6 +223,7 @@ class Stock_Totalform(forms.ModelForm):
 	class Meta:
 		model  = Stock_Total
 		fields = ('stockitem', 'Quantity_p', 'rate_p', 'Disc_p','gst_rate_p', 'Total_p')
+
 
 	def __init__(self, *args, **kwargs):
 		super(Stock_Totalform, self).__init__(*args, **kwargs)

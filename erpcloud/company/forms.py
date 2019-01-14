@@ -23,7 +23,7 @@ class companyform(forms.ModelForm):
 		self.fields['Pincode'].widget.attrs = {'class': 'form-control',}
 		self.fields['Telephone_No'].widget.attrs = {'class': 'form-control',}
 		self.fields['Mobile_No'].widget.attrs = {'class': 'form-control',}
-		self.fields['Financial_Year_From'].widget.attrs = {'class': 'form-control',}
+		self.fields['Financial_Year_From'].widget.attrs = {'class': 'form-control select2',}
 		self.fields['Books_Begining_From'].widget.attrs = {'class': 'form-control',}
 		self.fields['gst'].widget.attrs = {'class': 'form-control',}
 		self.fields['pan'].widget.attrs = {'class': 'form-control',}

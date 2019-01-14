@@ -10,13 +10,11 @@ class group1admin(admin.ModelAdmin):
 	readonly_fields = ('User',)
 
 
-
 class journaladmin(admin.ModelAdmin):
 	model = journal
 	list_display = ['By', 'To','Debit','Credit']
 	search_fields = ['By','To']
 	readonly_fields = ('User',)
-
 
 
 class journaltransactionsdebit(admin.TabularInline):
@@ -30,9 +28,6 @@ class journaltransactionscredit(admin.TabularInline):
 	fk_name = 'To'
 	exclude = ['Debit', 'Total_Credit', 'Total_Debit']
 	
-
-
-
 class ledgerAdmin(admin.ModelAdmin):
 	model = ledger1
 	form = Ledgerformadmin
@@ -43,8 +38,6 @@ class ledgerAdmin(admin.ModelAdmin):
            journaltransactionsdebit,
            journaltransactionscredit,
            ]
-
-	
 
 admin.site.register(ledger1,ledgerAdmin)
 admin.site.register(group1,group1admin)

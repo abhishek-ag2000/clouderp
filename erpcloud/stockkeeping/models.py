@@ -25,7 +25,7 @@ class Stockgroup(models.Model):
 		return self.name
 
 @receiver(post_save, sender=company)
-def user_created(sender, instance, created, **kwargs):
+def user_created_stockgroup(sender, instance, created, **kwargs):
 	if created:
 		Stockgroup.objects.create(User=instance.User,Company=instance,name='Primary',quantities=False)
 
@@ -59,7 +59,7 @@ class Stockdata(models.Model):
 	Company     = models.ForeignKey(company,on_delete=models.CASCADE,null=True,blank=True)
 	Date 		= models.DateField(default=datetime.date.today,blank=False, null=True)
 	daterange	= models.ForeignKey(selectdatefield,on_delete=models.CASCADE,null=True,blank=True,related_name='stockrange')
-	stock_name  = models.CharField(max_length=32,unique=True)
+	stock_name  = models.CharField(max_length=32)
 	batch_no	= models.PositiveIntegerField(blank=True, null=True)
 	bar_code 	= ImageField(upload_to='stockmanagement', null=True, blank=True)
 	mnf_date	= models.DateField(blank=True, null=True)

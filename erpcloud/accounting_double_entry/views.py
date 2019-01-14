@@ -529,48 +529,142 @@ def profit_and_loss_condensed_view(request,pk,pk3):
 	lds = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Sales Account', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)
 	ldsc = lds.aggregate(the_sum=Coalesce(Sum('Closing_balance'), Value(0)))['the_sum']
 
-	lde = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Indirect Expenses', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)
+	lde = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Indirect Expense', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)
 	ldse = lde.aggregate(the_sum=Coalesce(Sum('Closing_balance'), Value(0)))['the_sum']
 
-	ldi = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Indirect Incomes', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)
+	ldi = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Indirect Income', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)
 	ldsi = ldi.aggregate(the_sum=Coalesce(Sum('Closing_balance'), Value(0)))['the_sum']
 
 	# qo1 means opening stock exists
 
-	
-	gp = abs(ldsc) + abs(qs2) + abs(lddi) - abs(qo2) - abs(ldc) - abs(lddt)
+	# lddt = Direct Expenses
+	# lddi = Direct Incomes
+
+
+	if  lddi < 0 and lddt < 0:
+		gp = abs(ldsc) + abs(qs2) + abs(lddt) - abs(qo2) - abs(ldc) - abs(lddi)
+	elif lddt < 0:
+		gp = abs(ldsc) + abs(qs2) + abs(lddi) + abs(lddt) - abs(qo2) - abs(ldc)
+	elif lddi < 0:
+		gp = abs(ldsc) + abs(qs2) - abs(lddi) - abs(qo2) - abs(ldc) - abs(lddt)
+	else:	
+		gp = abs(ldsc) + abs(qs2) + abs(lddi) - abs(qo2) - abs(ldc) - abs(lddt)
 
 
 	if gp >=0:
-		tradingp  =  abs(qo2) + abs(ldc) + abs(lddt) + (gp)
-		tgp = abs(qs2) + abs(lddi) + abs(ldsc) 
+		if  lddi < 0 and lddt < 0:
+			tradingp  =  abs(qo2) + abs(ldc) + (gp) + abs(lddi)
+			tgp = abs(qs2) + abs(ldsc) + abs(lddt) 
+		elif lddt < 0:
+			tradingp  =  abs(qo2) + abs(ldc) + (gp)
+			tgp = abs(qs2) + abs(lddi) + abs(ldsc) + abs(lddt)
+		elif lddi < 0:
+			tradingp  =  abs(qo2) + abs(ldc) + abs(lddt) + (gp) + abs(lddi)
+			tgp = abs(qs2) + abs(ldsc)
+ 						
+		else:
+			tradingp  =  abs(qo2) + abs(ldc) + abs(lddt) + (gp)
+			tgp = abs(qs2) + abs(lddi) + abs(ldsc) 
 
 	else: # gp <0
-		tradingp =  abs(qo2) + abs(ldc) + abs(lddt) 
-		tgp = abs(qs2) + abs(lddi) + abs(ldsc) + abs(gp) 
+		if  lddi < 0 and lddt < 0:
+			tradingp =  abs(qo2) + abs(ldc) + abs(lddi) 
+			tgp = abs(qs2) + abs(ldsc) + abs(gp) + abs(lddt)
+		elif lddt < 0:
+			tradingp =  abs(qo2) + abs(ldc) 
+			tgp = abs(qs2) + abs(lddi) + abs(ldsc) + abs(gp) + abs(lddt)
+		elif lddi < 0:
+			tradingp =  abs(qo2) + abs(ldc) + abs(lddt) + abs(lddi) 
+			tgp = abs(qs2) + abs(ldsc) + abs(gp) 	
+  					
+		else:
+			tradingp =  abs(qo2) + abs(ldc) + abs(lddt) 
+			tgp = abs(qs2) + abs(lddi) + abs(ldsc) + abs(gp) 
 
 	
+	# ldse = Indirect Expense
+	# ldsi = Indirect Income
+
 
 	if gp >=0:
-		np = (gp) + abs(ldsi) - abs(ldse)
+		if ldsi < 0 and ldse < 0:
+			np = (gp) + abs(ldse) - abs(ldsi)
+		elif ldse < 0:
+			np = (gp) + abs(ldsi) + abs(ldse)
+		elif ldsi < 0:
+			np = (gp) - abs(ldsi) - abs(ldse)
+		else:
+			np = (gp) + abs(ldsi) - abs(ldse)
 	else:
-		np = abs(ldsi) - abs(ldse) - abs(gp)  
+		if ldsi < 0 and ldse < 0:
+			np = abs(ldse) - abs(ldsi) - abs(gp) 
+		elif ldsi < 0:
+			np = abs(ldsi) + abs(ldse) + abs(gp)
+		elif ldse < 0:
+			np = abs(ldsi) + abs(ldse) - abs(gp)
+		else:
+			np = abs(ldsi) - abs(ldse) - abs(gp) 
+
+
+	# ldse = Indirect Expense
+	# ldsi = Indirect Income
+ 
 
 
 	if gp >= 0:
 		if np >= 0:
-			tp = abs(ldse) + np
-			tc = abs(ldsi) + (gp)
+			if ldsi < 0 and ldse < 0:
+				tp = abs(ldsi) + np
+				tc = abs(ldse) + (gp)
+			elif ldsi < 0:
+				tp = abs(ldsi) + np + abs(ldse)  
+				tc = (gp)
+			elif ldse < 0:
+				tp = np
+				tc = abs(ldsi) + (gp) + abs(ldse)				
+			else:
+				tp = abs(ldse) + np
+				tc = abs(ldsi) + (gp)
 		else:
-			tp = abs(ldse) 
-			tc = gp + np + abs(ldsi)
+			if ldsi < 0 and ldse < 0:
+				tp = abs(ldsi)  
+				tc = gp + np + abs(ldse)
+			elif ldsi < 0:
+				tp = abs(ldse)  + abs(ldsi) 
+				tc = gp + np
+			elif ldse < 0:
+				tp =  0
+				tc = gp + np + abs(ldsi) + abs(ldse)																								
+			else:
+				tp = abs(ldse) 
+				tc = gp + np + abs(ldsi)
 	else: # gp<0
 		if np >= 0:
-			tp = abs(ldse) + np + abs(gp)
-			tc = abs(ldsi) 
+			if ldsi < 0 and ldse < 0:
+				tp = abs(ldsi) + np + abs(gp)
+				tc = abs(ldse) 
+			elif ldsi < 0:
+				tp = abs(ldse) + np + abs(gp) + abs(ldsi)
+				tc = 0	
+			elif ldse < 0:
+				tp = np + abs(gp)
+				tc = abs(ldsi) + abs(ldse) 							
+			else:
+				tp = abs(ldse) + np + abs(gp)
+				tc = abs(ldsi) 
 		else:
-			tp = abs(ldse) + abs(gp)
-			tc = abs(np) + abs(ldsi)
+			if ldsi < 0 and ldse < 0:
+				tp = abs(ldsi) + abs(gp)
+				tc = abs(np) + abs(ldse)
+			elif ldsi < 0:
+				tp = abs(ldse) + abs(gp) + abs(ldsi)
+				tc = abs(np) 
+			elif ldse < 0:
+				tp = abs(gp)
+				tc = abs(np) + abs(ldsi) + abs(ldse)				
+			else:
+				tp = abs(ldse) + abs(gp)
+				tc = abs(np) + abs(ldsi)
 
 	context = {
 
@@ -876,48 +970,142 @@ def balance_sheet_condensed_view(request,pk,pk3):
 	lds = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Sales Account', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)
 	ldsc = lds.aggregate(the_sum=Coalesce(Sum('Closing_balance'), Value(0)))['the_sum']
 
-	lde = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Indirect Expenses', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)
+	lde = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Indirect Expense', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)
 	ldse = lde.aggregate(the_sum=Coalesce(Sum('Closing_balance'), Value(0)))['the_sum']
 
-	ldi = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Indirect Incomes', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)
+	ldi = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Indirect Income', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)
 	ldsi = ldi.aggregate(the_sum=Coalesce(Sum('Closing_balance'), Value(0)))['the_sum']
 
 	# qo1 means opening stock exists
 
-	
-	gp = abs(ldsc) + abs(qs2) + abs(lddi) - abs(qo2) - abs(ldc) - abs(lddt)
+	# lddt = Direct Expenses
+	# lddi = Direct Incomes
+
+
+	if  lddi < 0 and lddt < 0:
+		gp = abs(ldsc) + abs(qs2) + abs(lddt) - abs(qo2) - abs(ldc) - abs(lddi)
+	elif lddt < 0:
+		gp = abs(ldsc) + abs(qs2) + abs(lddi) + abs(lddt) - abs(qo2) - abs(ldc)
+	elif lddi < 0:
+		gp = abs(ldsc) + abs(qs2) - abs(lddi) - abs(qo2) - abs(ldc) - abs(lddt)
+	else:	
+		gp = abs(ldsc) + abs(qs2) + abs(lddi) - abs(qo2) - abs(ldc) - abs(lddt)
 
 
 	if gp >=0:
-		tradingp  =  abs(qo2) + abs(ldc) + abs(lddt) + (gp)
-		tgp = abs(qs2) + abs(lddi) + abs(ldsc) 
+		if  lddi < 0 and lddt < 0:
+			tradingp  =  abs(qo2) + abs(ldc) + (gp) + abs(lddi)
+			tgp = abs(qs2) + abs(ldsc) + abs(lddt) 
+		elif lddt < 0:
+			tradingp  =  abs(qo2) + abs(ldc) + (gp)
+			tgp = abs(qs2) + abs(lddi) + abs(ldsc) + abs(lddt)
+		elif lddi < 0:
+			tradingp  =  abs(qo2) + abs(ldc) + abs(lddt) + (gp) + abs(lddi)
+			tgp = abs(qs2) + abs(ldsc)
+ 						
+		else:
+			tradingp  =  abs(qo2) + abs(ldc) + abs(lddt) + (gp)
+			tgp = abs(qs2) + abs(lddi) + abs(ldsc) 
 
 	else: # gp <0
-		tradingp =  abs(qo2) + abs(ldc) + abs(lddt) 
-		tgp = abs(qs2) + abs(lddi) + abs(ldsc) + abs(gp) 
+		if  lddi < 0 and lddt < 0:
+			tradingp =  abs(qo2) + abs(ldc) + abs(lddi) 
+			tgp = abs(qs2) + abs(ldsc) + abs(gp) + abs(lddt)
+		elif lddt < 0:
+			tradingp =  abs(qo2) + abs(ldc) 
+			tgp = abs(qs2) + abs(lddi) + abs(ldsc) + abs(gp) + abs(lddt)
+		elif lddi < 0:
+			tradingp =  abs(qo2) + abs(ldc) + abs(lddt) + abs(lddi) 
+			tgp = abs(qs2) + abs(ldsc) + abs(gp) 	
+  					
+		else:
+			tradingp =  abs(qo2) + abs(ldc) + abs(lddt) 
+			tgp = abs(qs2) + abs(lddi) + abs(ldsc) + abs(gp) 
 
 	
+	# ldse = Indirect Expense
+	# ldsi = Indirect Income
+
 
 	if gp >=0:
-		np = (gp) + abs(ldsi) - abs(ldse)
+		if ldsi < 0 and ldse < 0:
+			np = (gp) + abs(ldse) - abs(ldsi)
+		elif ldse < 0:
+			np = (gp) + abs(ldsi) + abs(ldse)
+		elif ldsi < 0:
+			np = (gp) - abs(ldsi) - abs(ldse)
+		else:
+			np = (gp) + abs(ldsi) - abs(ldse)
 	else:
-		np = abs(ldsi) - abs(ldse) - abs(gp)  
+		if ldsi < 0 and ldse < 0:
+			np = abs(ldse) - abs(ldsi) - abs(gp) 
+		elif ldsi < 0:
+			np = abs(ldsi) + abs(ldse) + abs(gp)
+		elif ldse < 0:
+			np = abs(ldsi) + abs(ldse) - abs(gp)
+		else:
+			np = abs(ldsi) - abs(ldse) - abs(gp) 
+
+
+	# ldse = Indirect Expense
+	# ldsi = Indirect Income
+ 
 
 
 	if gp >= 0:
 		if np >= 0:
-			tp = abs(ldse) + np
-			tc = abs(ldsi) + (gp)
+			if ldsi < 0 and ldse < 0:
+				tp = abs(ldsi) + np
+				tc = abs(ldse) + (gp)
+			elif ldsi < 0:
+				tp = abs(ldsi) + np + abs(ldse)  
+				tc = (gp)
+			elif ldse < 0:
+				tp = np
+				tc = abs(ldsi) + (gp) + abs(ldse)				
+			else:
+				tp = abs(ldse) + np
+				tc = abs(ldsi) + (gp)
 		else:
-			tp = abs(ldse) 
-			tc = gp + np + abs(ldsi)
+			if ldsi < 0 and ldse < 0:
+				tp = abs(ldsi)  
+				tc = gp + np + abs(ldse)
+			elif ldsi < 0:
+				tp = abs(ldse)  + abs(ldsi) 
+				tc = gp + np
+			elif ldse < 0:
+				tp =  0
+				tc = gp + np + abs(ldsi) + abs(ldse)																								
+			else:
+				tp = abs(ldse) 
+				tc = gp + np + abs(ldsi)
 	else: # gp<0
 		if np >= 0:
-			tp = abs(ldse) + np + abs(gp)
-			tc = abs(ldsi) 
+			if ldsi < 0 and ldse < 0:
+				tp = abs(ldsi) + np + abs(gp)
+				tc = abs(ldse) 
+			elif ldsi < 0:
+				tp = abs(ldse) + np + abs(gp) + abs(ldsi)
+				tc = 0	
+			elif ldse < 0:
+				tp = np + abs(gp)
+				tc = abs(ldsi) + abs(ldse) 							
+			else:
+				tp = abs(ldse) + np + abs(gp)
+				tc = abs(ldsi) 
 		else:
-			tp = abs(ldse) + abs(gp)
-			tc = abs(np) + abs(ldsi)
+			if ldsi < 0 and ldse < 0:
+				tp = abs(ldsi) + abs(gp)
+				tc = abs(np) + abs(ldse)
+			elif ldsi < 0:
+				tp = abs(ldse) + abs(gp) + abs(ldsi)
+				tc = abs(np) 
+			elif ldse < 0:
+				tp = abs(gp)
+				tc = abs(np) + abs(ldsi) + abs(ldse)				
+			else:
+				tp = abs(ldse) + abs(gp)
+				tc = abs(np) + abs(ldsi)
 
 
 

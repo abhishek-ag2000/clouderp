@@ -55,6 +55,10 @@ urlpatterns = [
 	url(r'^company/(?P<pk1>\d+)/salesupdate/(?P<pk2>\d+)/date/(?P<pk3>\d+)/$',views.Sales_updateview.as_view(),name='salesupdate'),
 	url(r'^company/(?P<pk>\d+)/salesdelete/(?P<pk2>\d+)/date/(?P<pk3>\d+)/$',views.Sales_deleteview.as_view(),name='salesdelete'),
 
+
+	url(r'^company/(?P<pk>\d+)/date/(?P<pk3>\d+)/stcreate/$',views.Stock_Total_createview.as_view(),name='stocktotalcreate'),
+
+
 ################################### Closing Stock Url #######################################
 	
 	url(r'^company/(?P<pk>\d+)/date/(?P<pk3>\d+)/$',views.closing_list_view.as_view(),name='closingstock'),
