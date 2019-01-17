@@ -6,10 +6,10 @@ from django.utils.dateformat import format
 from django.utils.dates import MONTHS
 from datetime import datetime, date
 from django.db.models.functions import TruncMonth, Coalesce
-from django.db.models import Sum
 import calendar
+import datetime
 
-from django.db.models import Case, When, Value, CharField
+from django.db.models import Case, When, Value, CharField, F, Sum
 
 
 daterange = selectdatefield.objects.all()
@@ -75,25 +75,25 @@ sd = selectdatefield.objects.all()
 # [calendar.month_name[month] for month in fs]
 
 
-conditions = []
-for i in range(1, 13):
-	month_name = calendar.month_name[i]		
-	conditions.append(When(date__month=i, then=Value(month_name)))
-	print(month_name)
+# conditions = []
+# for i in range(1, 13):
+# 	month_name = calendar.month_name[i]		
+# 	conditions.append(When(date__month=i, then=Value(month_name)))
+# 	print(month_name)
 
-x = Purchase.objects.annotate(month_name=Case(*conditions, default=Value(""), output_field=CharField())).order_by("month_name").values_list("month_name", flat=True).distinct().annotate(sales_sum=Sum('Total_Purchase')).values_list("month_name","sales_sum")
+# x = Purchase.objects.annotate(month_name=Case(*conditions, default=Value(""), output_field=CharField())).order_by("month_name").values_list("month_name", flat=True).distinct().annotate(sales_sum=Sum('Total_Purchase')).values_list("month_name","sales_sum")
 
-# y = x.values('month_name','sales_sum')
-# print(y)
+# # y = x.values('month_name','sales_sum')
+# # print(y)
 
 
-for month_name,sales_sum in x:
-	print(month_name,sales_sum)
+# for month_name,sales_sum in x:
+# 	print(month_name,sales_sum)
 	
 
 
-y = x.aggregate(the_sum=Coalesce(Sum('sales_sum'), Value(0)))['the_sum']
-print(y)
+# y = x.aggregate(the_sum=Coalesce(Sum('sales_sum'), Value(0)))['the_sum']
+# print(y)
 
 # month_name = calendar.month_name[-1]
 # print(type(month_name))
@@ -102,4 +102,44 @@ print(y)
 # 	print(month_name)
 # else:
 # 	print('none')
+
+
+# import calendar
+# import collections
+# import dateutil
+
+# def totals(start_date, end_date):
+    """
+    start_date and end_date are datetime.date objects.
+    """
+from stockkeeping.models import Stockgroup,Simpleunits,Compoundunits,Stockdata,Purchase,Sales,Stock_Total,Stock_Total_sales
+from django.db.models import Case, When, Value, CharField, F, Sum
+import datetime
+import calendar
+import collections
+import dateutil
+start_date = datetime.date(2018, 4, 1)
+end_date = datetime.date(2019, 3, 31)
+results = collections.OrderedDict()
+result = Purchase.objects.filter(date__gte=start_date, date__lt=end_date).annotate(real_total = Case(When(Total_Purchase__isnull=True, then=0),default=F('Total_Purchase')))
+date_cursor = start_date
+z = 0
+while date_cursor < end_date:
+    month_partial_total = result.filter(date__month=date_cursor.month).aggregate(partial_total=Sum('real_total'))['partial_total']
+    # results[date_cursor.month] = month_partial_total
+    if month_partial_total == None:
+        month_partial_total = int(0)
+        e = month_partial_total
+    else:
+        e = month_partial_total
+    
+    z = z + e
+
+    print(calendar.month_name[date_cursor.month],z , e)
+
+    
+    date_cursor += dateutil.relativedelta.relativedelta(months=1)
+
+    return results
+
 

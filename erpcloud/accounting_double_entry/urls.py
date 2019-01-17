@@ -13,7 +13,15 @@ urlpatterns = [
     url(r'^company/(?P<pk1>\d+)/groupupdate/(?P<pk2>\d+)/date/(?P<pk3>\d+)/$',views.group1UpdateView.as_view(),name='groupupdate'),
     url(r'^company/(?P<pk>\d+)/groupdelete/(?P<pk2>\d+)/date/(?P<pk3>\d+)/$',views.group1DeleteView.as_view(),name='groupdelete'),
 
+
+
+
+####### Ledger Monthly Url ########################################
+
+    url(r'^company/(?P<pk>\d+)/ledgermonthly/(?P<pk2>\d+)/date/(?P<pk3>\d+)/$',views.ledger_monthly_detail_view,name='ledgerdetailmonthly'),
+
 ####### Ledger Urls ########################################
+
 
     url(r'^company/(?P<pk>\d+)/date/(?P<pk3>\d+)/ledgerlist/$',views.ledger1ListView.as_view(),name='ledgerlist'),
     url(r'^company/(?P<pk>\d+)/ledgerdetail/(?P<pk2>\d+)/date/(?P<pk3>\d+)/$',views.ledger1_detail_view,name='ledgerdetail'),
@@ -21,6 +29,9 @@ urlpatterns = [
     url(r'^company/(?P<pk>\d+)/date/(?P<pk3>\d+)/ledgerupdate/(?P<pk2>\d+)/$',views.ledger1UpdateView.as_view(),name='ledgerupdate'),
     url(r'^company/(?P<pk>\d+)/date/(?P<pk3>\d+)/ledgerdelete/(?P<pk2>\d+)/$',views.ledger1DeleteView.as_view(),name='ledgerdelete'),
 
+####### Journal Register Urls ########################################  
+
+     url(r'^company/(?P<pk>\d+)/date/(?P<pk3>\d+)/journalregister/$',views.Journal_Register_view.as_view(),name='journalregister'),
 
 ####### Journal Urls ########################################  
 

@@ -30,6 +30,12 @@ urlpatterns = [
 	url(r'^company/(?P<pk1>\d+)/stockgroupupdate/(?P<pk2>\d+)/date/(?P<pk3>\d+)/$',views.Stockgroup_updateview.as_view(),name='stockgroupupdate'),
 	url(r'^company/(?P<pk>\d+)/stockgroupdelete/(?P<pk2>\d+)/date/(?P<pk3>\d+)/$',views.Stockgroup_deleteview.as_view(),name='stockgroupdelete'),
 
+
+################################### Stockdata Monthly Url ######################################
+
+    url(r'^company/(?P<pk>\d+)/stockmonthly/(?P<pk2>\d+)/date/(?P<pk3>\d+)/$',views.Stockitems_Monthly_view,name='stockmonthly'),
+
+
 ################################### Stockdata Url #######################################
 
 	url(r'^company/(?P<pk>\d+)/date/(?P<pk3>\d+)/stockdata$',views.Stockdata_listview.as_view(),name='stockdatalist'),
@@ -46,6 +52,16 @@ urlpatterns = [
 	url(r'^company/(?P<pk1>\d+)/purchaseupdate/(?P<pk2>\d+)/date/(?P<pk3>\d+)/$',views.Purchase_updateview.as_view(),name='purchaseupdate'),
 	url(r'^company/(?P<pk>\d+)/purchasedelete/(?P<pk2>\d+)/date/(?P<pk3>\d+)/$',views.Purchase_deleteview.as_view(),name='purchasedelete'),
 
+
+################################### Purchase Register Url #######################################
+
+	url(r'^company/(?P<pk>\d+)/Purchase_Register/date/(?P<pk3>\d+)/$',views.Purchase_Register_view.as_view(),name='purchase_register'),
+
+
+
+################################### Sale Register Url #######################################
+
+	url(r'^company/(?P<pk>\d+)/Sale_Register/date/(?P<pk3>\d+)/$',views.Sales_Register_view.as_view(),name='sale_register'),
 
 ################################### Sales Url #######################################
 

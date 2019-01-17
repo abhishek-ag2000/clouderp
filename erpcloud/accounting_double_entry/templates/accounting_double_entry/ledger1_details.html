@@ -74,6 +74,8 @@
       			<a href="{% url 'accounting_double_entry:ledgerlist' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-success" role="button">Select Ledger </a>
               	<a href="{% url 'accounting_double_entry:ledgercreate' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-warning" role="button">Create Ledger</a>
 
+              	<a href="{% url 'accounting_double_entry:ledgerdetailmonthly' pk=company_details.pk pk2=ledger1_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-primary" role="button">Ledger List View</a>
+
               	<div class="pull-right">
               		<a href="{% url 'accounting_double_entry:create' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-warning" role="button">Create Journal</a>
               	</div>
@@ -235,11 +237,11 @@
 
 													{% else %}
 													
-														<th><center>{{ j.Date}}</center></th>
-														<th><center>To</center></th>
+														<td><center>{{ j.Date}}</center></td>
+														<td><center>To</center></td>
 														<th><center><a href="{% url 'accounting_double_entry:detail' pk1=company_details.pk pk2=j.pk pk3=selectdatefield_details.pk %}">{{j.To}}</a></center></th>
-														<th><center>{{ j.id }}</center></th>
-														<th><center>{{j.Debit}}</center></th>
+														<td><center>{{ j.id }}</center></td>
+														<td><center>{{j.Debit}}</center></td>
 
 													{% endif %}
 												{% endfor %}
@@ -257,11 +259,11 @@
 
 														{% else %}
 
-															<th><center>{{ k.Date}}</center></th>
-															<th><center>By</center></th>
+															<td><center>{{ k.Date}}</center></td>
+															<td><center>By</center></td>
 															<th><center><a href="{% url 'accounting_double_entry:detail' pk1=company_details.pk pk2=k.pk pk3=selectdatefield_details.pk %}">{{k.By}}</a></center></th>
-															<th><center>{{ k.id }}</center></th>
-															<th><center>{{ k.Credit }}</center></th>
+															<td><center>{{ k.id }}</center></td>
+															<td><center>{{ k.Credit }}</center></td>
 															
 														{% endif %}
 										
@@ -275,11 +277,11 @@
 										{% for journal in journal_debit %}
 		
 											<tr>
-												<th><center>{{ journal.Date}}</center></th>
-												<th><center>To</center></th>
+												<td><center>{{ journal.Date}}</center></td>
+												<td><center>To</center></td>
 												<th><center><a href="{% url 'accounting_double_entry:detail' pk1=company_details.pk pk2=journal.pk pk3=selectdatefield_details.pk %}">{{journal.To}}</a></center></th>
-												<th><center>{{ journal.id }}</center></th>
-												<th><center>{{journal.Debit}}</center></th>								
+												<td><center>{{ journal.id }}</center></td>
+												<td><center>{{journal.Debit}}</center></td>								
 												<th><center></center></th>
 												<th><center></center></th>
 												<th><center></center></th>
@@ -299,11 +301,11 @@
 												<th><center></center></th>
 												<th><center></center></th>
 												
-												<th><center>{{ journal.Date}}</center></th>
-												<th><center>By</center></th>
+												<td><center>{{ journal.Date}}</center></td>
+												<td><center>By</center></td>
 												<th><center><a href="{% url 'accounting_double_entry:detail' pk1=company_details.pk pk2=journal.pk pk3=selectdatefield_details.pk %}">{{journal.By}}</a></center></th>
-												<th><center>{{ journal.id }}</center></th>
-												<th><center>{{journal.Credit}}</center></th>									
+												<td><center>{{ journal.id }}</center></td>
+												<td><center>{{journal.Credit}}</center></td>									
 											</tr>
 										{% endfor %}
 

@@ -37,6 +37,7 @@ urlpatterns = [
     url(r"^todo/", include("todogst.urls", namespace="todogst")),
     url(r"^profile/", include("userprofile.urls", namespace="userprofile")),
     url(r"^blog/", include("blog.urls", namespace="blog")),
+    url(r"^pdf/", include("pdf.urls", namespace="pdf")),
     url(r'^select2/', include('django_select2.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
     url(r"^consultancy/", include("consultancy.urls", namespace="consultancy")),

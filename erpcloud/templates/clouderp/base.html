@@ -672,9 +672,9 @@
           </a>
           <ul class="treeview-menu">
             <li><a href="pages/tables/simple.html"><i class="fa fa-circle-o"></i> Day Book</a></li>
-            <li><a href="Sales_Register.html"><i class="fa fa-circle-o"></i> Sales Register</a></li>
-            <li><a href="Purchase_Register.html"><i class="fa fa-circle-o"></i> Purchase Register</a></li>
-            <li><a href="pages/tables/Simple1.html"><i class="fa fa-circle-o"></i> Journal Register</a></li>
+            <li><a href="{% url 'stockkeeping:sale_register' pk=company_details.pk pk3=selectdatefield_details.pk  %}"><i class="fa fa-circle-o"></i> Sales Register</a></li>
+            <li><a href="{% url 'stockkeeping:purchase_register' pk=company_details.pk pk3=selectdatefield_details.pk  %}"><i class="fa fa-circle-o"></i> Purchase Register</a></li>
+            <li><a href="{% url 'accounting_double_entry:journalregister' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Journal Register</a></li>
             <li><a href="pages/tables/Simple1.html"><i class="fa fa-circle-o"></i> Cash/Funds Flow</a></li>
             <li><a href="pages/tables/Simple1.html"><i class="fa fa-circle-o"></i> Receipts And Payments</a></li>
           </ul>

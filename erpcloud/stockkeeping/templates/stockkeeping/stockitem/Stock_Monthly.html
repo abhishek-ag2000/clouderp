@@ -2,7 +2,7 @@
 {% load staticfiles %}
 {% load mathfilters %}
 
-{% block title %}StockItem Details{% endblock %}
+{% block title %}Stock Item Monthly Summary{% endblock %}
 
 
 
@@ -75,6 +75,8 @@
           
           <a href="{% url 'stockkeeping:stockdatacreate' pk=company_details.pk pk3=selectdatefield_details.pk  %}" class="btn btn-warning" role="button">Create Stockitem</a>
 
+          <a href="{% url 'stockkeeping:closingstock' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-primary" role="button">See Stock Summary</a>
+
             <button type="button" class="btn btn-default dropdown-toggle pull-right" data-toggle="dropdown">Wt AVG(default)
                     <span class="fa fa-caret-down"></span></button>
                   <ul class="dropdown-menu pull-right">
@@ -102,9 +104,14 @@
 				<div class="box box-info">
 					<div class="box-header with-border">
         			
-          		<h2 class="box-title"><b>Stock Item Summary</b></h2>
+          		<h2 class="box-title"><b>Stock Item Monthly Summary</b></h2>
         
         	</div>
+          <div class="box-header with-border">
+              
+              <h2><b><center>{{ stockdata_details.stock_name }}</center></b></h2>
+        
+          </div>
 
           <div class="box-body table-responsive no-padding">
 
@@ -116,68 +123,101 @@
                }
         </style>
 
-          <table class="table table-bordered table-hover">
-              <tr>
-                <th class="col-md-3"></th>
-                <th><center>Closing Balance</center></th>
+            <table class="table table-bordered table-hover">
 
+              <tr>
+                <th class="col-md-3"><center></center></th>
+                <th class="col-md-2"><center>Inward</center></th>
+                
+               
+                <th class="col-md-2"><center>Outward</center></th>
+                
+                             
+                <th class="col-md-2"><center>Closing Balance</center></th>
               </tr>
-          </table>
+
+                
+               
+            </table>
+
+
 
             <table class="table table-bordered table-hover">
 
               <tr>
-               <th class="col-md-3"><center>Particulars</center></th>
-                <th class="col-md-3">Total Quantity</th>
-                <th class="col-md-3">Avg Rate</th>
-                <th class="col-md-3">Value(&#8377)</th>
+               <th class="col-md-4"><center>Particulars</center></th>
+                  <th>Total Quantity</th>
+                  <th>Value(&#8377)</th>
+                  <th>Total Quantity</th>
+                  <th>Value(&#8377)</th>
+                  <th>Total Quantity</th>
+                  <th>Value(&#8377)</th>
                   
               </tr>
 
-            {% for stockdata in Totalquantity %}
+            {% for key, value in data %}
               <tr>
-
-                <th><a href="{% url 'stockkeeping:stockmonthly' pk=company_details.pk pk2=stockdata.id pk3=selectdatefield_details.pk %}">{{stockdata.stock_name}}</a></th>
+                <td>{{ key }}</td>
                 
-                <td>{{ stockdata.difference|floatformat:0 }}</td>
+                {% if value.1 == 0 %}
+                  <td></td>
+                {% else %}
+                  <td>{{ value.1|abs }}</td>
+                {% endif %}
 
-                <td>{{ stockdata.total|div:stockdata.difference|floatformat:2}}</td>
-                <td>{{ stockdata.total|floatformat:2}}</td>
+                {% if value.3 == 0 %}
+                  <td></td>
+                {% else %}
+                  <td>{{ value.3|floatformat:2|abs }}</td>
+                {% endif %}
+
+                {% if value.2 == 0 %}
+                  <td></td>
+                {% else %}
+                  <td>{{ value.2|abs }}</td>
+                {% endif %}
+
+                {% if value.4 == 0 %}
+                  <td></td>
+                {% else %}
+                  <td>{{ value.4|floatformat:2|abs }}</td>
+                {% endif %}
+
+                {% if value.0 == 0 %}
+                  <td></td>
+                {% else %}
+                  <td>{{ value.0|abs }}</td>
+                {% endif %}
+
+                {% if value.5 == 0 %}
+                  <td></td>
+                {% else %}
+                  <td>{{ value.5|floatformat:2|abs }}</td>
+                {% endif %}
               </tr>
             {% endfor %}
+
+              <tr>
+                <th>Grand Total</th>
+                
+                <th>{{ total_purchase_quantity|abs }}</th>
+
+                <th>{{ total_purchase|floatformat:2|abs }}</th>
+                <th>{{ total_sale_quantity|abs }}</th>
+                <th>{{ total_sale|floatformat:2|abs }}</th>
+                <th>{{ total_purchase_quantity|sub:total_sale_quantity|abs }}</th>
+                <th>{{ Closing_balance|floatformat:2|abs }}</th>
+              </tr>
+
             </table>
           </div>
 
-                            <div class="box-footer">
-                    
-                    <div class="pull-left">
-                    <p>Showing item {{ page_obj.start_index }} to {{ page_obj.end_index }} of {{ page_obj.paginator.count }} entries</p>
-                  </div>
+          <div class="box-footer">
+            <br>
+            <a href="#" class="btn btn-default" role="button"><i class="fa fa-print"></i> Print</a>
 
-                  <div class="pull-right">
-                        {% if is_paginated %}
-                            <ul class="pagination">
-                             {% if page_obj.has_previous %}
-                                <li><a href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
-                              {% else %}
-                                <li class="disabled"><span>Previous</span></li>
-                              {% endif %}
-                              {% for i in paginator.page_range %}
-                                  {% if page_obj.number == i %}
-                                     <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
-                                  {% else %}
-                                      <li><a href="?page={{ i }}">{{ i }}</a></li>
-                                  {% endif %}
-                              {% endfor %}
-                              {% if page_obj.has_next %}
-                                  <li><a href="?page={{ page_obj.next_page_number }}">Next</a></li>
-                              {% else %}
-                                  <li class="disabled"><span>Next</span></li>
-                              {% endif %}
-                          </ul>
-                      {% endif %}
-                    </div>
-                  </div>
+            <a href="#" class="btn btn-primary pull-right" role="button"><i class="fa fa-download "></i> Generate Pdf</a>
+          </div>
 
 				</div>
 

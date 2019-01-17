@@ -40,8 +40,8 @@ class Ledgerform(forms.ModelForm):
 		super(Ledgerform, self).__init__(*args, **kwargs)
 		self.fields['Creation_Date'].widget.attrs = {'class': 'form-control',}
 		self.fields['name'].widget.attrs = {'class': 'form-control',}
-		self.fields['group1_Name'].queryset = group1.objects.filter(User= self.User,Company = self.Company).exclude(group_Name__icontains='Primary')
 		self.fields['group1_Name'].widget.attrs = {'class': 'form-control select2', 'placeholder':"Select Group",}
+		self.fields['group1_Name'].queryset = group1.objects.filter(User= self.User,Company = self.Company).exclude(group_Name__icontains='Primary')
 		self.fields['Opening_Balance'].widget.attrs = {'class': 'form-control',}
 		self.fields['User_Name'].widget.attrs = {'class': 'form-control',}
 		self.fields['Address'].widget.attrs = {'class': 'form-control',}
@@ -63,8 +63,8 @@ class Ledgerformadmin(forms.ModelForm):
 		super(Ledgerformadmin, self).__init__(*args, **kwargs)
 		self.fields['Creation_Date'].widget.attrs = {'class': 'form-control',}
 		self.fields['name'].widget.attrs = {'class': 'form-control',}
-		self.fields['group1_Name'].queryset = group1.objects.exclude(group_Name__icontains='Primary')
 		self.fields['group1_Name'].widget.attrs = {'class': 'form-control select2', 'placeholder':"Select Group",}
+		self.fields['group1_Name'].queryset = group1.objects.exclude(group_Name__icontains='Primary')
 		self.fields['Opening_Balance'].widget.attrs = {'class': 'form-control',}
 		self.fields['User_Name'].widget.attrs = {'class': 'form-control',}
 		self.fields['Address'].widget.attrs = {'class': 'form-control',}

@@ -85,6 +85,7 @@ INSTALLED_APPS = [
     'blog',
     'consultancy',
     'stockkeeping',
+    'pdf',
 
 ]
 

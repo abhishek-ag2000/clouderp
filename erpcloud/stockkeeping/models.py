@@ -206,7 +206,7 @@ class Stock_Total(models.Model):
 class Stock_Total_sales(models.Model):
 	sales       = models.ForeignKey(Sales,on_delete=models.CASCADE,null=True,blank=False,related_name='saletotal')
 	stockitem   = models.ForeignKey(Stockdata,on_delete=models.CASCADE,null=True,blank=True,related_name='salestock') 
-	Quantity    = models.PositiveIntegerField()
+	Quantity    = models.PositiveIntegerField(null=True,blank=True)
 	rate		= models.DecimalField(max_digits=10,decimal_places=2)
 	Disc    	= models.DecimalField(max_digits=10,decimal_places=2,default=0)
 	gst_rate    = models.DecimalField(max_digits=4,decimal_places=2,default=5)

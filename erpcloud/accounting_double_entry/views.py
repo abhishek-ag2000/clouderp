@@ -18,7 +18,12 @@ import datetime
 from django.db.models import Value
 from django.db.models.functions import Coalesce 
 from itertools import zip_longest
-from bootstrap_modal_forms.mixins import PassRequestMixin, DeleteAjaxMixin          
+from bootstrap_modal_forms.mixins import PassRequestMixin, DeleteAjaxMixin  
+from django.db.models import Case, When, CharField, Value, Sum, F, ExpressionWrapper, Subquery, OuterRef, Count
+from django.db.models.fields import DecimalField
+import calendar
+import dateutil
+import collections        
 
 
 # Create your views here.
@@ -141,6 +146,115 @@ class group1DeleteView(LoginRequiredMixin,DeleteAjaxMixin,DeleteView):
 		context['selectdatefield_details'] = selectdatefield_details
 		return context
 
+
+################## Views For Ledger Monthly Display ###################################
+
+
+@login_required
+def ledger_monthly_detail_view(request, pk, pk2, pk3):
+	company_details = get_object_or_404(company, pk=pk)
+	ledger1_details = get_object_or_404(ledger1, pk=pk2)
+	selectdatefield_details = get_object_or_404(selectdatefield, pk=pk3)
+
+
+	# opening balance
+	qsob  = journal.objects.filter(User=request.user, Company=company_details.pk, By=ledger1_details.pk, Date__gte=ledger1_details.Creation_Date, Date__lte=selectdatefield_details.Start_Date)
+	qsob2 = journal.objects.filter(User=request.user, Company=company_details.pk, To=ledger1_details.pk, Date__gte=ledger1_details.Creation_Date, Date__lte=selectdatefield_details.Start_Date)
+
+	total_debitob = qsob.aggregate(the_sum=Coalesce(Sum('Debit'), Value(0)))['the_sum']
+	total_creditob = qsob2.aggregate(the_sum=Coalesce(Sum('Credit'), Value(0)))['the_sum']
+
+
+
+	if(ledger1_details.Creation_Date!=selectdatefield_details.Start_Date):
+		if(ledger1_details.group1_Name.balance_nature == 'Debit'):
+			opening_balance = abs(ledger1_details.Opening_Balance) + abs(total_debitob) - abs(total_creditob)
+		else:
+			opening_balance = abs(ledger1_details.Opening_Balance) + abs(total_creditob) - abs(total_debitob) 
+	else:
+		opening_balance = abs(ledger1_details.Opening_Balance)
+
+
+	results = collections.OrderedDict()
+
+	qscb  = journal.objects.filter(User=request.user, Company=company_details.pk, By=ledger1_details.pk, Date__gte=selectdatefield_details.Start_Date, Date__lte=selectdatefield_details.End_Date).annotate(real_total_debit = Case(When(Debit__isnull=True, then=0),default=F('Debit')))
+	qscb2 = journal.objects.filter(User=request.user, Company=company_details.pk, To=ledger1_details.pk, Date__gte=selectdatefield_details.Start_Date, Date__lte=selectdatefield_details.End_Date).annotate(real_total_credit = Case(When(Debit__isnull=True, then=0),default=F('Debit')))	
+	
+	date_cursor = selectdatefield_details.Start_Date
+
+	z = 0
+	k = 0
+
+	while date_cursor < selectdatefield_details.End_Date:
+		month_partial_total_debit = qscb.filter(Date__month=date_cursor.month).aggregate(partial_total_debit=Sum('real_total_debit'))['partial_total_debit']
+		month_partial_total_credit = qscb2.filter(Date__month=date_cursor.month).aggregate(partial_total_credit=Sum('real_total_credit'))['partial_total_credit']
+
+		if month_partial_total_debit == None:
+
+			month_partial_total_debit = int(0)
+
+			e = month_partial_total_debit
+
+		else:
+
+			e = month_partial_total_debit
+
+
+		if month_partial_total_credit == None:
+
+			month_partial_total_credit = int(0)
+
+			f = month_partial_total_credit
+
+		else:
+
+			f = month_partial_total_credit
+
+		if(ledger1_details.group1_Name.balance_nature == 'Debit'):
+
+			z = z + e - f 
+
+		else:
+			z = z + f - e 
+
+		k = z + opening_balance
+
+		results[calendar.month_name[date_cursor.month]] =  [e,f,k]
+
+		date_cursor += dateutil.relativedelta.relativedelta(months=1)
+
+	total_debit = qscb.aggregate(the_sum=Coalesce(Sum('Debit'), Value(0)))['the_sum']
+	total_credit = qscb2.aggregate(the_sum=Coalesce(Sum('Credit'), Value(0)))['the_sum']
+
+	if(ledger1_details.group1_Name.balance_nature == 'Debit'):
+
+		total1 = total_debit - total_credit
+
+	else:
+
+		 total1 = total_credit - total_debit
+
+	total = total1 + opening_balance
+
+
+	context = {
+
+		'company_details' : company_details,
+		'ledger1_details' : ledger1_details,
+		'selectdatefield_details' : selectdatefield_details,
+		'total_debit'     : total_debit,
+		'total_credit'    : total_credit,
+		'total'			  : total,
+		'data'			  : results.items(),
+		'opening_balance' : opening_balance,
+
+				
+	}
+
+	return render(request, 'accounting_double_entry/ledger_monthly.html', context)
+
+
+
 ################## Views For Ledger Display ###################################
 
 
@@ -182,8 +296,8 @@ def ledger1_detail_view(request, pk, pk2, pk3):
 		opening_balance = abs(ledger1_details.Opening_Balance)
 
 	# closing balance
-	qscb  = journal.objects.filter(User=request.user, Company=company_details.pk, By=ledger1_details.pk, Date__gte=selectdatefield_details.Start_Date, Date__lte=selectdatefield_details.End_Date)
-	qscb2 = journal.objects.filter(User=request.user, Company=company_details.pk, To=ledger1_details.pk, Date__gte=selectdatefield_details.Start_Date, Date__lte=selectdatefield_details.End_Date)	
+	qscb  = journal.objects.filter(User=request.user, Company=company_details.pk, By=ledger1_details.pk, Date__gte=selectdatefield_details.Start_Date, Date__lte=selectdatefield_details.End_Date).order_by('Date')
+	qscb2 = journal.objects.filter(User=request.user, Company=company_details.pk, To=ledger1_details.pk, Date__gte=selectdatefield_details.Start_Date, Date__lte=selectdatefield_details.End_Date).order_by('Date')	
 	new   = zip_longest(qscb,qscb2)
 
 	total_debitcb = qscb.aggregate(the_sum=Coalesce(Sum('Debit'), Value(0)))['the_sum']
@@ -314,7 +428,52 @@ class ledger1DeleteView(LoginRequiredMixin,DeleteView):
 		context['selectdatefield_details'] = selectdatefield_details
 		context['selectdates'] = selectdatefield.objects.filter(User=self.request.user)
 		return context
+
+
+################## Views For journal register Display ###################################
 	
+class Journal_Register_view(LoginRequiredMixin,ListView):
+	model = journal
+	template_name = 'accounting_double_entry/Journal_register.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(Journal_Register_view, self).get_context_data(**kwargs)
+		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		context['company_details'] = company_details
+		context['selectdatefield_details'] = selectdatefield_details
+
+		results = collections.OrderedDict()
+		result = journal.objects.filter(User=self.request.user, Company=company_details.pk,Date__gte=selectdatefield_details.Start_Date, Date__lt=selectdatefield_details.End_Date).annotate(real_total = Case(When(Debit__isnull=True, then=0),default=F('Debit')))
+		date_cursor = selectdatefield_details.Start_Date
+
+		z = 0
+
+		while date_cursor < selectdatefield_details.End_Date:
+			month_partial_total = result.filter(Date__month=date_cursor.month).aggregate(partial_total=Count('real_total'))['partial_total']
+
+			if month_partial_total == None:
+
+				month_partial_total = int(0)
+
+				e = month_partial_total
+
+			else:
+
+				e = month_partial_total
+
+			results[calendar.month_name[date_cursor.month]] = e			
+
+			date_cursor += dateutil.relativedelta.relativedelta(months=1)
+
+		total_voucher = result.aggregate(the_sum=Coalesce(Count('real_total'), Value(0)))['the_sum']
+
+
+		context['data'] = results.items()
+		context['total_voucher'] = total_voucher
+		
+		return context
+
 
 ################## Views For journal Display ###################################
 
@@ -523,8 +682,8 @@ def profit_and_loss_condensed_view(request,pk,pk3):
 	ldd = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Direct Expenses', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)
 	lddt = ldd.aggregate(the_sum=Coalesce(Sum('Closing_balance'), Value(0)))['the_sum']
 
-	ldi = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Direct Incomes', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)
-	lddi = ldi.aggregate(the_sum=Coalesce(Sum('Closing_balance'), Value(0)))['the_sum']
+	ldii = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Direct Incomes', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)
+	lddi = ldii.aggregate(the_sum=Coalesce(Sum('Closing_balance'), Value(0)))['the_sum']
 
 	lds = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Sales Account', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)
 	ldsc = lds.aggregate(the_sum=Coalesce(Sum('Closing_balance'), Value(0)))['the_sum']
@@ -685,7 +844,7 @@ def profit_and_loss_condensed_view(request,pk,pk3):
 		'total_direct_expenses': lddt,
 		'direct_expenses': ldd,
 		'total_direct_incomes': lddi,
-		'direct_incomes': ldi,
+		'direct_incomes': ldii,
 		'gross_profit' : gp,
 		'nett_profit' : np,
 		'tradingprofit': tradingp,

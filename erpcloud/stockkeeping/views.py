@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import (ListView,DetailView,
+from django.views.generic import (View,ListView,DetailView,
 								  CreateView,UpdateView,DeleteView)
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -12,8 +12,12 @@ from userprofile.models import Profile
 from django.shortcuts import get_object_or_404
 from django.db import transaction
 from django.db.models.functions import Coalesce
-from django.db.models import Value, Sum, F, ExpressionWrapper, Subquery, OuterRef
+from django.db.models import Case, When, CharField, Value, Sum, F, ExpressionWrapper, Subquery, OuterRef
 from django.db.models.fields import DecimalField
+import calendar
+import dateutil
+import collections
+
 # Create your views here.
 
 
@@ -421,6 +425,103 @@ class Stockgroup_deleteview(LoginRequiredMixin,DeleteView):
 		context['selectdatefield_details'] = selectdatefield_details
 		return context
 
+##################################### Stockitems Monthly Views #####################################
+
+@login_required
+def Stockitems_Monthly_view(request, pk, pk2, pk3):
+	company_details = get_object_or_404(company, pk=pk)
+	selectdatefield_details = get_object_or_404(selectdatefield, pk=pk3)
+	stockdata_details = get_object_or_404(Stockdata, pk=pk2)
+
+
+	results = collections.OrderedDict()
+	result1 = Stock_Total_sales.objects.filter(sales__User=request.user, sales__Company=company_details.pk, stockitem=stockdata_details.pk, sales__date__gte=selectdatefield_details.Start_Date, sales__date__lt=selectdatefield_details.End_Date).annotate(real_total_quantity_s = Case(When(Quantity__isnull=True, then=0),default=F('Quantity')))
+	result2 = Stock_Total.objects.filter(purchases__User=request.user, purchases__Company=company_details.pk, stockitem=stockdata_details.pk, purchases__date__gte=selectdatefield_details.Start_Date, purchases__date__lt=selectdatefield_details.End_Date).annotate(real_total_quantity_p = Case(When(Quantity_p__isnull=True, then=0),default=F('Quantity_p')))
+	result3 = Stock_Total.objects.filter(purchases__User=request.user, purchases__Company=company_details.pk, stockitem=stockdata_details.pk, purchases__date__gte=selectdatefield_details.Start_Date, purchases__date__lt=selectdatefield_details.End_Date).annotate(real_total_p = Case(When(Total_p__isnull=True, then=0),default=F('Total_p')))
+	result4 = Stock_Total_sales.objects.filter(sales__User=request.user, sales__Company=company_details.pk, stockitem=stockdata_details.pk, sales__date__gte=selectdatefield_details.Start_Date, sales__date__lt=selectdatefield_details.End_Date).annotate(real_total_s = Case(When(Total__isnull=True, then=0),default=F('Total')))
+
+	date_cursor = selectdatefield_details.Start_Date
+
+	w = 0
+	x = 0
+	y = 0
+	z = 0
+
+	while date_cursor < selectdatefield_details.End_Date:
+		month_partial_purchase_quantity = result2.filter(purchases__date__month=date_cursor.month).aggregate(partial_total_purchase_quantity=Sum('real_total_quantity_p'))['partial_total_purchase_quantity']
+		month_partial_sale_quantity = result1.filter(sales__date__month=date_cursor.month).aggregate(partial_total_sale_quantity=Sum('real_total_quantity_s'))['partial_total_sale_quantity']
+		month_partial_purchase = result3.filter(purchases__date__month=date_cursor.month).aggregate(partial_total_purchase=Sum('real_total_p'))['partial_total_purchase']
+		month_partial_sale = result4.filter(sales__date__month=date_cursor.month).aggregate(partial_total_sale=Sum('real_total_s'))['partial_total_sale']
+
+		if month_partial_purchase_quantity == None:
+
+			month_partial_purchase_quantity = int(0)
+			e = month_partial_purchase_quantity
+		else:
+			e = month_partial_purchase_quantity
+
+		if month_partial_sale_quantity == None:
+
+			month_partial_sale_quantity = int(0)
+			f = month_partial_sale_quantity
+		else:
+			f = month_partial_sale_quantity	
+
+		if month_partial_purchase == None:
+
+			month_partial_purchase = int(0)
+			g = month_partial_purchase
+		else:
+			g = month_partial_purchase
+
+
+		if month_partial_sale == None:
+
+			month_partial_sale = int(0)
+			h = month_partial_sale
+		else:
+			h = month_partial_sale
+
+
+		w = w + e - f
+
+		x = x + e
+
+		y = y + g
+
+		if x == 0:
+			z = y * w
+		else:
+			z = y / x * w			
+
+		results[calendar.month_name[date_cursor.month]] =  [w,e,f,g,h,z]			
+		date_cursor += dateutil.relativedelta.relativedelta(months=1)
+
+	total_purchase_quantity = result2.aggregate(the_sum=Coalesce(Sum('real_total_quantity_p'), Value(0)))['the_sum']
+	total_sale_quantity = result1.aggregate(the_sum=Coalesce(Sum('real_total_quantity_s'), Value(0)))['the_sum']
+	total_purchase = result3.aggregate(the_sum=Coalesce(Sum('real_total_p'), Value(0)))['the_sum']
+	total_sale = result4.aggregate(the_sum=Coalesce(Sum('real_total_s'), Value(0)))['the_sum']
+
+	Closing_balance = z
+
+	context = {
+
+		'company_details'             : company_details,
+		'stockdata_details'           : stockdata_details,
+		'selectdatefield_details' 	  : selectdatefield_details,
+		'total_purchase_quantity'     : total_purchase_quantity,
+		'total_sale_quantity'         : total_sale_quantity,
+		'total_purchase'			  : total_purchase,
+		'total_sale'                  : total_sale,
+		'data'			              : results.items(),
+		'Closing_balance'			  : Closing_balance,
+
+				
+	}
+
+	return render(request, 'stockkeeping/stockitem/Stock_Monthly.html', context)
+
+
 
 ##################################### Stockitems Views #####################################
 
@@ -468,7 +569,7 @@ class closing_list_view(LoginRequiredMixin,ListView):
     					'the_sum'
     				)
     			),
-    		purchase_tot = Coalesce(Sum('purchasestock__Total_p'),0)
+    		purchase_tot = Coalesce(Sum('purchasestock__Total_p'),0),
 		)
 
 		qs1 = qs.annotate(
@@ -653,7 +754,6 @@ class Purchase_detailsview(LoginRequiredMixin,DetailView):
 
 	def get_context_data(self, **kwargs):
 		context = super(Purchase_detailsview, self).get_context_data(**kwargs) 
-		context['profile_details'] = Profile.objects.all()
 		company_details = get_object_or_404(company, pk=self.kwargs['pk1'])
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
@@ -769,6 +869,106 @@ class Purchase_deleteview(LoginRequiredMixin,DeleteView):
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
 		return context
+
+
+##################################### Purchase Register Views #####################################
+
+
+class Purchase_Register_view(LoginRequiredMixin,ListView):
+	model = Purchase
+	template_name = 'stockkeeping/purchase/Purchase_Register.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(Purchase_Register_view, self).get_context_data(**kwargs)
+		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		context['company_details'] = company_details
+		context['selectdatefield_details'] = selectdatefield_details
+
+		results = collections.OrderedDict()
+		result = Purchase.objects.filter(User=self.request.user, Company=company_details.pk,date__gte=selectdatefield_details.Start_Date, date__lt=selectdatefield_details.End_Date).annotate(real_total = Case(When(Total_Purchase__isnull=True, then=0),default=F('Total_Purchase')))
+		date_cursor = selectdatefield_details.Start_Date
+
+		z = 0
+
+		while date_cursor < selectdatefield_details.End_Date:
+			month_partial_total = result.filter(date__month=date_cursor.month).aggregate(partial_total=Sum('real_total'))['partial_total']
+
+			if month_partial_total == None:
+
+				month_partial_total = int(0)
+
+				e = month_partial_total
+
+			else:
+
+				e = month_partial_total
+
+
+			z = z + e
+			
+
+			results[calendar.month_name[date_cursor.month]] =  [e,z]			
+
+			date_cursor += dateutil.relativedelta.relativedelta(months=1)
+
+		total_purchase = result.aggregate(the_sum=Coalesce(Sum('real_total'), Value(0)))['the_sum']
+
+		context['data'] = results.items()
+		
+		context['total_purchase'] = total_purchase
+		return context
+
+
+##################################### Sales Register Views #####################################
+
+
+class Sales_Register_view(LoginRequiredMixin,ListView):
+	model = Sales
+	template_name = 'stockkeeping/sales/Sales_Register.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(Sales_Register_view, self).get_context_data(**kwargs)
+		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		context['company_details'] = company_details
+		context['selectdatefield_details'] = selectdatefield_details
+
+		results = collections.OrderedDict()
+		result = Sales.objects.filter(User=self.request.user, Company=company_details.pk,date__gte=selectdatefield_details.Start_Date, date__lt=selectdatefield_details.End_Date).annotate(real_total = Case(When(Total_Amount__isnull=True, then=0),default=F('Total_Amount')))
+		date_cursor = selectdatefield_details.Start_Date
+
+		z = 0
+
+		while date_cursor < selectdatefield_details.End_Date:
+			month_partial_total = result.filter(date__month=date_cursor.month).aggregate(partial_total=Sum('real_total'))['partial_total']
+
+			if month_partial_total == None:
+
+				month_partial_total = int(0)
+
+				e = month_partial_total
+
+			else:
+
+				e = month_partial_total
+
+
+			z = z + e
+			
+
+			results[calendar.month_name[date_cursor.month]] =  [e,z]			
+
+			date_cursor += dateutil.relativedelta.relativedelta(months=1)
+
+		total_sale = result.aggregate(the_sum=Coalesce(Sum('real_total'), Value(0)))['the_sum']
+
+		context['Debit'] = e
+		context['data'] = results.items()
+		
+		context['total_sale'] = total_sale
+		return context
+
 
 ##################################### Sales Views #####################################
 
@@ -1042,8 +1242,8 @@ def profit_and_loss_view(request,pk,pk3):
 	ldd = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Direct Expenses', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)
 	lddt = ldd.aggregate(the_sum=Coalesce(Sum('Closing_balance'), Value(0)))['the_sum']
 
-	ldi = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Direct Incomes', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)
-	lddi = ldi.aggregate(the_sum=Coalesce(Sum('Closing_balance'), Value(0)))['the_sum']
+	ldii = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Direct Incomes', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)
+	lddi = ldii.aggregate(the_sum=Coalesce(Sum('Closing_balance'), Value(0)))['the_sum']
 
 	lds = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Sales Account', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)
 	ldsc = lds.aggregate(the_sum=Coalesce(Sum('Closing_balance'), Value(0)))['the_sum']
@@ -1204,7 +1404,7 @@ def profit_and_loss_view(request,pk,pk3):
 		'total_direct_expenses': lddt,
 		'direct_expenses': ldd,
 		'total_direct_incomes': lddi,
-		'direct_incomes': ldi,
+		'direct_incomes': ldii,
 		'gross_profit' : gp,
 		'nett_profit' : np,
 		'tradingprofit': tradingp,
