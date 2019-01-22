@@ -3,9 +3,9 @@ from django.views.generic import (ListView,DetailView,
 								  CreateView,UpdateView,DeleteView)
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from accounting_double_entry.models import group1,ledger1,journal,selectdatefield
+from accounting_double_entry.models import journal,group1,ledger1,selectdatefield,Payment,Particularspayment,Receipt,Particularsreceipt,Contra,Particularscontra,Multijournal,Multijournaltotal
 from stockkeeping.models import Stockgroup,Simpleunits,Compoundunits,Stockdata,Purchase,Sales,Stock_Total,Stock_Total_sales
-from accounting_double_entry.forms import journalForm,group1Form,Ledgerform,DateRangeForm
+from accounting_double_entry.forms import journalForm,group1Form,Ledgerform,DateRangeForm,PaymentForm,Payment_formSet,ParticularspaymentForm,ReceiptForm,ParticularsreceiptForm,Receipt_formSet,ContraForm,ParticularscontraForm,Contra_formSet,MultijournalForm,MultijournaltotalForm,Multijournal_formSet
 from userprofile.models import Profile
 from company.models import company
 from django.db.models import Q
@@ -23,7 +23,10 @@ from django.db.models import Case, When, CharField, Value, Sum, F, ExpressionWra
 from django.db.models.fields import DecimalField
 import calendar
 import dateutil
-import collections        
+import collections   
+from django.db import transaction  
+from django.forms import inlineformset_factory
+
 
 
 # Create your views here.
@@ -494,7 +497,6 @@ class journalListView(LoginRequiredMixin,ListView):
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
-		context['narrate'] = 'being journal.By debited by journal.To for journal.Credit.'
 		return context
 
 def journal_detail(request, pk1, pk2, pk3):
@@ -602,6 +604,232 @@ class journalDeleteView(LoginRequiredMixin,DeleteView):
 		context['selectdatefield_details'] = selectdatefield_details
 		return context
 
+################## Views For Multijournal ###################################
+
+
+class Multijournal_listview(LoginRequiredMixin,ListView):
+	model = Multijournaltotal
+	template_name = 'Multijournal/multi_journal_list.html'
+	paginate_by = 15
+
+
+	def get_queryset(self):
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		return self.model.objects.filter(User=self.request.user, Company=self.kwargs['pk'], Date__gte=selectdatefield_details.Start_Date, Date__lte=selectdatefield_details.End_Date).order_by('-id')
+
+	def get_context_data(self, **kwargs):
+		context = super(Multijournal_listview, self).get_context_data(**kwargs) 
+		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
+		context['company_details'] = company_details
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		context['selectdatefield_details'] = selectdatefield_details
+		return context
+
+
+def multijournal_detail(request, pk, pk2, pk3):
+	company_details = get_object_or_404(company, pk=pk)
+	multijournal_details = get_object_or_404(Multijournaltotal, pk=pk2)
+	selectdatefield_details = get_object_or_404(selectdatefield, pk=pk3)
+	Multijournals = Multijournal.objects.filter(total=multijournal_details.pk)
+
+
+	context = {
+
+		'multijournal_details'     : multijournal_details,
+		'company_details'          : company_details,
+		'selectdatefield_details'  : selectdatefield_details,
+		'Multijournals'            : Multijournals,
+	}
+	return render(request, 'Multijournal/multi_journal_details.html', context)
+
+
+class Multijournal_createview(LoginRequiredMixin,CreateView):
+	form_class  = MultijournaltotalForm
+	template_name = 'Multijournal/multi_journal_form.html'
+
+
+	def get_success_url(self,**kwargs):
+		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		return reverse('accounting_double_entry:multijournallist', kwargs={'pk':company_details.pk, 'pk3':selectdatefield_details.pk})
+
+	def get_context_data(self, **kwargs):
+		context = super(Multijournal_createview, self).get_context_data(**kwargs) 
+		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
+		context['company_details'] = company_details
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		context['selectdatefield_details'] = selectdatefield_details
+		if self.request.POST:
+			context['multijournalformset'] = Multijournal_formSet(self.request.POST)
+		else:
+			context['multijournalformset'] = Multijournal_formSet()
+		return context
+
+	def form_valid(self, form):
+		form.instance.User = self.request.user
+		c = company.objects.get(pk=self.kwargs['pk'])
+		form.instance.Company = c
+		context = self.get_context_data()
+		multijournalformset = context['multijournalformset']
+		with transaction.atomic():
+			self.object = form.save()
+			if multijournalformset.is_valid():
+				multijournalformset.instance = self.object
+				multijournalformset.save()
+		return super(Multijournal_createview, self).form_valid(form)
+
+	def get_form_kwargs(self):
+		data = super(Multijournal_createview, self).get_form_kwargs()
+		if self.request.POST:
+			multijournalformset = Multijournal_formSet(self.request.POST)
+		else:
+			multijournalformset = Multijournal_formSet()
+		if multijournalformset.is_valid():
+			data.update(
+				User=self.request.user,
+				Company=company.objects.get(pk=self.kwargs['pk'])
+				)
+		return data
+
+
+
+class Multijournal_updateview(LoginRequiredMixin,UpdateView):
+	model = Multijournaltotal
+	form_class  = MultijournaltotalForm
+	template_name = 'Multijournal/multi_journal_form.html'
+
+
+	def get_success_url(self,**kwargs):
+		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
+		multijournal_details = get_object_or_404(Multijournaltotal, pk=pk2)
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		return reverse('accounting_double_entry:multijournaldetail', kwargs={'pk1':company_details.pk, 'pk2':multijournal_details.pk,'pk3':selectdatefield_details.pk})
+
+	def get_object(self):
+		pk1 = self.kwargs['pk']
+		pk2 = self.kwargs['pk2']
+		get_object_or_404(company, pk=pk1)
+		multijournaltotal = get_object_or_404(Multijournaltotal, pk=pk2)
+		return multijournaltotal
+
+	def get_context_data(self, **kwargs):
+		context = super(Multijournal_updateview, self).get_context_data(**kwargs) 
+		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
+		context['company_details'] = company_details
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		context['selectdatefield_details'] = selectdatefield_details
+		multijournal_details = get_object_or_404(Multijournaltotal, pk=self.kwargs['pk2'])
+		total = Multijournal.objects.get(total=multijournal_details.pk)
+		Multijournal_formSet = inlineformset_factory(Multijournaltotal, Multijournal,form=MultijournalForm, extra=6)	
+		multijournalformset = Multijournal_formSet(self.request.POST or None, instance=total)	
+		context['multijournalformset'] = multijournalformset
+		return context
+
+	def form_valid(self, form):
+		form.instance.User = self.request.user
+		c = company.objects.get(pk=self.kwargs['pk']) 
+		form.instance.Company = c
+		context = self.get_context_data()
+		multijournalformset = context['multijournalformset']
+		with transaction.atomic():
+			self.object = form.save()
+			if multijournalformset.is_valid():
+				multijournalformset.instance = self.object
+				multijournalformset.save()
+		return super(Multijournal_createview, self).form_valid(form)
+
+
+# @login_required
+# def Multijournal_updateview(request,pk,pk2,pk3):
+# 	company_details = get_object_or_404(company, pk=pk)
+# 	selectdatefield_details = get_object_or_404(selectdatefield, pk=pk3)
+# 	multijournal_details = get_object_or_404(Multijournaltotal, pk=pk2)
+
+# 	total = Multijournal.objects.filter(total=multijournal_details.pk)
+# 	Multijournal_formSet = inlineformset_factory(Multijournaltotal, Multijournal,form=MultijournalForm, extra=6)
+
+# 	if request.method == "POST":
+# 		multijournalformset = Multijournal_formSet(request.POST or None, instance=total)
+
+# 		if multijournalformset.is_valid():
+# 			instances = multijournalformset.save(commit=False)
+# 			for instance in instances:
+# 				m = Multijournaltotal.objects.get(total=multijournal_details.pk)
+# 				instance.total = m
+# 				instance.save()
+# 				return HttpResponseRedirect(total.get_absolute_url())
+
+# 	else:
+# 		multijournalformset = Multijournal_formSet()
+
+# 	context = {
+
+# 		'company_details' 		  : company_details,
+# 		'selectdatefield_details' : selectdatefield_details,
+# 		'multijournal_details'	  : multijournal_details,
+# 		'multijournalformset'	  : multijournalformset
+# 	}
+
+# 	return render(request, 'Multijournal/multi_journal_form.html', context)
+
+class multijournal_deleteview(LoginRequiredMixin,DeleteView):
+	model = Multijournaltotal
+	template_name = 'Multijournal/multijournal_delete.html'
+
+	def get_success_url(self,**kwargs):
+		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		return reverse('accounting_double_entry:multijournallist', kwargs={'pk':company_details.pk, 'pk3':selectdatefield_details.pk})
+
+	def get_object(self):
+		pk1 = self.kwargs['pk']
+		pk2 = self.kwargs['pk2']
+		get_object_or_404(company, pk=pk1)
+		multijournal = get_object_or_404(Multijournaltotal, pk=pk2)
+		return multijournal
+
+	def get_context_data(self, **kwargs):
+		context = super(multijournal_deleteview, self).get_context_data(**kwargs) 
+		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
+		context['company_details'] = company_details
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		context['selectdatefield_details'] = selectdatefield_details
+		multijournal_details = get_object_or_404(Multijournaltotal, pk=self.kwargs['pk2'])
+		context['multijournal_details'] = multijournal_details	
+		return context	
+
+
+################## Views For Multiplae Journal objects ###################################	
+
+class Multiplae_Journal_objectsCreateView(LoginRequiredMixin,CreateView):
+	form_class  = Multijournal
+	template_name = 'Multijournal/multi_journal_form.html'
+
+	def get_success_url(self,**kwargs):
+		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		return reverse('accounting_double_entry:multijournallist', kwargs={'pk':company_details.pk, 'pk3':selectdatefield_details.pk})
+
+
+	def get_form_kwargs(self):
+		data = super(Multiplae_Journal_objectsCreateView, self).get_form_kwargs()
+		data.update(
+			User=self.request.user,
+			Company=company.objects.get(pk=self.kwargs['pk'])
+			)
+		return data
+
+
+	def get_context_data(self, **kwargs):
+		context = super(Multiplae_Journal_objectsCreateView, self).get_context_data(**kwargs) 
+		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
+		context['company_details'] = company_details
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		context['selectdatefield_details'] = selectdatefield_details
+		return context
+
+
+
 ################## Views For Daterange Display ###################################
 
 class datecreateview(LoginRequiredMixin,CreateView):
@@ -623,6 +851,227 @@ class dateupdateview(LoginRequiredMixin,UpdateView):
 	def get_success_url(self,**kwargs):
 		return reverse('company:list')
 
+
+
+################## Views For Payment ###################################
+
+class Payment_createview(LoginRequiredMixin,CreateView):
+	form_class  = PaymentForm
+	success_message = "%(account)s is submitted successfully"
+	template_name = 'Payments/payment_form.html'
+
+
+	def get_success_url(self,**kwargs):
+		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		return reverse('accounting_double_entry:paymentcreate', kwargs={'pk':company_details.pk, 'pk3':selectdatefield_details.pk})
+
+	def get_context_data(self, **kwargs):
+		context = super(Payment_createview, self).get_context_data(**kwargs) 
+		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
+		context['company_details'] = company_details
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		context['selectdatefield_details'] = selectdatefield_details
+		if self.request.POST:
+			context['payments'] = Payment_formSet(self.request.POST)
+		else:
+			context['payments'] = Payment_formSet()
+		return context
+
+	def form_valid(self, form):
+		form.instance.User = self.request.user
+		c = company.objects.get(pk=self.kwargs['pk'])
+		form.instance.Company = c
+		context = self.get_context_data()
+		payments = context['payments']
+		with transaction.atomic():
+			self.object = form.save()
+			if payments.is_valid():
+				payments.instance = self.object
+				payments.save()
+		return super(Payment_createview, self).form_valid(form)
+
+	def get_form_kwargs(self):
+		data = super(Payment_createview, self).get_form_kwargs()
+		data.update(
+			User=self.request.user,
+			Company=company.objects.get(pk=self.kwargs['pk'])
+			)
+		return data
+
+class ParticularspaymentCreateView(LoginRequiredMixin,CreateView):
+	form_class  = ParticularspaymentForm
+	template_name = 'Payments/payment_form.html'
+
+	def get_success_url(self,**kwargs):
+		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		return reverse('accounting_double_entry:paymentcreate', kwargs={'pk':company_details.pk, 'pk3':selectdatefield_details.pk})
+
+
+	def get_form_kwargs(self):
+		data = super(ParticularspaymentCreateView, self).get_form_kwargs()
+		data.update(
+			User=self.request.user,
+			Company=company.objects.get(pk=self.kwargs['pk'])
+			)
+		return data
+
+
+	def get_context_data(self, **kwargs):
+		context = super(ParticularspaymentCreateView, self).get_context_data(**kwargs) 
+		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
+		context['company_details'] = company_details
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		context['selectdatefield_details'] = selectdatefield_details
+		return context
+
+
+################## Views For Receipt ###################################
+
+class Receipt_createview(LoginRequiredMixin,CreateView):
+	form_class  = ReceiptForm
+	success_message = "%(account)s is submitted successfully"
+	template_name = 'Receipt/receipt_form.html'
+
+
+	def get_success_url(self,**kwargs):
+		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		return reverse('accounting_double_entry:receiptcreate', kwargs={'pk':company_details.pk, 'pk3':selectdatefield_details.pk})
+
+	def get_context_data(self, **kwargs):
+		context = super(Receipt_createview, self).get_context_data(**kwargs) 
+		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
+		context['company_details'] = company_details
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		context['selectdatefield_details'] = selectdatefield_details
+		if self.request.POST:
+			context['receipts'] = Receipt_formSet(self.request.POST)
+		else:
+			context['receipts'] = Receipt_formSet()
+		return context
+
+	def form_valid(self, form):
+		form.instance.User = self.request.user
+		c = company.objects.get(pk=self.kwargs['pk'])
+		form.instance.Company = c
+		context = self.get_context_data()
+		receipts = context['receipts']
+		with transaction.atomic():
+			self.object = form.save()
+			if receipts.is_valid():
+				receipts.instance = self.object
+				receipts.save()
+		return super(Receipt_createview, self).form_valid(form)
+
+	def get_form_kwargs(self):
+		data = super(Receipt_createview, self).get_form_kwargs()
+		data.update(
+			User=self.request.user,
+			Company=company.objects.get(pk=self.kwargs['pk'])
+			)
+		return data
+
+class ParticularspayreceiptCreateView(LoginRequiredMixin,CreateView):
+	form_class  = ParticularsreceiptForm
+	template_name = 'Receipt/receipt_form.html'
+
+	def get_success_url(self,**kwargs):
+		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		return reverse('accounting_double_entry:receiptcreate', kwargs={'pk':company_details.pk, 'pk3':selectdatefield_details.pk})
+
+
+	def get_form_kwargs(self):
+		data = super(ParticularspayreceiptCreateView, self).get_form_kwargs()
+		data.update(
+			User=self.request.user,
+			Company=company.objects.get(pk=self.kwargs['pk'])
+			)
+		return data
+
+
+	def get_context_data(self, **kwargs):
+		context = super(ParticularspayreceiptCreateView, self).get_context_data(**kwargs) 
+		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
+		context['company_details'] = company_details
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		context['selectdatefield_details'] = selectdatefield_details
+		return context
+
+################## Views For Contra ###################################
+
+class Contra_createview(LoginRequiredMixin,CreateView):
+	form_class  = ContraForm
+	success_message = "%(account)s is submitted successfully"
+	template_name = 'Contra/contra_form.html'
+
+
+	def get_success_url(self,**kwargs):
+		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		return reverse('accounting_double_entry:contracreate', kwargs={'pk':company_details.pk, 'pk3':selectdatefield_details.pk})
+
+	def get_context_data(self, **kwargs):
+		context = super(Contra_createview, self).get_context_data(**kwargs) 
+		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
+		context['company_details'] = company_details
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		context['selectdatefield_details'] = selectdatefield_details
+		if self.request.POST:
+			context['contras'] = Contra_formSet(self.request.POST)
+		else:
+			context['contras'] = Contra_formSet()
+		return context
+
+	def form_valid(self, form):
+		form.instance.User = self.request.user
+		c = company.objects.get(pk=self.kwargs['pk'])
+		form.instance.Company = c
+		context = self.get_context_data()
+		contras = context['contras']
+		with transaction.atomic():
+			self.object = form.save()
+			if contras.is_valid():
+				contras.instance = self.object
+				contras.save()
+		return super(Contra_createview, self).form_valid(form)
+
+	def get_form_kwargs(self):
+		data = super(Contra_createview, self).get_form_kwargs()
+		data.update(
+			User=self.request.user,
+			Company=company.objects.get(pk=self.kwargs['pk'])
+			)
+		return data
+
+class ParticularspaycontraCreateView(LoginRequiredMixin,CreateView):
+	form_class  = ParticularscontraForm
+	template_name = 'Contra/contra_form.html'
+
+	def get_success_url(self,**kwargs):
+		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		return reverse('accounting_double_entry:contracreate', kwargs={'pk':company_details.pk, 'pk3':selectdatefield_details.pk})
+
+
+	def get_form_kwargs(self):
+		data = super(ParticularspaycontraCreateView, self).get_form_kwargs()
+		data.update(
+			User=self.request.user,
+			Company=company.objects.get(pk=self.kwargs['pk'])
+			)
+		return data
+
+
+	def get_context_data(self, **kwargs):
+		context = super(ParticularspaycontraCreateView, self).get_context_data(**kwargs) 
+		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
+		context['company_details'] = company_details
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		context['selectdatefield_details'] = selectdatefield_details
+		return context
 
 ################## Views For Profit & Loss Display ###################################
 

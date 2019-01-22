@@ -74,23 +74,23 @@
         <!-- /.col -->
       </div>
       <!-- /.row -->
-
+<hr>
       <!-- Table row -->
       <div class="row">
         <div class="col-xs-12 table-responsive">
           <table class="table table-striped">
-            <thead>
+          
             <tr>
-              <th>Sl.no</th>
-              <th>Product</th>
-              <th>Quantity</th>
-              <th>Rate</th>
-              <th>GST Rate(%)</th>
-              <th>Discount(%)</th>
-              <th>Sub Total(&#8377;)</th>
+              <td><strong>Sl.no</strong></td>
+              <td><strong>Product</strong></td>
+              <td><strong>Quantity</strong></td>
+              <td><strong> Rate</strong></td>
+              <td><strong> GST Rate(%)</strong></td>
+              <td><strong> Discount(%)</strong></td>
+              <td><strong> Sub Total(INR)</strong></td>
             </tr>
-            </thead>
-            <tbody>
+
+            
             {% for stock_total in stocklist %}
               <tr>
                 <td>{{forloop.counter}}</td>
@@ -101,13 +101,32 @@
                 <td>{{stock_total.Disc}}</td>
                 <td>{{stock_total.Total}}</td>
               </tr>
-              {% endfor %}
-            </tbody>
+            {% endfor %}
+         
           </table>
         </div>
         <!-- /.col -->
       </div>
       <!-- /.row -->
+
+<hr>
+          <div class="table-responsive pull-right">
+            <table class="table">
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>Subtotal(INR) :</th>
+                <th></th>
+                <th>{{sales_details.Total_Amount}}</th>
+              </tr>
+
+              
+              
+              
+            </table>
+          </div>
 
       <div class="row">
         <!-- accepted payments column -->
@@ -136,18 +155,7 @@
         <div class="col-xs-6">
           
 
-          <div class="table-responsive">
-            <table class="table">
-              <tr>
-                <th style="width:50%">Subtotal:(&#8377;)</th>
-                <td>{{sales_details.Total_Amount}}</td>
-              </tr>
 
-              
-              
-              
-            </table>
-          </div>
         </div>
         <!-- /.col -->
       </div>

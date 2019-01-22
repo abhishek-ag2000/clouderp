@@ -6,7 +6,8 @@ from django.dispatch import receiver
 from django.urls import reverse
 from django.core.exceptions import ValidationError
 from django.dispatch import receiver
-from django.db.models import Sum
+from django.db.models.functions import Coalesce 
+from django.db.models import Case, When, CharField, Value, Sum, F, ExpressionWrapper, Subquery, OuterRef, Count
 from company.models import company
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
@@ -311,5 +312,149 @@ class journal(models.Model):
 			raise ValidationError('Debit Amount Should Be Equal To Credit Amount')
 		elif self.To == self.By:
 			raise ValidationError('Particular Entry Cannot be same')
+
+
+class Payment(models.Model):
+	User       = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,null=True,blank=True)
+	Company    = models.ForeignKey(company,on_delete=models.CASCADE,null=True,blank=True,related_name='Companynamepayment')
+	date       = models.DateField(default=datetime.date.today)
+	account    = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='Payledgers')
+	total_amt  = models.DecimalField(max_digits=10,decimal_places=2,blank=True,null=True)
+
+	def __str__(self):
+		return str(self.account)
+
+class Particularspayment(models.Model):
+	payment    = models.ForeignKey(Payment,on_delete=models.CASCADE,related_name='payments')
+	particular = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='particularpayment')
+	amount     = models.DecimalField(max_digits=10,decimal_places=2,null=True)
+
+	def __str__(self):
+		return str(self.payment)
+
+class Receipt(models.Model):
+	User       = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,null=True,blank=True)
+	Company    = models.ForeignKey(company,on_delete=models.CASCADE,null=True,blank=True,related_name='Companynamereceipt')
+	date       = models.DateField(default=datetime.date.today)
+	account    = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='receiptledgers')
+	total_amt  = models.DecimalField(max_digits=10,decimal_places=2,blank=True,null=True)
+
+	def __str__(self):
+		return str(self.account)
+
+class Particularsreceipt(models.Model):
+	receipt    = models.ForeignKey(Receipt,on_delete=models.CASCADE,related_name='receipts')
+	particular = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='particularreceipt')
+	amount     = models.DecimalField(max_digits=10,decimal_places=2,null=True)
+
+	def __str__(self):
+		return str(self.receipt)
+
+
+class Contra(models.Model):
+	User       = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,null=True,blank=True)
+	Company    = models.ForeignKey(company,on_delete=models.CASCADE,null=True,blank=True,related_name='Companynamecontra')
+	date       = models.DateField(default=datetime.date.today)
+	account    = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='contraledgers')
+	total_amt  = models.DecimalField(max_digits=10,decimal_places=2,blank=True,null=True)
+
+	def __str__(self):
+		return str(self.account)
+
+class Particularscontra(models.Model):
+	contra     = models.ForeignKey(Contra,on_delete=models.CASCADE,related_name='contras')
+	particular = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='particularcontra')
+	amount     = models.DecimalField(max_digits=10,decimal_places=2,null=True)
+
+	def __str__(self):
+		return str(self.contra)
+
+
+
+@receiver(pre_save, sender=Payment)
+def update_total_payment(sender,instance,*args,**kwargs):
+	total1 = instance.payments.aggregate(the_sum=Coalesce(Sum('amount'), Value(0)))['the_sum']
+	instance.total_amt = total1
+
+
+@receiver(pre_save, sender=Particularspayment)
+def user_created_payment(sender,instance,*args,**kwargs):
+	if instance.amount != None:
+		journal.objects.update_or_create(User=instance.payment.User,Company=instance.payment.Company,Date=instance.payment.date,By=instance.particular,To=instance.payment.account,Debit=instance.amount,Credit=instance.amount)
+
+
+@receiver(pre_save, sender=Receipt)
+def update_total_receipt(sender,instance,*args,**kwargs):
+	total1 = instance.receipts.aggregate(the_sum=Coalesce(Sum('amount'), Value(0)))['the_sum']
+	instance.total_amt = total1
+
+
+@receiver(pre_save, sender=Particularsreceipt)
+def user_created_receipt(sender,instance,*args,**kwargs):
+	if instance.amount != None:
+		journal.objects.update_or_create(User=instance.receipt.User,Company=instance.receipt.Company,Date=instance.receipt.date,By=instance.receipt.account,To=instance.particular,Debit=instance.amount,Credit=instance.amount)
+
+@receiver(pre_save, sender=Contra)
+def update_total_contra(sender,instance,*args,**kwargs):
+	total1 = instance.contras.aggregate(the_sum=Coalesce(Sum('amount'), Value(0)))['the_sum']
+	instance.total_amt = total1
+
+
+@receiver(pre_save, sender=Particularscontra)
+def user_created_contra(sender,instance,*args,**kwargs):
+	if instance.amount != None:
+		journal.objects.update_or_create(User=instance.contra.User,Company=instance.contra.Company,Date=instance.contra.date,By=instance.particular,To=instance.contra.account,Debit=instance.amount,Credit=instance.amount)
+
+
+
+class Multijournaltotal(models.Model):
+	User         = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,null=True,blank=True)
+	Company      = models.ForeignKey(company,on_delete=models.CASCADE,null=True,blank=True,related_name='Companynamemultijournaltotal')
+	Date         = models.DateField(default=datetime.date.today)
+	Total_Debit  = models.DecimalField(max_digits=10,decimal_places=2,blank=True,null=True)
+	Total_Credit = models.DecimalField(max_digits=10,decimal_places=2,blank=True,null=True)
+
+	def __str__(self):
+		return str(self.Total_Debit)
+
+	def clean(self):
+		if self.Total_Debit != self.Total_Credit:
+			raise ValidationError('Debit Amount Should Be Equal To Credit Amount')
+
+	def get_absolute_url(self, **kwargs):
+		company_details = get_object_or_404(company, pk=self.kwargs['pk1'])
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=pk3)
+		return reverse("accounting_double_entry:multijournaldetail", kwargs={'pk2':self.pk, 'pk':company_details.pk, 'pk3':selectdatefield_details.pk })
+
+
+class Multijournal(models.Model):
+	By           = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='Debitledgersmulti')
+	To           = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='Creditledgersmulti')
+	Debit        = models.DecimalField(max_digits=10,decimal_places=2,null=True)	
+	Credit       = models.DecimalField(max_digits=10,decimal_places=2,null=True)
+	total 		 = models.ForeignKey(Multijournaltotal,on_delete=models.CASCADE,related_name='totals')	
+	narration    = models.TextField(blank=True)
+
+
+	def __str__(self):
+		return str(self.By)
+
+	def get_absolute_url(self, **kwargs):
+		company_details = get_object_or_404(company, pk=self.kwargs['pk1'])
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=pk3)
+		return reverse("accounting_double_entry:multijournaldetail", kwargs={'pk2':self.pk, 'pk':company_details.pk, 'pk3':selectdatefield_details.pk })
+
+
+
+
+@receiver(pre_save, sender=Multijournaltotal)
+def update_total_journaldebit(sender,instance,*args,**kwargs):
+	total_debit = instance.totals.aggregate(the_sum=Coalesce(Sum('Debit'), Value(0)))['the_sum']
+	instance.Total_Debit = total_debit
+
+@receiver(pre_save, sender=Multijournaltotal)
+def update_total_journalcredit(sender,instance,*args,**kwargs):
+	total_credit = instance.totals.aggregate(the_sum=Coalesce(Sum('Credit'), Value(0)))['the_sum']
+	instance.Total_Credit = total_credit
 
 

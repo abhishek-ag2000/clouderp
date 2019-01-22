@@ -139,6 +139,8 @@
       </div>
       <!-- /.row -->
 
+      <hr>
+
       <!-- Table row -->
       <div class="row">
         <div class="col-xs-12 table-responsive">
@@ -165,24 +167,24 @@
             {% for stock_total in stocklist %}
 
               <tr>
-                <td>{{forloop.counter}}</td>
-                <td>{{stock_total.stockitem}}</td>
-                <td>{{stock_total.Quantity_p}}</td>
-                <td>{{stock_total.rate_p}}</td>
-                <td>{{stock_total.Disc_p}}</td>
-                <td>{{stock_total.Total_p}}</td>
+                <th>{{forloop.counter}}</th>
+                <th>{{stock_total.stockitem}}</th>
+                <th>{{stock_total.Quantity_p}}</th>
+                <th>{{stock_total.rate_p}}</th>
+                <th>{{stock_total.Disc_p}}</th>
+                <th>{{stock_total.Total_p}}</th>
                 {% if company_details.State == purchase_details.State %}                
 
-                  <td>{{name}}-({{stock_total.stockitem.gst_rate|div:2}}%)</td>
-                  <td>{{stock_total.stockitem.gst_rate|div:200|mul:stock_total.Total_p|floatformat:2}}-({{stock_total.stockitem.gst_rate|div:2}}%)</td>
+                  <th>{{name}}-({{stock_total.stockitem.gst_rate|div:2}}%)</th>
+                  <th>{{stock_total.stockitem.gst_rate|div:200|mul:stock_total.Total_p|floatformat:2}}-({{stock_total.stockitem.gst_rate|div:2}}%)</th>
                 
                 {% else %}
 
-                  <td>{{stock_total.stockitem.gst_rate|div:100|mul:stock_total.Total_p|floatformat:2}}-{{stock_total.stockitem.gst_rate}}%</td>
+                  <th>{{stock_total.stockitem.gst_rate|div:100|mul:stock_total.Total_p|floatformat:2}}-{{stock_total.stockitem.gst_rate}}%</th>
 
                 {% endif %}
 
-                <td>{{stock_total.stockitem.gst_rate|div:100|addition:1|mul:stock_total.Total_p|floatformat:2}}</td>
+                <th>{{stock_total.stockitem.gst_rate|div:100|addition:1|mul:stock_total.Total_p|floatformat:2}}</th>
                 
               </tr>
 
@@ -195,6 +197,65 @@
         <!-- /.col -->
       </div>
       <!-- /.row -->
+
+      <hr>
+              
+              
+              
+            
+          <div class="table-responsive pull-right">
+            <table class="table">
+              <tr>
+                 <th></th>
+                <th></th>
+                <th></th>
+                <th style="width:50%">Subtotal:(&#8377;)</th>
+                <th></th>
+                <th></th>
+                <td>{{purchase_details.Total_Purchase}}</td>
+              </tr>
+          {% if company_details.State == purchase_details.State %}
+              <tr>
+                 <th></th>
+                <th></th>
+                <th></th>
+                <th style="width:50%">CGST:(&#8377;)</th>
+                <th></th>
+                <th></th>
+                <td>{{purchase_details.Total_Purchase}}</td>
+              </tr>
+              <tr>
+                 <th></th>
+                <th></th>
+                <th></th>
+                <th style="width:50%">SGST:(&#8377;)</th>
+                <th></th>
+                <th></th>
+                <td>{{purchase_details.Total_Purchase}}</td>
+              </tr>
+          {% else %}
+              <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th style="width:50%">IGST:(&#8377;)</th>
+                <th></th>
+                <th></th>
+                <td>{{purchase_details.Total_Purchase}}</td>
+              </tr>
+          {% endif %}
+              <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th style="width:50%">Total:(&#8377;)</th>
+                <th></th>
+                <th></th>
+                <td>{{purchase_details.Total_Purchase}}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
 
       <div class="row">
         <!-- accepted payments column -->
@@ -220,37 +281,7 @@
           </p>
         </div>
         <!-- /.col -->
-        <div class="col-xs-6">
-          
 
-          <div class="table-responsive">
-            <table class="table">
-              <tr>
-                <th style="width:50%">Subtotal:(&#8377;)</th>
-                <td>{{purchase_details.Total_Purchase}}</td>
-              </tr>
-          {% if company_details.State == purchase_details.State %}
-              <tr>
-                <th style="width:50%">CGST:(&#8377;)</th>
-                <td>{{purchase_details.Total_Purchase}}</td>
-              </tr>
-              <tr>
-                <th style="width:50%">SGST:(&#8377;)</th>
-                <td>{{purchase_details.Total_Purchase}}</td>
-              </tr>
-          {% else %}
-              <tr>
-                <th style="width:50%">IGST:(&#8377;)</th>
-                <td>{{purchase_details.Total_Purchase}}</td>
-              </tr>
-          {% endif %}
-              <tr>
-                <th style="width:50%">Total:(&#8377;)</th>
-                <td>{{purchase_details.Total_Purchase}}</td>
-              </tr>
-            </table>
-          </div>
-        </div>
         <!-- /.col -->
       </div>
       <!-- /.row -->

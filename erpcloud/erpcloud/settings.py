@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     # argon2 = pip install django[argon2]
     # bcrypt = pip install bcrypt
     # pillow = pip install pillow
+    # xhtml2pdf = pip install --pre xhtml2pdf
 
 
 

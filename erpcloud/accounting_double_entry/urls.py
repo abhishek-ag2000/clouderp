@@ -41,11 +41,33 @@ urlpatterns = [
     url(r'^company/(?P<pk1>\d+)/date/(?P<pk3>\d+)/journal/update/(?P<pk2>\d+)/$',views.journalUpdateView.as_view(),name='update'),
     url(r'^company/(?P<pk1>\d+)/date/(?P<pk3>\d+)/journal/delete/(?P<pk2>\d+)/$',views.journalDeleteView.as_view(),name='delete'),
 
+####### Multijournal Urls ######################################## 
+
+    url(r'^company/(?P<pk>\d+)/date/(?P<pk3>\d+)/multijournallist/$',views.Multijournal_listview.as_view(),name='multijournallist'),
+    url(r'^company/(?P<pk>\d+)/date/(?P<pk3>\d+)/multijournallist/(?P<pk2>\d+)/$',views.multijournal_detail,name='multijournaldetail'),   
+    url(r'^company/(?P<pk>\d+)/date/(?P<pk3>\d+)/multijournal/create/$',views.Multijournal_createview.as_view(),name='multijournalcreate'),
+    url(r'^company/(?P<pk>\d+)/date/(?P<pk3>\d+)/multijournalupdate/(?P<pk2>\d+)/$',views.Multijournal_updateview.as_view(),name='multijournalupdate'),
+    url(r'^company/(?P<pk>\d+)/date/(?P<pk3>\d+)/multijournal/delete/(?P<pk2>\d+)/$',views.multijournal_deleteview.as_view(),name='multijournaldelete'),
+
 
 ####### Daterange Urls ########################################  
   
     url(r'^daterangecreate/$',views.datecreateview.as_view(),name='datecreate'),
     url(r'^daterangeupdate/(?P<pk>\d+)/$',views.dateupdateview.as_view(),name='dateupdate'),
+
+####### Payment Urls ######################################## 
+
+    url(r'^company/(?P<pk>\d+)/date/(?P<pk3>\d+)/payment/create/$',views.Payment_createview.as_view(),name='paymentcreate'),
+
+####### Receipt Urls ######################################## 
+
+    url(r'^company/(?P<pk>\d+)/date/(?P<pk3>\d+)/receipt/create/$',views.Receipt_createview.as_view(),name='receiptcreate'),
+
+####### Contra Urls ######################################## 
+
+    url(r'^company/(?P<pk>\d+)/date/(?P<pk3>\d+)/contra/create/$',views.Contra_createview.as_view(),name='contracreate'),
+
+
 
 
 

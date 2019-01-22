@@ -441,6 +441,22 @@
               </ul>
             </li>
 
+                        <li class="treeview">
+              <a href="#"><i class="fa fa-circle-o"></i>Multi Journal
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+              <ul class="treeview-menu">
+               
+                <li><a href="{% url 'accounting_double_entry:multijournalcreate' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Create</a></li>
+                <li><a href="{% url 'accounting_double_entry:multijournallist' pk=company_details.pk pk3=selectdatefield_details.pk  %}"><i class="fa fa-circle-o"></i> Display</a></li>
+                  
+                 
+                   
+              </ul>
+            </li>
+
             <li class="treeview">
               <a href="#"><i class="fa fa-circle-o"></i> Ledgers
                 <span class="pull-right-container">
@@ -659,8 +675,114 @@
                 <li><a href="pages/tables/Purchase_Invoice.html"><i class="fa fa-circle-o"></i> Income Tax Reports</a></li>
                 </ul>
 
+
+
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-share"></i> <span>Vouchers</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            
+            
+            <li class="treeview">
+              <a href="#"><i class="fa fa-circle-o"></i> Journal
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+              <ul class="treeview-menu">
+               
+                 <li><a href="{% url 'accounting_double_entry:create' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Create</a></li>
+                 
+                 
+                   
+              </ul>
             </li>
-            <li><a href="index3.html"><i class="fa fa-book"></i> <span>Create Voucher</span></a></li>
+
+                        <li class="treeview">
+              <a href="#"><i class="fa fa-circle-o"></i>Sales Invoice
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="{% url 'stockkeeping:salescreate' pk=company_details.pk pk3=selectdatefield_details.pk  %}"><i class="fa fa-circle-o"></i> Create</a></li>
+                
+                  
+                  <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Alter</a></li> -->
+                   
+              </ul>
+            </li>
+            <li class="treeview">
+              <a href="#"><i class="fa fa-circle-o"></i>Purchase Invoice
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="{% url 'stockkeeping:purchasecreate' pk=company_details.pk pk3=selectdatefield_details.pk  %}"><i class="fa fa-circle-o"></i> Create</a></li>
+                
+                  
+                  <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Alter</a></li> -->
+                   
+              </ul>
+            </li>
+
+                        <li class="treeview">
+              <a href="#"><i class="fa fa-circle-o"></i>Payment
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="{% url 'accounting_double_entry:paymentcreate' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Create</a></li>
+                
+                  
+                  <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Alter</a></li> -->
+                   
+              </ul>
+            </li>
+
+            <li class="treeview">
+              <a href="#"><i class="fa fa-circle-o"></i>Receipts
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="{% url 'accounting_double_entry:receiptcreate' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Create</a></li>
+                
+                  
+                  <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Alter</a></li> -->
+                   
+              </ul>
+            </li>
+
+                        <li class="treeview">
+              <a href="#"><i class="fa fa-circle-o"></i>Contra
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="{% url 'accounting_double_entry:contracreate' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Create</a></li>
+                
+                  
+                  <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Alter</a></li> -->
+                   
+              </ul>
+            </li>
+
+
+
+
+
+          </ul>
+        </li>
+
 
             
         <li class="treeview">
@@ -902,6 +1024,14 @@
     {% endblock %}
   </aside>
 
+  
+      {% if messages %}
+      <ul class="messages">
+          {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+          {% endfor %}
+      </ul>
+    {% endif %}
 
 
 <div id="content">
@@ -910,6 +1040,8 @@
 
   {% endblock %}
 </div>
+
+{% block footer %}
   <footer class="main-footer">
     <div class="pull-right hidden-xs">
       <b>Version</b> 1.1.0
@@ -917,6 +1049,7 @@
     BracketLine - <strong>Copyright &copy; 2017-2018 <a href="#"></a>.</strong> All rights
     reserved.
 </footer>
+{% endblock %}
 
 
 

@@ -105,7 +105,10 @@
     <div class="row">
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="box box-info">
-          <div class="box-header with-border">
+
+<div id="printableArea">
+  
+<div class="box-header with-border">
               
               <h2 class="box-title"><b>Profit & Loss Overview</b></h2>
         
@@ -390,13 +393,16 @@
                 </tr>     
             </table>
           </div>
+  
+</div>
+          
 
 
 
                             <div class="box-footer">
                     <hr>
                      <div class="pull-left">
-                     <a href="invoice-print.html" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</a>
+                     <input class='btn btn-default' type="button" onclick="printDiv('printableArea')" value="Print" />
                     
                      </div>
 
@@ -419,4 +425,17 @@
 
 
 
+<script type="text/javascript">
+  
+  function printDiv(divName) {
+     var printContents = document.getElementById(divName).innerHTML;
+     var originalContents = document.body.innerHTML;
+
+     document.body.innerHTML = printContents;
+
+     window.print();
+
+     document.body.innerHTML = originalContents;
+  }
+</script>
 {% endblock %}

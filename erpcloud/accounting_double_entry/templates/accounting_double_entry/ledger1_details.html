@@ -98,6 +98,12 @@
 			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 			
 				<div class="box box-info">
+
+
+<div id="printableArea">
+	
+
+
 					 <div class="box-header with-border">
         			
           				<h3 class="box-title"><b>Ledger Details</b></h3>
@@ -624,13 +630,20 @@
 					</table>
         			</div>
 
+</div>
+
 
 						
 
 						<br>
 
 						<div class="box-footer">
-    					<p><a class='btn btn-warning' href="{% url 'accounting_double_entry:ledgerupdate' pk=company_details.pk pk2=ledger1_details.pk pk3=selectdatefield_details.pk %}">Update Ledger</a> <a class='btn btn-danger pull-right' href="{% url 'accounting_double_entry:ledgerdelete' pk=company_details.pk pk2=ledger1_details.pk pk3=selectdatefield_details.pk %}">Delete Ledger</a></p>
+
+						<p><input class='btn btn-default' type="button" onclick="printDiv('printableArea')" value="Print" />
+
+    					<a class='btn btn-warning' href="{% url 'accounting_double_entry:ledgerupdate' pk=company_details.pk pk2=ledger1_details.pk pk3=selectdatefield_details.pk %}">Update Ledger</a> 
+
+    					<a class='btn btn-danger pull-right' href="{% url 'accounting_double_entry:ledgerdelete' pk=company_details.pk pk2=ledger1_details.pk pk3=selectdatefield_details.pk %}">Delete Ledger</a></p>
 
   					</div>
 
@@ -644,5 +657,22 @@
 		
 	</section>
 </div>
+
+
+<script type="text/javascript">
+  
+  	function printDiv(divName) {
+	    var printContents = document.getElementById(divName).innerHTML;
+	    var originalContents = document.body.innerHTML;
+
+	    document.body.innerHTML = printContents;
+
+	    window.print();
+
+	    document.body.innerHTML = originalContents;
+
+ 	}
+
+</script> 
 
 {% endblock %}

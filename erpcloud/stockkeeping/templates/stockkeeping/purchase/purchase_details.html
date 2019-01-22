@@ -90,11 +90,14 @@
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
           <!-- Horizontal Form -->
           <div class="box box-info">
-            <div class="box-header with-border">
             
-              <h3 class="box-title"> Purchase Invoice</h3>
+            <div id="printableArea">
+              
+<div class="box-header with-border">
+            
+      <h3 class="box-title">Purchase Invoice</h3>
            
-            </div>
+  </div>
             <!-- /.box-header -->
   <div class="box-body">
      <section class="invoice">
@@ -102,7 +105,7 @@
       <div class="row">
         <div class="col-xs-12">
           <h2 class="page-header">
-            <i class="fa fa-globe"></i> {{company_details.Name}}
+            {{company_details.Name}}
             <small class="pull-right">Date: {{purchase_details.date}}</small>
           </h2>
         </div>
@@ -262,13 +265,17 @@
       </div>
       <!-- /.row -->
     </section>
-  </div>      <!-- form start -->
+  </div> 
+
+            </div>
+            <!-- printablearea -->
+       <!-- form start -->
    
 
       <!-- this row will not appear when printing -->
       <div class="box-footer">
         
-          <a href="{% url 'pdf:purchasedetailprint' pk2=purchase_details.pk pk1=company_details.pk pk3=selectdatefield_details.pk %}" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</a>
+          <input class='btn btn-default' type="button" onclick="printDiv('printableArea')" value="Print" />
 
           <a class='btn btn-warning' href="{% url 'stockkeeping:purchaseupdate' pk1=company_details.pk pk2=purchase_details.pk pk3=selectdatefield_details.pk %}">Update Purchase Invoice</a><a class='btn btn-danger pull-right' href="{% url 'stockkeeping:purchasedelete' pk=company_details.pk pk2=purchase_details.pk pk3=selectdatefield_details.pk %}">Delete Purchase Invoice</a>
 
@@ -291,7 +298,21 @@
 </section>
 </div>
 
-    
+   
+
+<script type="text/javascript">
+  
+  function printDiv(divName) {
+     var printContents = document.getElementById(divName).innerHTML;
+     var originalContents = document.body.innerHTML;
+
+     document.body.innerHTML = printContents;
+
+     window.print();
+
+     document.body.innerHTML = originalContents;
+  }
+</script> 
   
 
 {% endblock %}

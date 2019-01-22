@@ -215,6 +215,9 @@ class Stock_Total_sales(models.Model):
 	def __str__(self):
 		return str(self.sales)
 
+
+
+
 @receiver(pre_save, sender=Stock_Total)
 def update_gst_rate_purchase(sender, instance, *args, **kwargs):
 	instance.gst_rate_p = instance.stockitem.gst_rate
