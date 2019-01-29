@@ -71,25 +71,10 @@
           <div class="box box-default">
           <div class="box-body">
 
-          <a href="{% url 'accounting_double_entry:P&Lcond' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-success" role="button">Profit & Loss View</a>
-          
-          <a href="{% url 'accounting_double_entry:blsht' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-warning" role="button">Balance Sheet Overview</a>
-
-          <a href="{% url 'accounting_double_entry:trialbalcond' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-warning" role="button">Trial Balance</a>
-
-            <button type="button" class="btn btn-default dropdown-toggle pull-right" data-toggle="dropdown">Wt AVG(default)
-                    <span class="fa fa-caret-down"></span></button>
-                  <ul class="dropdown-menu pull-right">
-                    <li><a  href="{% url 'stockkeeping:closingstock' pk=company_details.pk pk3=selectdatefield_details.pk %}">Wt AVG</a></li>
-                    <li><a  href="">LIFO</a></li>
-                    <li><a href="">FIFO</a></li>
-                    
-                                        
-                  </ul>
-
-                <a class="pull-right"><strong>Stock valuation Method :</strong>&nbsp;</a>
 
             <a href="{% url 'stockkeeping:sale_register' pk=company_details.pk pk3=selectdatefield_details.pk  %}" class="btn btn-info" role="button">Sales Register</a>
+
+            <a href="{% url 'accounting_double_entry:daybook' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-warning" role="button">Day Book</a>
 
             <a href="{% url 'accounting_double_entry:journalregister' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-default" role="button">Journal Register</a>
         

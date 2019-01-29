@@ -102,6 +102,25 @@
 				<div class="box box-info">
 
 <div id="printableArea">
+
+
+  <!--         CSS for not printing the urls in print preview
+ -->      <style>
+          @media print  
+          {
+          a[href]:after {
+          content: none !important;
+           }
+          @page {
+          margin-top: 0;
+          margin-bottom: 0;
+          }
+           body{
+          padding-top: 72px;
+          padding-bottom: 72px ;
+          }
+          }
+          </style>
   
   <div class="box-header with-border">
               
@@ -122,7 +141,7 @@
           <table class="table table-bordered table-hover">
               <tr>
                 <th class="col-lg-3 col-md-3 col-sm-3 col-xs-3"></th>
-                <th><center>Closing Balance</center></th>
+                <th class="col-lg-9 col-md-9 col-sm-9 col-xs-9"><center>Closing Balance</center></th>
 
               </tr>
           </table>

@@ -104,27 +104,31 @@
                   </div>
                   <!-- /.box-header -->
                   <div class="box-body table-responsive no-padding">
-                    <table class="table table-bordered table-striped">
+                    <table class="table table-bordered table-striped" id="book-table">
 
-                      <tr>
-                        <th>Sl no</th>
-                        <th>Name</th>
+                      <thead>
+                        
+                        <tr>
+                        
+                        <th>Ledger Name</th>
+                        <th>Ledger ID</th>
                         <th>Date Created</th>
                         <th>Under Group</th>
+                        <th>Balance Nature</th>
                         <th>Opening Balance</th>
                         <th>Closing Balance</th>
+                        <th>Delete</th>
                       </tr>
 
-                      {% for ledger1 in ledger1_list %}
-                      <tr>
-                        <td><a href="{% url 'accounting_double_entry:ledgerdetail' pk=company_details.pk pk2=ledger1.pk pk3=selectdatefield_details.pk %}">{{ forloop.counter0|add:page_obj.start_index }}</a></td>
-                        <td><a href="{% url 'accounting_double_entry:ledgerdetail' pk=company_details.pk pk2=ledger1.pk pk3=selectdatefield_details.pk %}">{{ledger1.name}}</a></td>
-                        <td><a href="{% url 'accounting_double_entry:ledgerdetail' pk=company_details.pk pk2=ledger1.pk pk3=selectdatefield_details.pk %}">{{ledger1.Creation_Date}}</a></td>
-                        <td><a href="{% url 'accounting_double_entry:ledgerdetail' pk=company_details.pk pk2=ledger1.pk pk3=selectdatefield_details.pk %}">{{ledger1.group1_Name}}</a></td>
-                        <td><a href="{% url 'accounting_double_entry:ledgerdetail' pk=company_details.pk pk2=ledger1.pk pk3=selectdatefield_details.pk %}">{{ledger1.Balance_opening}}</a></td>
-                        <td><a href="{% url 'accounting_double_entry:ledgerdetail' pk=company_details.pk pk2=ledger1.pk pk3=selectdatefield_details.pk %}">{{ledger1.Closing_balance|floatformat:2|abs}}</a></td>
-                      </tr>
-                      {% endfor %}
+                      </thead>
+
+                      <tbody>
+                        {% include "accounting_double_entry/ledger_list_2.html" %}
+                      </tbody>
+
+                      
+
+
                      
                      
                     </table>
@@ -174,6 +178,13 @@
 
       </div>
 </section>
+
+
+  <div class="modal fade" id="modal-book">
+    <div class="modal-dialog">
+      <div class="modal-content"></div>
+    </div>
+  </div>
 
 
 {% endblock %}

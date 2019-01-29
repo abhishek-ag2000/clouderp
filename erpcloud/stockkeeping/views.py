@@ -502,7 +502,7 @@ def Stockitems_Monthly_view(request, pk, pk2, pk3):
 	total_purchase = result3.aggregate(the_sum=Coalesce(Sum('real_total_p'), Value(0)))['the_sum']
 	total_sale = result4.aggregate(the_sum=Coalesce(Sum('real_total_s'), Value(0)))['the_sum']
 
-	Closing_balance = (total_purchase / total_purchase_quantity) * (total_purchase_quantity - total_sale_quantity)
+	Closing_balance = z
 
 	context = {
 
@@ -557,17 +557,7 @@ class closing_list_view(LoginRequiredMixin,ListView):
     					the_sum = Sum('Quantity')
     				).values('the_sum'),
     			output_field=FloatField()),
-    		purchase_sum = Subquery(
-    			Stock_Total.objects.filter(purchases__User=self.request.user, purchases__Company=company_details.pk,
-    				stockitem = OuterRef('pk'),purchases__date__gte=selectdatefield_details.Start_Date, purchases__date__lt=selectdatefield_details.End_Date
-    				).values(
-    					'stockitem'
-    				).annotate(
-    					the_sum = Sum('Quantity_p')
-    				).values(
-    					'the_sum'
-    				),
-    			output_field=FloatField()),
+    		purchase_sum =  Coalesce(Sum('purchasestock__Quantity_p'),0),
     		purchase_tot = Subquery(
     			Stock_Total.objects.filter(purchases__User=self.request.user, purchases__Company=company_details.pk,
     				stockitem = OuterRef('pk'),purchases__date__gte=selectdatefield_details.Start_Date, purchases__date__lt=selectdatefield_details.End_Date

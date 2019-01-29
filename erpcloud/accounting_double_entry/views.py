@@ -26,18 +26,43 @@ import dateutil
 import collections   
 from django.db import transaction  
 from django.forms import inlineformset_factory
+from django.http import JsonResponse
+from django.template.loader import render_to_string
 
 
 
 # Create your views here.
 ###################### Views For Group Display ############################################
 
+class groupsummaryListView(LoginRequiredMixin,ListView):
+	model = group1
+	paginate_by = 15
+
+	def get_template_names(self):
+		if True:  
+			return ['Group_Summary/group_summary.html']
+		else:
+			pass
+
+	def get_queryset(self):
+		return self.model.objects.filter(User=self.request.user, Company=self.kwargs['pk']).order_by('-id')
+
+	def get_context_data(self, **kwargs):
+		context = super(groupsummaryListView, self).get_context_data(**kwargs) 
+		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
+		context['company_details'] = company_details
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		context['selectdatefield_details'] = selectdatefield_details
+		return context
+
+
+
 class group1ListView(LoginRequiredMixin,ListView):
 	model = group1
 	paginate_by = 15
 
 	def get_queryset(self):
-		return self.model.objects.filter(User=self.request.user, Company=self.kwargs['pk'])
+		return self.model.objects.filter(User=self.request.user, Company=self.kwargs['pk']).order_by('-id')
 
 	def get_context_data(self, **kwargs):
 		context = super(group1ListView, self).get_context_data(**kwargs) 
@@ -46,6 +71,110 @@ class group1ListView(LoginRequiredMixin,ListView):
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
 		return context
+
+
+@login_required
+def groupsummary_detail_view(request, pk, pk2, pk3):
+	company_details = get_object_or_404(company, pk=pk)
+	group1_details = get_object_or_404(group1, pk=pk2)
+	selectdatefield_details = get_object_or_404(selectdatefield, pk=pk3)
+
+	group1_obj = group1.objects.filter(User=request.user, Company=company_details.pk, Master=group1_details.pk, ledgergroups__Creation_Date__gte=selectdatefield_details.Start_Date, ledgergroups__Creation_Date__lte=selectdatefield_details.End_Date)
+	groups_cb  = group1_obj.annotate(
+				closing = Coalesce(Sum('ledgergroups__Closing_balance'), 0),
+			)
+
+	ledger1_obj = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name=group1_details.pk, Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)
+	ledger1_cb  = ledger1_obj.annotate(
+				closing = Coalesce(Sum('Closing_balance'), 0),
+			)
+
+	# For Primary Groups
+
+	groupprimary = group1.objects.filter(User=request.user, Company=company_details.pk, Master__group_Name__icontains='Primary', ledgergroups__Creation_Date__gte=selectdatefield_details.Start_Date, ledgergroups__Creation_Date__lte=selectdatefield_details.End_Date)
+	groupprimarycb = groupprimary.annotate(
+			closing = Coalesce(Sum('ledgergroups__Closing_balance'), 0))
+
+	groupprimarytcb = groupprimarycb.aggregate(the_sum=Coalesce(Sum('closing'), Value(0)))['the_sum']
+	
+	ledprimary = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name__group_Name__icontains='Primary', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)	
+	ledprimarycb = ledprimary.aggregate(the_sum=Coalesce(Sum('Closing_balance'), Value(0)))['the_sum']
+
+	total_primarycb = groupprimarytcb + ledprimarycb	
+
+
+
+	# Groups and ledger with debit balance nature
+
+	groupsdebit = group1.objects.filter(User=request.user, Company=company_details.pk, Master=group1_details.pk, balance_nature__icontains='Debit', ledgergroups__Creation_Date__gte=selectdatefield_details.Start_Date, ledgergroups__Creation_Date__lte=selectdatefield_details.End_Date)
+	groups_cbc = groupsdebit.annotate(
+				closing = Coalesce(Sum('ledgergroups__Closing_balance'), 0)).filter(closing__gt = 0)
+
+	groupcbl = groupsdebit.annotate(
+			closing = Coalesce(Sum('ledgergroups__Closing_balance'), 0)).filter(closing__lt = 0)
+
+	posgroup = groups_cbc.aggregate(the_sum=Coalesce(Sum('closing'), Value(0)))['the_sum']
+	neggroup = groupcbl.aggregate(the_sum=Coalesce(Sum('closing'), Value(0)))['the_sum']
+
+
+
+
+	ledger1debit = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name=group1_details.pk, group1_Name__balance_nature__icontains='Debit', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)
+	ledger1_cbc = ledger1debit.annotate(
+				closing = Coalesce(Sum('Closing_balance'), 0)).filter(closing__gt = 0)
+
+	ledger1cbl = ledger1debit.annotate(
+			closing = Coalesce(Sum('Closing_balance'), 0)).filter(closing__lt = 0)
+
+	posledger = ledger1_cbc.aggregate(the_sum=Coalesce(Sum('closing'), Value(0)))['the_sum']
+	negledger = ledger1cbl.aggregate(the_sum=Coalesce(Sum('closing'), Value(0)))['the_sum']
+
+
+	# Groups and ledger with Credit balance nature
+
+	groupscredit = group1.objects.filter(User=request.user, Company=company_details.pk, Master=group1_details.pk, balance_nature__icontains='Credit', ledgergroups__Creation_Date__gte=selectdatefield_details.Start_Date, ledgergroups__Creation_Date__lte=selectdatefield_details.End_Date)
+	groups_credpo = groupscredit.annotate(
+				closing = Coalesce(Sum('ledgergroups__Closing_balance'), 0)).filter(closing__gt = 0)
+
+	groups_creneg = groupscredit.annotate(
+			closing = Coalesce(Sum('ledgergroups__Closing_balance'), 0)).filter(closing__lt = 0)
+
+	posgroupcre = groups_credpo.aggregate(the_sum=Coalesce(Sum('closing'), Value(0)))['the_sum']
+	neggroupcre = groups_creneg.aggregate(the_sum=Coalesce(Sum('closing'), Value(0)))['the_sum']
+
+
+
+	ledger1credit = ledger1.objects.filter(User=request.user, Company=company_details.pk, group1_Name=group1_details.pk, group1_Name__balance_nature__icontains='Credit', Creation_Date__gte=selectdatefield_details.Start_Date, Creation_Date__lte=selectdatefield_details.End_Date)
+	ledger1_crepo = ledger1credit.annotate(
+				closing = Coalesce(Sum('Closing_balance'), 0)).filter(closing__gt = 0)
+
+	ledger1_creneg = ledger1credit.annotate(
+			closing = Coalesce(Sum('Closing_balance'), 0)).filter(closing__lt = 0)
+
+	posledgercre = ledger1_crepo.aggregate(the_sum=Coalesce(Sum('closing'), Value(0)))['the_sum']
+	negledgercre = ledger1_creneg.aggregate(the_sum=Coalesce(Sum('closing'), Value(0)))['the_sum']
+
+	debitside = posgroup + neggroupcre + posledger + negledgercre
+
+	creditside = posledgercre + negledger + posgroupcre + neggroup
+
+	context = {
+
+		'company_details' 		  : company_details,
+		'group1_details'  		  : group1_details,
+		'selectdatefield_details' : selectdatefield_details,
+		'group1_obj'      		  : groups_cb,
+		'ledger1_obj'    		  : ledger1_cb,
+		'debitside'				  : debitside,
+		'creditside'			  : creditside,
+		'primary_groups'		  : groupprimarycb,
+		'primary_ledgers'		  : ledprimary,
+		'total_primary'			  : total_primarycb,	
+				
+	}
+
+	return render(request, 'Group_Summary/group_summary_details.html', context)
+
 
 
 class group1DetailView(LoginRequiredMixin,DetailView):
@@ -124,30 +253,56 @@ class group1UpdateView(LoginRequiredMixin,UpdateView):
 		context['selectdatefield_details'] = selectdatefield_details
 		return context
 
-class group1DeleteView(LoginRequiredMixin,DeleteAjaxMixin,DeleteView):
-	model = group1
-	success_message = 'This group is successfully deleted.'
+def save_all(request,form,template_name,pk, pk3):
+	company_details = get_object_or_404(company, pk=pk)
+	selectdatefield_details = get_object_or_404(selectdatefield, pk=pk3)
+	data = dict()
+	if request.method == 'POST':
+		if form.is_valid():
+			form.save()
+			data['form_is_valid'] = True
+			group1_list = group1.objects.filter(User= request.user, Company=company_details.pk).order_by('-id')
+			data['group_list'] = render_to_string('accounting_double_entry/group1_list2.html',{'group1_list':group1_list})
+		else:
+			data['form_is_valid'] = False
+	context = {
 
-	def get_success_url(self,**kwargs):
-		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
-		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
-		return reverse('accounting_double_entry:grouplist', kwargs={'pk':company_details.pk, 'pk3':selectdatefield_details.pk})
-	
+		'form':form,
+		'company_details' : company_details,
+		'selectdatefield_details' : selectdatefield_details
+	}
+	data['html_form'] = render_to_string(template_name,context,request=request)
 
-	def get_object(self):
-		pk = self.kwargs['pk']
-		pk2 = self.kwargs['pk2']
-		get_object_or_404(company, pk=pk)
-		group = get_object_or_404(group1, pk=pk2)
-		return group
+	return JsonResponse(data)
 
-	def get_context_data(self, **kwargs):
-		context = super(group1DeleteView, self).get_context_data(**kwargs) 
-		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
-		context['company_details'] = company_details
-		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
-		context['selectdatefield_details'] = selectdatefield_details
-		return context
+@login_required
+def group_delete_view(request, pk, pk2, pk3):
+	data = dict()
+	company_details = get_object_or_404(company, pk=pk)
+	group = get_object_or_404(group1, pk=pk2)
+	selectdatefield_details = get_object_or_404(selectdatefield, pk=pk3)
+
+	if request.method == "POST":
+		group.delete()
+		data['form_is_valid'] = True
+		group1_list = group1.objects.filter(User= request.user, Company=company_details.pk).order_by('-id')
+		context = {
+			'group1_list':group1_list,
+			'company_details' : company_details,
+			'selectdatefield_details' : selectdatefield_details,
+		}
+		data['group_list'] = render_to_string('accounting_double_entry/group1_list2.html',context)
+	else:
+		context = {
+			'group':group,
+			'company_details' : company_details,
+			'selectdatefield_details' : selectdatefield_details,
+		}
+		data['html_form'] = render_to_string('accounting_double_entry/group1_confirm_delete.html',context,request=request)
+
+	return JsonResponse(data)
+
+
 
 
 ################## Views For Ledger Monthly Display ###################################
@@ -181,7 +336,7 @@ def ledger_monthly_detail_view(request, pk, pk2, pk3):
 	results = collections.OrderedDict()
 
 	qscb  = journal.objects.filter(User=request.user, Company=company_details.pk, By=ledger1_details.pk, Date__gte=selectdatefield_details.Start_Date, Date__lte=selectdatefield_details.End_Date).annotate(real_total_debit = Case(When(Debit__isnull=True, then=0),default=F('Debit')))
-	qscb2 = journal.objects.filter(User=request.user, Company=company_details.pk, To=ledger1_details.pk, Date__gte=selectdatefield_details.Start_Date, Date__lte=selectdatefield_details.End_Date).annotate(real_total_credit = Case(When(Debit__isnull=True, then=0),default=F('Debit')))	
+	qscb2 = journal.objects.filter(User=request.user, Company=company_details.pk, To=ledger1_details.pk, Date__gte=selectdatefield_details.Start_Date, Date__lte=selectdatefield_details.End_Date).annotate(real_total_credit = Case(When(Credit__isnull=True, then=0),default=F('Credit')))	
 	
 	date_cursor = selectdatefield_details.Start_Date
 
@@ -406,31 +561,32 @@ class ledger1UpdateView(LoginRequiredMixin,UpdateView):
 		return context
 
 
-class ledger1DeleteView(LoginRequiredMixin,DeleteView):
-	model = ledger1
+@login_required
+def ledger_delete_view(request, pk, pk2, pk3):
+	data = dict()
+	company_details = get_object_or_404(company, pk=pk)
+	ledger = get_object_or_404(ledger1, pk=pk2)
+	selectdatefield_details = get_object_or_404(selectdatefield, pk=pk3)
 
-	def get_success_url(self,**kwargs):
-		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
-		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
-		return reverse('accounting_double_entry:ledgerlist', kwargs={'pk':company_details.pk, 'pk3':selectdatefield_details.pk})
-	
+	if request.method == "POST":
+		ledger.delete()
+		data['form_is_valid'] = True
+		ledger1_list = ledger1.objects.filter(User= request.user, Company=company_details.pk).order_by('-id')
+		context = {
+			'ledger1_list':ledger1_list,
+			'company_details' : company_details,
+			'selectdatefield_details' : selectdatefield_details,
+		}
+		data['ledger_list'] = render_to_string('accounting_double_entry/ledger_list_2.html',context)
+	else:
+		context = {
+			'ledger':ledger,
+			'company_details' : company_details,
+			'selectdatefield_details' : selectdatefield_details,
+		}
+		data['html_form'] = render_to_string('accounting_double_entry/ledger1_confirm_delete.html',context,request=request)
 
-	def get_object(self):
-		pk1 = self.kwargs['pk']
-		pk2 = self.kwargs['pk2']
-		get_object_or_404(company, pk=pk1)
-		ledger = get_object_or_404(ledger1, pk=pk2)
-		return ledger
-
-
-	def get_context_data(self, **kwargs):
-		context = super(ledger1DeleteView, self).get_context_data(**kwargs) 
-		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
-		context['company_details'] = company_details
-		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
-		context['selectdatefield_details'] = selectdatefield_details
-		context['selectdates'] = selectdatefield.objects.filter(User=self.request.user)
-		return context
+	return JsonResponse(data)
 
 
 ################## Views For journal register Display ###################################
@@ -492,6 +648,30 @@ class journalListView(LoginRequiredMixin,ListView):
 
 	def get_context_data(self, **kwargs):
 		context = super(journalListView, self).get_context_data(**kwargs) 
+		context['profile_details'] = Profile.objects.all()
+		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
+		context['company_details'] = company_details
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		context['selectdatefield_details'] = selectdatefield_details
+		return context
+
+class DaybookListView(LoginRequiredMixin,ListView):
+	model = journal
+	paginate_by = 15
+
+	def get_template_names(self):
+		if True:  
+			return ['Daybook/daybook.html']
+		else:
+			return ['accounting_double_entry/journal_list.html']
+
+	def get_queryset(self):
+		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		return journal.objects.filter(User=self.request.user, Company=self.kwargs['pk'], Date__gte=selectdatefield_details.Start_Date, Date__lte=selectdatefield_details.End_Date).order_by('-id')
+
+
+	def get_context_data(self, **kwargs):
+		context = super(DaybookListView, self).get_context_data(**kwargs) 
 		context['profile_details'] = Profile.objects.all()
 		company_details = get_object_or_404(company, pk=self.kwargs['pk'])
 		context['company_details'] = company_details
@@ -580,29 +760,32 @@ class journalUpdateView(LoginRequiredMixin,UpdateView):
 		context['selectdatefield_details'] = selectdatefield_details
 		return context
 
-class journalDeleteView(LoginRequiredMixin,DeleteView):
-	model = journal
+@login_required
+def journal_delete_view(request, pk, pk2, pk3):
+	data = dict()
+	company_details = get_object_or_404(company, pk=pk)
+	journals = get_object_or_404(journal, pk=pk2)
+	selectdatefield_details = get_object_or_404(selectdatefield, pk=pk3)
 
-	def get_success_url(self,**kwargs):
-		company_details = get_object_or_404(company, pk=self.kwargs['pk1'])
-		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
-		return reverse('accounting_double_entry:list', kwargs={'pk':company_details.pk, 'pk3':selectdatefield_details.pk})
+	if request.method == "POST":
+		journals.delete()
+		data['form_is_valid'] = True
+		journal_list = journal.objects.filter(User= request.user, Company=company_details.pk, Date__gte=selectdatefield_details.Start_Date, Date__lte=selectdatefield_details.End_Date).order_by('-id')
+		context = {
+			'journal_list':journal_list,
+			'company_details' : company_details,
+			'selectdatefield_details' : selectdatefield_details,
+		}
+		data['journals_list'] = render_to_string('accounting_double_entry/journal_list_2.html',context)
+	else:
+		context = {
+			'journals':journals,
+			'company_details' : company_details,
+			'selectdatefield_details' : selectdatefield_details,
+		}
+		data['html_form'] = render_to_string('accounting_double_entry/journal_confirm_delete.html',context,request=request)
 
-	def get_object(self):
-		pk1 = self.kwargs['pk1']
-		pk2 = self.kwargs['pk2']
-		get_object_or_404(company, pk=pk1)
-		Journal = get_object_or_404(journal, pk=pk2)
-		return Journal
-
-
-	def get_context_data(self, **kwargs):
-		context = super(journalDeleteView, self).get_context_data(**kwargs) 
-		company_details = get_object_or_404(company, pk=self.kwargs['pk1'])
-		context['company_details'] = company_details
-		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
-		context['selectdatefield_details'] = selectdatefield_details
-		return context
+	return JsonResponse(data)
 
 ################## Views For Multijournal ###################################
 
@@ -1534,8 +1717,8 @@ def balance_sheet_condensed_view(request,pk,pk3):
 
 
 
-	# Current Assets
-
+	
+# Current Assets
 	groupcurastch = group1.objects.filter(User=request.user, Company=company_details.pk, Master__group_Name__icontains='Current Assets', ledgergroups__Creation_Date__gte=selectdatefield_details.Start_Date, ledgergroups__Creation_Date__lte=selectdatefield_details.End_Date)
 	groupcurastcb = groupcurastch.annotate(
 			closing = Coalesce(Sum('ledgergroups__Closing_balance'), 0))
@@ -1600,40 +1783,6 @@ def balance_sheet_condensed_view(request,pk,pk3):
 		gp = abs(ldsc) + abs(qs2) + abs(lddi) - abs(qo2) - abs(ldc) - abs(lddt)
 
 
-	if gp >=0:
-		if  lddi < 0 and lddt < 0:
-			tradingp  =  abs(qo2) + abs(ldc) + (gp) + abs(lddi)
-			tgp = abs(qs2) + abs(ldsc) + abs(lddt) 
-		elif lddt < 0:
-			tradingp  =  abs(qo2) + abs(ldc) + (gp)
-			tgp = abs(qs2) + abs(lddi) + abs(ldsc) + abs(lddt)
-		elif lddi < 0:
-			tradingp  =  abs(qo2) + abs(ldc) + abs(lddt) + (gp) + abs(lddi)
-			tgp = abs(qs2) + abs(ldsc)
- 						
-		else:
-			tradingp  =  abs(qo2) + abs(ldc) + abs(lddt) + (gp)
-			tgp = abs(qs2) + abs(lddi) + abs(ldsc) 
-
-	else: # gp <0
-		if  lddi < 0 and lddt < 0:
-			tradingp =  abs(qo2) + abs(ldc) + abs(lddi) 
-			tgp = abs(qs2) + abs(ldsc) + abs(gp) + abs(lddt)
-		elif lddt < 0:
-			tradingp =  abs(qo2) + abs(ldc) 
-			tgp = abs(qs2) + abs(lddi) + abs(ldsc) + abs(gp) + abs(lddt)
-		elif lddi < 0:
-			tradingp =  abs(qo2) + abs(ldc) + abs(lddt) + abs(lddi) 
-			tgp = abs(qs2) + abs(ldsc) + abs(gp) 	
-  					
-		else:
-			tradingp =  abs(qo2) + abs(ldc) + abs(lddt) 
-			tgp = abs(qs2) + abs(lddi) + abs(ldsc) + abs(gp) 
-
-	
-	# ldse = Indirect Expense
-	# ldsi = Indirect Income
-
 
 	if gp >=0:
 		if ldsi < 0 and ldse < 0:
@@ -1653,69 +1802,6 @@ def balance_sheet_condensed_view(request,pk,pk3):
 			np = abs(ldsi) + abs(ldse) - abs(gp)
 		else:
 			np = abs(ldsi) - abs(ldse) - abs(gp) 
-
-
-	# ldse = Indirect Expense
-	# ldsi = Indirect Income
- 
-
-
-	if gp >= 0:
-		if np >= 0:
-			if ldsi < 0 and ldse < 0:
-				tp = abs(ldsi) + np
-				tc = abs(ldse) + (gp)
-			elif ldsi < 0:
-				tp = abs(ldsi) + np + abs(ldse)  
-				tc = (gp)
-			elif ldse < 0:
-				tp = np
-				tc = abs(ldsi) + (gp) + abs(ldse)				
-			else:
-				tp = abs(ldse) + np
-				tc = abs(ldsi) + (gp)
-		else:
-			if ldsi < 0 and ldse < 0:
-				tp = abs(ldsi)  
-				tc = gp + np + abs(ldse)
-			elif ldsi < 0:
-				tp = abs(ldse)  + abs(ldsi) 
-				tc = gp + np
-			elif ldse < 0:
-				tp =  0
-				tc = gp + np + abs(ldsi) + abs(ldse)																								
-			else:
-				tp = abs(ldse) 
-				tc = gp + np + abs(ldsi)
-	else: # gp<0
-		if np >= 0:
-			if ldsi < 0 and ldse < 0:
-				tp = abs(ldsi) + np + abs(gp)
-				tc = abs(ldse) 
-			elif ldsi < 0:
-				tp = abs(ldse) + np + abs(gp) + abs(ldsi)
-				tc = 0	
-			elif ldse < 0:
-				tp = np + abs(gp)
-				tc = abs(ldsi) + abs(ldse) 							
-			else:
-				tp = abs(ldse) + np + abs(gp)
-				tc = abs(ldsi) 
-		else:
-			if ldsi < 0 and ldse < 0:
-				tp = abs(ldsi) + abs(gp)
-				tc = abs(np) + abs(ldse)
-			elif ldsi < 0:
-				tp = abs(ldse) + abs(gp) + abs(ldsi)
-				tc = abs(np) 
-			elif ldse < 0:
-				tp = abs(gp)
-				tc = abs(np) + abs(ldsi) + abs(ldse)				
-			else:
-				tp = abs(ldse) + abs(gp)
-				tc = abs(np) + abs(ldsi)
-
-
 
 
 	# From Trial Balance
@@ -1879,8 +1965,6 @@ def balance_sheet_condensed_view(request,pk,pk3):
 
 		'gross_profit' : gp,		
 		'nett_profit' : np,
-		'totalpl' : tp,
-		'totalplright' : tc,
 
 
 		# From Trial Balance
@@ -1900,9 +1984,67 @@ def balance_sheet_condensed_view(request,pk,pk3):
 
 
 
+@login_required
+def cash_and_bank_view(request,pk,pk3):
+	company_details = get_object_or_404(company, pk=pk)
+	selectdatefield_details = get_object_or_404(selectdatefield, pk=pk3)
+
+	# Cash Account
+	cash_group = group1.objects.filter(User=request.user, Company=company_details.pk, group_Name__icontains='Cash-in-hand', ledgergroups__Creation_Date__gte=selectdatefield_details.Start_Date, ledgergroups__Creation_Date__lte=selectdatefield_details.End_Date)
+	cash_group_closing = cash_group.annotate(
+				closing = Coalesce(Sum('ledgergroups__Closing_balance'), 0),
+			)
+
+
+	groups_ca_pos = cash_group.annotate(
+				closing = Coalesce(Sum('ledgergroups__Closing_balance'), 0)
+			).filter(closing__gt = 0)
+
+	groups_ca_neg = cash_group.annotate(
+				closing = Coalesce(Sum('ledgergroups__Closing_balance'), 0)
+			).filter(closing__lte = 0)
+
+	groups_ca_positive = groups_ca_pos.aggregate(the_sum=Coalesce(Sum('closing'), Value(0)))['the_sum']
+	groups_ca_negative = groups_ca_neg.aggregate(the_sum=Coalesce(Sum('closing'), Value(0)))['the_sum']
+
+
+	# Bank Account
+	bank_group = group1.objects.filter(User=request.user, Company=company_details.pk, group_Name__icontains='Bank Accounts', ledgergroups__Creation_Date__gte=selectdatefield_details.Start_Date, ledgergroups__Creation_Date__lte=selectdatefield_details.End_Date)
+	bank_group_closing = bank_group.annotate(
+				closing = Coalesce(Sum('ledgergroups__Closing_balance'), 0),
+			)
+
+	groups_ba_pos = bank_group.annotate(
+				closing = Coalesce(Sum('ledgergroups__Closing_balance'), 0),
+			).filter(closing__gt = 0)
+
+	# groups_ba_neg = bank_group.annotate(
+	# 			closing = Sum('ledgergroups__Closing_balance')
+	# 		).filter(closing__lte = 0, closing = 0),
+
+	groups_ba_positive = groups_ba_pos.aggregate(the_sum=Coalesce(Sum('closing'), Value(0)))['the_sum']
+	# groups_ba_negative = groups_ba_neg.aggregate(the_sum1=Sum('closing'))['the_sum1']
 
 
 
+	positive = groups_ca_positive + groups_ba_positive
+	negative = groups_ca_negative 
+
+
+	context = {
+		'company_details' : company_details,
+		'selectdatefield_details' : selectdatefield_details,
+
+		'cash_group' : cash_group_closing,
+
+		'bank_group' : bank_group_closing,
+
+		'positive' : positive,
+		'negative' : negative, 
+
+	}
+
+	return render(request, 'Cash_Bank/cash_and_bank.html', context)
 
 
 

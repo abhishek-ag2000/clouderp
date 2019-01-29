@@ -1,5 +1,6 @@
 {% extends "clouderp/base.html" %}
 {% load staticfiles %}
+{% load mathfilters %}
 
 {% block title%}Company List{% endblock %}
 
@@ -60,7 +61,7 @@
         
         <li><a href="{% url 'userprofile:profiledetail' %}"><i class="fa fa-book"></i> <span>Profile Settings</span></a></li>
 
-        <li class="header">PLUGINS</li>
+        <li class="header">MARKET PLACE</li>
         <li><a href="{% url 'blog:allbloglist' %}"><i class="fa fa-circle-o text-red"></i> <span>Read Blogs & Articles</span></a></li>
         <li><a href="{% url 'consultancy:consultancylist' %}"><i class="fa fa-circle-o text-red"></i> <span>Consultancy Forum</span></a></li>
         <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Subscribe Newsletter</span></a></li>
@@ -176,10 +177,10 @@
                         <tr>
                           <td><a href="{% url 'company:Dashboard' pk=company.pk pk3=selectdatefield.pk %}">{{company.Name}}</a></td>
                           <td><a href="{% url 'company:Dashboard' pk=company.pk pk3=selectdatefield.pk %}">{{company.Books_Begining_From}}</a></td>
-                          <td><a href="{% url 'company:Dashboard' pk=company.pk pk3=selectdatefield.pk %}">{{capital}}</a></td>
-                          <td>Private equity firm</td>
-                          <td>1259000</td>
-                          <td>11-7-2014</td>
+                          <td><a href="{% url 'company:Dashboard' pk=company.pk pk3=selectdatefield.pk %}">{{capital|floatformat:2|abs}}</a></td>
+                          <td><a href="{% url 'company:Dashboard' pk=company.pk pk3=selectdatefield.pk %}">{{company.Type_of_company}}</a></td>
+                          <td><a href="{% url 'company:Dashboard' pk=company.pk pk3=selectdatefield.pk %}">{{Assets|floatformat:2|abs}}</a></td>
+                          <td><a href="{% url 'company:Dashboard' pk=company.pk pk3=selectdatefield.pk %}">{{company.modified_date}}</a></td>
                           <td>100000</td>
                           
                           

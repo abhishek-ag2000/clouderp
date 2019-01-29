@@ -101,6 +101,25 @@
 
 
 <div id="printableArea">
+
+
+	<!--         CSS for not printing the urls in print preview
+ -->      <style>
+          @media print  
+          {
+          a[href]:after {
+          content: none !important;
+           }
+          @page {
+          margin-top: 0;
+          margin-bottom: 0;
+          }
+           body{
+          padding-top: 72px;
+          padding-bottom: 72px ;
+          }
+          }
+          </style>
 	
 
 
@@ -643,7 +662,7 @@
 
     					<a class='btn btn-warning' href="{% url 'accounting_double_entry:ledgerupdate' pk=company_details.pk pk2=ledger1_details.pk pk3=selectdatefield_details.pk %}">Update Ledger</a> 
 
-    					<a class='btn btn-danger pull-right' href="{% url 'accounting_double_entry:ledgerdelete' pk=company_details.pk pk2=ledger1_details.pk pk3=selectdatefield_details.pk %}">Delete Ledger</a></p>
+    					</p>
 
   					</div>
 

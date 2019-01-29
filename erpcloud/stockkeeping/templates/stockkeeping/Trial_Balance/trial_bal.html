@@ -104,6 +104,24 @@
 				<div class="box box-info">
 
         <div id="printableArea">
+
+          <!--         CSS for not printing the urls in print preview
+ -->      <style>
+          @media print  
+          {
+          a[href]:after {
+          content: none !important;
+           }
+          @page {
+          margin-top: 0;
+          margin-bottom: 0;
+          }
+           body{
+          padding-top: 72px;
+          padding-bottom: 72px ;
+          }
+          }
+          </style>
           
           <div class="box-header with-border">
               
@@ -158,7 +176,7 @@
 
 
                     <tr>
-                    <th><center>{{ group1.group_Name }}</center></th>
+                    <th><center><a href="{% url 'accounting_double_entry:groupdetailsummary' pk=company_details.pk pk2=group1.pk pk3=selectdatefield_details.pk %}">{{group1.group_Name}}</a></center></th>
                       {% if group1.opening >= 0 %}
                         <th>{{ group1.opening|floatformat:2|abs }}</th>
                         <th></th>
@@ -203,7 +221,7 @@
 
                       {% for ledger1 in group1.ledgergroups.all %}
                         <tr>
-                          <td><center>{{ ledger1.name }}</center></td>
+                          <td><center><a href="{% url 'accounting_double_entry:ledgerdetailmonthly' pk=company_details.pk pk2=ledger1.pk pk3=selectdatefield_details.pk %}"><em>{{ ledger1.name }}</em></a></center></td>
                           {% if ledger1.Balance_opening >= 0 %}
                             <td>{{ ledger1.Balance_opening|floatformat:2|abs }}</td>
                             <th></th>
@@ -227,7 +245,7 @@
                 {% else %}
 
                     <tr>
-                    <th><center>{{ group1.group_Name }}</center></th>
+                    <th><center><a href="{% url 'accounting_double_entry:groupdetailsummary' pk=company_details.pk pk2=group1.pk pk3=selectdatefield_details.pk %}">{{group1.group_Name}}</a></center></th>
                       {% if group1.opening >= 0 %}
                         <th>{{ group1.opening|floatformat:2|abs }}</th>
                         <th></th>
@@ -249,7 +267,7 @@
 
                       {% for ledger1 in group1.ledgergroups.all %}
                         <tr>
-                          <td><center>{{ ledger1.name }}</center></td>
+                          <td><center><a href="{% url 'accounting_double_entry:ledgerdetailmonthly' pk=company_details.pk pk2=ledger1.pk pk3=selectdatefield_details.pk %}"><em>{{ ledger1.name }}</em></a></center></td>
                           {% if ledger1.Balance_opening >= 0 %}
                             <td>{{ ledger1.Balance_opening|floatformat:2|abs }}</td>
                             <th></th>
@@ -274,7 +292,7 @@
               {% else %}
 
                   <tr>
-                  <th><center>{{ group1.group_Name }}</center></th>
+                  <th><center><a href="{% url 'accounting_double_entry:groupdetailsummary' pk=company_details.pk pk2=group1.pk pk3=selectdatefield_details.pk %}">{{group1.group_Name}}</a></center></th>
                     {% if group1.opening >= 0 %}
                        
                       <th></th>
@@ -298,7 +316,7 @@
 
                     {% for ledger1 in group1.ledgergroups.all %}
                       <tr>
-                        <td><center>{{ ledger1.name }}</center></td>
+                        <td><center><a href="{% url 'accounting_double_entry:ledgerdetailmonthly' pk=company_details.pk pk2=ledger1.pk pk3=selectdatefield_details.pk %}"><em>{{ ledger1.name }}</em></a></center></td>
                         {% if ledger1.Balance_opening >= 0 %}
                           <td></td>
                           <td>{{ ledger1.Balance_opening|floatformat:2|abs }}</td>

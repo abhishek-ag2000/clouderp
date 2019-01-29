@@ -9,6 +9,12 @@
 {% block content %}
 
 <div class="content-wrapper">
+
+  <div class="modal fade" id="modal-book">
+  <div class="modal-dialog">
+    <div class="modal-content"></div>
+  </div>
+</div>
 	 <section class="content-header">
         <!-- <div class="col-md-12 col-md-offset-4"> -->
           <h1>
@@ -61,8 +67,6 @@
 
           <a href="{% url 'accounting_double_entry:grouplist' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-success" role="button">Select Group </a>
           <a href="{% url 'accounting_double_entry:groupcreate' pk=company_details.pk pk3=selectdatefield_details.pk  %}" class="btn btn-warning" role="button">Create Group</a>
-
-          <a class='btn btn-danger' href="{% url 'accounting_double_entry:groupdelete' pk=company_details.pk pk2=group1_details.pk pk3=selectdatefield_details.pk %}">Delete Group</a>
 
 
 
@@ -153,17 +157,13 @@
 
 		
 	
-<!-- <script type="text/javascript">
-  $(function(){
-
-    $(".delete-group").each(function() {
-      $(this).modalForm({formURL : "{% url 'accounting_double_entry:groupdelete' pk=company_details.pk pk2=group1_details.pk pk3=selectdatefield_details.pk %}"});
-    });
-
-  });
-</script> -->
 
 
-	
+
+
+
+
+
+
 
 {% endblock %}

@@ -15,6 +15,8 @@ User = get_user_model()
 
 class company(models.Model):
 	User = models.ForeignKey(User,related_name="Company_Owner",on_delete=models.CASCADE,null=True,blank=True)
+	created_date = models.DateField(auto_now_add=True)
+	modified_date = models.DateField(auto_now=True)
 	Name = models.CharField(max_length=50,blank=False)
 	types = (   ('Individual','Individual'),
 				('HUF','HUF'),
@@ -78,8 +80,8 @@ class company(models.Model):
 	Mobile_No = models.BigIntegerField(blank=True,null=True)
 
 	financial_date = (
-		(datetime.date(int(datetime.datetime.now().year),4,1),datetime.date(int(datetime.datetime.now().year),4,1)),
-		(datetime.date(int(datetime.datetime.now().year),1,1),datetime.date(int(datetime.datetime.now().year),1,1))
+		(datetime.date((datetime.datetime.now().year),4,1),datetime.date((datetime.datetime.now().year),4,1)),
+		(datetime.date((datetime.datetime.now().year),1,1),datetime.date((datetime.datetime.now().year),1,1))
 		)
 
 
@@ -92,9 +94,12 @@ class company(models.Model):
 	def __str__(self):
 		return self.Name
 
-	def clean(self):
-		if self.Books_Begining_From < self.Financial_Year_From:
-			raise ValidationError('Books Begining year cannot be less than starting of the Financial year')
+	def save(self):
+		if self.id:
+			self.modified_date = datetime.datetime.now()
+		else:
+			self.created_date = datetime.datetime.now()
+		super(company,self).save()
 
 	class Meta:
 		ordering = ["Name"]

@@ -249,13 +249,13 @@ def update_total_sales(sender,instance,*args,**kwargs):
 @receiver(pre_save, sender=Purchase)
 def user_created(sender,instance,*args,**kwargs):
 	if instance.Total_Purchase != None:
-		journal.objects.update_or_create(User=instance.User,Company=instance.Company,Date=instance.date,By=instance.purchase,To=instance.Party_ac,Debit=instance.Total_Purchase,Credit=instance.Total_Purchase)
+		journal.objects.update_or_create(User=instance.User,Company=instance.Company,Date=instance.date,voucher_id=instance.id, voucher_type= "Purchase",By=instance.purchase,To=instance.Party_ac,Debit=instance.Total_Purchase,Credit=instance.Total_Purchase)
 
 
 @receiver(pre_save, sender=Sales)
 def user_created_sales(sender,instance,*args,**kwargs):
 	if instance.Total_Amount != None:
-		journal.objects.update_or_create(User=instance.User,Company=instance.Company,Date=instance.date,By=instance.Party_ac,To=instance.sales,Debit=instance.Total_Amount,Credit=instance.Total_Amount)
+		journal.objects.update_or_create(User=instance.User,Company=instance.Company,Date=instance.date,voucher_id=instance.id, voucher_type= "Sales",By=instance.Party_ac,To=instance.sales,Debit=instance.Total_Amount,Credit=instance.Total_Amount)
 
 # for stock calculations in stock summary
 

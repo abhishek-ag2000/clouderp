@@ -126,7 +126,11 @@
 											
 											<td><center>{{journal_details.Date}}</center></td>
 											<td><center>{{journal_details.By}}</center></td>
-											<td><center>{{journal_details.id}}</center></td>
+                    {% if journal_details.voucher_id == None %}
+                      <td><center>{{journal_details.id}}</center></td>
+                    {% else %}
+                      <td><center>{{journal_details.voucher_id}}</center></td>
+                    {% endif %}
 											<td><center>{{journal_details.Debit}}</center></td>
 										
 										</tr>
@@ -176,7 +180,11 @@
 			
 										<td><center>{{journal_details.Date}}</center></td>
 										<td><center>{{journal_details.To}}</center></td>
-										<td><center>{{journal_details.id}}</center></td>
+                    {% if journal_details.voucher_id == None %}
+                      <td><center>{{journal_details.id}}</center></td>
+                    {% else %}
+										  <td><center>{{journal_details.voucher_id}}</center></td>
+                    {% endif %}
 										<td><center>{{journal_details.Credit}}</center></td>
 									</tr>
 									
@@ -209,7 +217,7 @@
 
         <div class="box-footer">
                
-               <p><a class='btn btn-warning' href="{% url 'accounting_double_entry:update' pk1=company_details.pk  pk2=journal_details.pk pk3=selectdatefield_details.pk %}">Update journal</a> <a class='btn btn-danger pull-right' href="{% url 'accounting_double_entry:delete' pk1=company_details.pk pk2=journal_details.pk pk3=selectdatefield_details.pk %}">Delete journal</a></p> 
+               <p><a class='btn btn-warning' href="{% url 'accounting_double_entry:update' pk1=company_details.pk  pk2=journal_details.pk pk3=selectdatefield_details.pk %}">Update journal</a></p> 
         </div>
     
     

@@ -171,7 +171,7 @@
                 </tr>
 
          
-              {% if total_direct_expenses > 0 %}
+              {% if total_direct_expenses >= 0 %}
 
                 <tr>
                   <th>Direct Expenses</th>
@@ -194,7 +194,7 @@
                 </tr>
               {% endif %}
 
-              {% if total_direct_incomes > 0 %}
+              {% if total_direct_incomes >= 0 %}
 
                  <tr>
                   <th></th>
@@ -219,7 +219,7 @@
               {% endif %}
 
 
-            {% if gross_profit > 0 %}
+            {% if gross_profit >= 0 %}
               <tr>
                   <th>Gross Profit</th>
                   <td></td>
@@ -273,7 +273,7 @@
             {% endif %}
 
 
-              {% if total_indirectexp_ledger > 0 %}
+              {% if total_indirectexp_ledger >= 0 %}
 
                 <tr>
                   <th>Indirect Expenses</th>
@@ -298,7 +298,7 @@
               {% endif %}
 
 
-              {% if total_indirectinc_ledger > 0 %}
+              {% if total_indirectinc_ledger >= 0 %}
 
                 <tr>
                   <td></td>

@@ -93,79 +93,34 @@
 						 <div class="box-header">
 		              <h3 class="box-title">Journal list details</h3>
 
-		              <div class="box-tools">
-		                <div class="input-group input-group-sm" style="width: 150px;">
-		                  <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
-
-		                  <div class="input-group-btn">
-		                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-		                  </div>
-		                </div>
-		              </div>
 		            </div>
 
 		            	<div class="box-body table-responsive no-padding">
 		            		<table id="example1" class="table table-bordered table-striped">
 								
-											<tr>
-												<th><center>Date</center></th>
-												<th><center>Debit A/c</center></th>
-												<th><center>Credit A/c</center></th>
-												<th><center>Voucher No</center></th>
-												<th><center>Amount</center></th>
-												<th><center>Narration</center></th>
-											</tr>
-											{% for journal in journal_list %}
-												<tr>
-													<td><center><a href="{% url 'accounting_double_entry:detail' pk1=company_details.pk pk2=journal.pk pk3=selectdatefield_details.pk %}">{{journal.Date}}</a></center></td>
-													<td><center><a href="{% url 'accounting_double_entry:detail' pk1=company_details.pk pk2=journal.pk pk3=selectdatefield_details.pk %}">{{journal.By}}</a></center></td>
-													<td><center><a href="{% url 'accounting_double_entry:detail' pk1=company_details.pk pk2=journal.pk pk3=selectdatefield_details.pk %}">{{journal.To}}</a></center></td>
-														
-													<td><center><a href="{% url 'accounting_double_entry:detail' pk1=company_details.pk pk2=journal.pk pk3=selectdatefield_details.pk %}">{{journal.id}}</a></center></td>
-													<td><center><a href="{% url 'accounting_double_entry:detail' pk1=company_details.pk pk2=journal.pk pk3=selectdatefield_details.pk %}">{{journal.Debit}}</a></center></td>
+								<thead>
+									<tr>
+										<th><center>Date</center></th>
+										<th><center>Debit A/c</center></th>
+										<th><center>Credit A/c</center></th>
+										<th><center>Voucher No</center></th>
+										<th><center>Voucher Type</center></th>
+										<th><center>Amount</center></th>
+										<th><center>Narration</center></th>
+										<th><center>Delete Journal</center></th>
+									</tr>
+								</thead>
 
-													{% if journal.narration %}
-														<td><center><a href="{% url 'accounting_double_entry:detail' pk1=company_details.pk pk2=journal.pk pk3=selectdatefield_details.pk %}">{{journal.narration|safe|truncatewords:"8"}}</a></center></td>
-													{% else %}
-														<td><center><a href="{% url 'accounting_double_entry:detail' pk1=company_details.pk pk2=journal.pk pk3=selectdatefield_details.pk %}" >being {{journal.By}} debited by {{journal.To}} for {{journal.Credit}}.</a></center></td>
-													{% endif %}			
-												</tr>
-											{% endfor %}
+								<tbody id="book-table">
+									{% include "accounting_double_entry/journal_list_2.html" %}
+								</tbody>
+								
+
 									
 							</table>
 		            	</div>
 
 
-					<div class="box-footer">
-                    
-                    <div class="pull-left">
-                    <p>Showing item {{ page_obj.start_index }} to {{ page_obj.end_index }} of {{ page_obj.paginator.count }} entries</p>
-                  </div>
-
-                  <div class="pull-right">
-                        {% if is_paginated %}
-                            <ul class="pagination">
-                             {% if page_obj.has_previous %}
-                                <li><a href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
-                              {% else %}
-                                <li class="disabled"><span>Previous</span></li>
-                              {% endif %}
-                              {% for i in paginator.page_range %}
-                                  {% if page_obj.number == i %}
-                                     <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
-                                  {% else %}
-                                      <li><a href="?page={{ i }}">{{ i }}</a></li>
-                                  {% endif %}
-                              {% endfor %}
-                              {% if page_obj.has_next %}
-                                  <li><a href="?page={{ page_obj.next_page_number }}">Next</a></li>
-                              {% else %}
-                                  <li class="disabled"><span>Next</span></li>
-                              {% endif %}
-                          </ul>
-                      {% endif %}
-                    </div>
-                  </div>
 						</div>
 				{% else %}
  			<div class="col-xs-12 alert alert-danger alert-dismissible">
@@ -182,5 +137,10 @@
 
 	</div>
 
+  <div class="modal fade" id="modal-book">
+    <div class="modal-dialog">
+      <div class="modal-content"></div>
+    </div>
+  </div>
 
  {% endblock %}

@@ -1,27 +1,17 @@
-{% extends "clouderp/base.html" %}
-
-
-{% block title %}Delete Ledger{% endblock %}
-
-{% block content %}
-
-<div class="content-wrapper">
-	<div class="container">
-		<section class="content-header">
-			<div class="col-md-12">
-			<h1>
-			<strong>Delete {{ledger1.name }}?</strong>
-			</h1>
-			</div>
-		</section>
-
-<form method="post">
-  {% csrf_token %}
-  <input type="submit" class="btn btn-danger" value="Delete">
-  <a href="{% url 'accounting_double_entry:ledgerdetail' pk2=ledger1.pk pk=company_details.pk pk3=selectdatefield_details.pk %}">Cancel</a>
-
+{% load crispy_forms_tags %}
+<form method="post" data-url="{% url 'accounting_double_entry:ledgerdelete' pk=company_details.pk pk2=ledger.pk pk3=selectdatefield_details.pk %}" class="delete-form">
+	{% csrf_token %}
+		<div class="modal-header">
+		<h5 class="modal-title" >Delete Ledger</h5>
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+		</button>
+		</div>
+		<div class="modal-body">
+		<p class="lead"> Are you sure you want to delete this ledger <strong>{{ledger.name}}</strong></p>
+		</div>
+		<div class="modal-footer">
+		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		<input type="submit" class="btn btn-danger" value="Delete Group">
+		</div>
 </form>
-	</div>
-</div>
-
-{% endblock %}

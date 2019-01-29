@@ -291,14 +291,16 @@ def create_default_ledger(sender, instance, created, **kwargs):
 	
 		
 class journal(models.Model):
-	User       = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,null=True,blank=True)
-	Company    = models.ForeignKey(company,on_delete=models.CASCADE,null=True,blank=True,related_name='Companyname')
-	Date       = models.DateField(default=datetime.date.today)
-	By         = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='Debitledgers')
-	To         = models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='Creditledgers')
-	Debit      = models.DecimalField(max_digits=10,decimal_places=2,null=True)
-	Credit     = models.DecimalField(max_digits=10,decimal_places=2,null=True)
-	narration  = models.TextField(blank=True)
+	User       		= models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,null=True,blank=True)
+	Company    		= models.ForeignKey(company,on_delete=models.CASCADE,null=True,blank=True,related_name='Companyname')
+	Date       		= models.DateField(default=datetime.date.today)
+	voucher_id		= models.PositiveIntegerField(blank=True,null=True)
+	voucher_type	= models.CharField(max_length=100,blank=True)
+	By         		= models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='Debitledgers')
+	To         		= models.ForeignKey(ledger1,on_delete=models.CASCADE,related_name='Creditledgers')
+	Debit      		= models.DecimalField(max_digits=10,decimal_places=2,null=True)
+	Credit     		= models.DecimalField(max_digits=10,decimal_places=2,null=True)
+	narration  		= models.TextField(blank=True)
 
 
 	def __str__(self):
@@ -312,6 +314,7 @@ class journal(models.Model):
 			raise ValidationError('Debit Amount Should Be Equal To Credit Amount')
 		elif self.To == self.By:
 			raise ValidationError('Particular Entry Cannot be same')
+
 
 
 class Payment(models.Model):
@@ -380,7 +383,7 @@ def update_total_payment(sender,instance,*args,**kwargs):
 @receiver(pre_save, sender=Particularspayment)
 def user_created_payment(sender,instance,*args,**kwargs):
 	if instance.amount != None:
-		journal.objects.update_or_create(User=instance.payment.User,Company=instance.payment.Company,Date=instance.payment.date,By=instance.particular,To=instance.payment.account,Debit=instance.amount,Credit=instance.amount)
+		journal.objects.update_or_create(User=instance.payment.User,Company=instance.payment.Company,Date=instance.payment.date, voucher_id=instance.payment.id, voucher_type= "Payment",By=instance.particular,To=instance.payment.account,Debit=instance.amount,Credit=instance.amount)
 
 
 @receiver(pre_save, sender=Receipt)
@@ -392,7 +395,7 @@ def update_total_receipt(sender,instance,*args,**kwargs):
 @receiver(pre_save, sender=Particularsreceipt)
 def user_created_receipt(sender,instance,*args,**kwargs):
 	if instance.amount != None:
-		journal.objects.update_or_create(User=instance.receipt.User,Company=instance.receipt.Company,Date=instance.receipt.date,By=instance.receipt.account,To=instance.particular,Debit=instance.amount,Credit=instance.amount)
+		journal.objects.update_or_create(User=instance.receipt.User,Company=instance.receipt.Company,Date=instance.receipt.date, voucher_id=instance.receipt.id, voucher_type= "Receipt",By=instance.receipt.account,To=instance.particular,Debit=instance.amount,Credit=instance.amount)
 
 @receiver(pre_save, sender=Contra)
 def update_total_contra(sender,instance,*args,**kwargs):
@@ -403,7 +406,7 @@ def update_total_contra(sender,instance,*args,**kwargs):
 @receiver(pre_save, sender=Particularscontra)
 def user_created_contra(sender,instance,*args,**kwargs):
 	if instance.amount != None:
-		journal.objects.update_or_create(User=instance.contra.User,Company=instance.contra.Company,Date=instance.contra.date,By=instance.particular,To=instance.contra.account,Debit=instance.amount,Credit=instance.amount)
+		journal.objects.update_or_create(User=instance.contra.User,Company=instance.contra.Company,Date=instance.contra.date, voucher_id=instance.contra.id, voucher_type= "Contra",By=instance.particular,To=instance.contra.account,Debit=instance.amount,Credit=instance.amount)
 
 
 
