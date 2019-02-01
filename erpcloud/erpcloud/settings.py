@@ -58,7 +58,6 @@ INSTALLED_APPS = [
     'select2',                                  #pip install django-select2-forms
     'sorl.thumbnail',                           #pip install sorl-thumbnail
     'import_export',                            #pip install django-import-export
-    'bootstrap_modal_forms',                    #pip install django-bootstrap-modal-forms
 
     # argon2 = pip install django[argon2]
     # bcrypt = pip install bcrypt

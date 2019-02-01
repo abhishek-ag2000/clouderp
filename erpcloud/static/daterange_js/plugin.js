@@ -8,10 +8,10 @@ $(document).ready(function () {
       dataType: 'json',
       beforeSend: function () {
         jQuery.noConflict()
-        $('#modal-book').modal('show')
+        $('#modal-book-date').modal('show')
       },
       success: function (data) {
-        $('#modal-book .modal-content').html(data.html_form)
+        $('#modal-book-date .modal-content').html(data.html_form)
       }
     })
   }
@@ -26,10 +26,10 @@ $(document).ready(function () {
       success: function (data) {
         jQuery.noConflict()
         if (data.form_is_valid) {
-          $('#book-table').html(data.journals_list)
-          $('#modal-book').modal('hide')
+          $('#book-table-date tbody').html(data.selectdatefields_list)
+          $('#modal-book-date').modal('hide')
         } else {
-          $('#modal-book .modal-content').html(data.html_form)
+          $('#modal-book-date .modal-content').html(data.html_form)
         }
       }
     })
@@ -38,13 +38,9 @@ $(document).ready(function () {
 
   // create
   $('.show-form').click(ShowForm)
-  $('#modal-book').on('submit', '.create-form', SaveForm)
+  $('#modal-book-date').on('submit', '.create-form', SaveForm)
 
   // update
-  $('#book-table').on('click', '.show-form-update', ShowForm)
-  $('#modal-book').on('submit', '.update-form', SaveForm)
-
-  // delete
-  $('#book-table').on('click', '.show-form-delete', ShowForm)
-  $('#modal-book').on('submit', '.delete-form', SaveForm)
+  $('.show-form-update').click(ShowForm)
+  $('#modal-book-date').on('submit', '.update-form', SaveForm)
 })

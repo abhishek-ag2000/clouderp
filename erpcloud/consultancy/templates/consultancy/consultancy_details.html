@@ -177,24 +177,12 @@
 
               <!-- Social sharing buttons -->
 
-          <form action="{% url 'consultancy:like_question' %}" method="post">
-            {% csrf_token %}
+            <div id="like-section-consultancy">
+        
+              {% include 'consultancy/consultancy_like.html' %}
 
-            {% if is_liked %}
-                <button type="submit" name="consultancy_details_id" value="{{ consultancy_details.id}}" class='btn btn-info btn-sm'>
-                    
+            </div>
 
-                     Following   
-                </button>
-            {% else %}
-                  <button type="submit" name="consultancy_details_id" value="{{ consultancy_details.id}}" class='btn btn-default btn-sm'>
-                    
-
-                    Follow   
-                  </button>
-            {% endif %}
-
-          </form>
              
               <span class="pull-right text-muted">{{ total_like }} follow - {{ comments.count }} Solution{{ comments|pluralize }}</span>
             </div>

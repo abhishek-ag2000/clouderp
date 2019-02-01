@@ -170,7 +170,7 @@
             <div class="box box-success">
 
               <div class="box-body table-responsive no-padding">
-                <table class="table">
+                <table class="table" id="calculate">
                     {{ contras.management_form }}
 
                         <thead>
@@ -180,14 +180,24 @@
                         </tr>
                         </thead>
 
-                    {% for form in contras.forms %}
-                      
-                        <tr class='{% cycle "row1" "row2" %}  formset_row'>
-                          <td class="col-md-6">{{ form.id }} {{ form.particular}}</td>
-                          <td class="col-md-6">{{ form.amount}}</td>
-                        </tr>  
-                      
-                    {% endfor %}
+                        <tbody>
+                            {% for form in contras.forms %}
+                              
+                                <tr class='{% cycle "row1" "row2" %}  formset_row'>
+                                  <td class="col-md-6">{{ form.id }} {{ form.particular}}</td>
+                                  <td class="col-md-6 amounts">{{ form.amount}}</td>
+                                </tr>  
+                              
+                            {% endfor %}
+
+                        
+
+                        <tr>
+                            <td class="col-md-6"></td>
+                            <td class="col-md-6 totaled"><input type="text" name="total"></td>
+                        </tr>
+
+                        </tbody>
                 </table>
                 
               </div>
@@ -226,6 +236,20 @@
         deleteText: 'remove',
         prefix: 'contras'
     });
+</script>
+
+<script type="text/javascript">
+  
+$(document).ready(function(e){
+  $('#calculate tbody').change(function(){
+      var totals = 0;
+      $(".amounts").each(function(){
+          totals = totals + parseInt($(this).innerHTML());
+
+      })
+      $("input[name=total]").val(totals);
+  });
+});
 </script>
 
 </section>

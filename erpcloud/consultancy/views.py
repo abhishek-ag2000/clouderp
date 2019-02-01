@@ -6,8 +6,10 @@ from django.views.generic import (ListView,DetailView,
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404
+from django.template.loader import render_to_string
+
 # Create your views here.
 
 
@@ -80,8 +82,15 @@ def liked_post(request):
 		consultancy_details.like.add(request.user)
 		is_liked = True
 
-	return HttpResponseRedirect(consultancy_details.get_absolute_url())
+	context = {
+		'consultancy_details' : consultancy_details,
+		'is_liked' : is_liked,
+		'total_like' : consultancy_details.total_like(),
+	}
 
+	if request.is_ajax():
+		html = render_to_string('consultancy/consultancy_like.html', context, request=request)
+		return JsonResponse({'form' : html})
 
 
 

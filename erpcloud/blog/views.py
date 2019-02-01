@@ -1,16 +1,16 @@
 from django.shortcuts import render
 from django.views.generic import (ListView,DetailView,
 								  CreateView,UpdateView,DeleteView)
-
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from blog.models import Blog,categories
 from blog.forms import Blogform,BlogSearchForm
 from django.db.models import Q
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.db.models import Count
 from django.contrib.auth.decorators import login_required
+from django.template.loader import render_to_string
 
 
 # Create your views here.
@@ -146,7 +146,16 @@ def like_post(request):
 		blog_details.likes.add(request.user)
 		is_liked = True
 
-	return HttpResponseRedirect(blog_details.get_absolute_url())
+	context = {
+		'blog_details' : blog_details,
+		'is_liked' : is_liked,
+		'total_likes' : blog_details.total_likes(),
+		
+	}
+
+	if request.is_ajax():
+		html = render_to_string('blog/like_section.html', context, request=request)
+		return JsonResponse({'form' : html})
 
 
 

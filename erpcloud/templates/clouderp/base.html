@@ -1071,6 +1071,7 @@
 
 <script src="{% static 'journal_js/plugin.js' %}"></script>
 
+<script src="{% static 'daterange_js/plugin.js' %}"></script>
 <!-- Bootstrap 3.3.7 -->
 <script src="{% static 'clouderp/bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>
 
@@ -1094,7 +1095,7 @@
 <!-- AdminLTE App -->
 
 <script src="{% static 'clouderp/js/main.min.js' %}"></script>
-<!-- AdminLTE for demo purposes -->
+
 <script src="{% static 'clouderp/js/select2.min.js' %}"></script>
 
 <script src="{% static 'clouderp/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
@@ -1126,6 +1127,52 @@
       'autoWidth'   : false
     })
   })
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function(event){
+    $(document).on('click', '#like', function(event){
+      event.preventDefault();
+      var pk = $(this).attr('value');
+      $.ajax({
+        type : 'POST',
+        url  : '{% url "blog:like_post" %}',
+        data : {'blog_details_id':pk, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+        datatype : 'json',
+        success : function(response){
+          $('#like-section').html(response['form'])
+          console.log($('#like-section').html(response['form']));
+        },
+        error : function(rs, e){
+          console.log(rs, responseText);
+        }
+
+      });
+    });
+  });
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function(event){
+    $(document).on('click', '#like', function(event){
+      event.preventDefault();
+      var pk = $(this).attr('value');
+      $.ajax({
+        type : 'POST',
+        url  : '{% url "consultancy:like_question" %}',
+        data : {'consultancy_details_id':pk, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+        datatype : 'json',
+        success : function(response){
+          $('#like-section-consultancy').html(response['form'])
+          console.log($('#like-section-consultancy').html(response['form']));
+        },
+        error : function(rs, e){
+          console.log(rs, responseText);
+        }
+
+      });
+    });
+  });
 </script>
 
     </div>

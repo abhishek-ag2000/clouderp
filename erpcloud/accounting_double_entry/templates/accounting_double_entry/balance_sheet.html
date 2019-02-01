@@ -43,20 +43,36 @@
 
         
         
-                {% if not selectdatefield_details %}
+              {% if not selectdatefield_details %}
 
-                   <a type="button" class="btn btn-primary pull-right" href="{% url 'accounting_double_entry:datecreate' %}">Select Date Range</a>
+                  
+                     <button class="btn btn-primary show-form pull-right" data-url="{% url 'accounting_double_entry:datecreate' %}">
+                      <span class="glyphicon glyphicon-plus"></span>
+                        Select Date Range
+                      </button>
 
                 {% else %} 
               
-  
-                      <a type="button" class='btn btn-warning pull-right'  href="{% url 'accounting_double_entry:dateupdate' pk=selectdatefield_details.pk %}">Update Date Range</a>
+                          <table id="book-table-date">
+                            
+                            <thead>
+                              
+                            </thead>
 
-                      <a class="pull-right"><strong>Selected Period: From</strong> {{ selectdatefield_details.Start_Date|date }} <strong>To</strong> {{ selectdatefield_details.End_Date|date }}  &nbsp;</a> 
+                            <tbody>
+                              <button  class="btn btn-warning show-form-update pull-right" data-url="{% url 'accounting_double_entry:dateupdate' pk=selectdatefield_details.pk %}">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                              Update Date Range 
+                            </button>
 
+                      <a class="pull-right"><strong>Selected Period: From</strong> {{ selectdatefield_details.Start_Date|date }} <strong>To</strong> {{ selectdatefield_details.End_Date|date }}  &nbsp;</a>  
+
+                            </tbody>
+                          </table>
+                            
                  
 
-                {% endif %} 
+                {% endif %}
         
         </div>
       
@@ -67,7 +83,7 @@
 </div>
 
 <div class="row">
-      <div class="col-xs-12">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
           <div class="box box-default">
           <div class="box-body">
 
@@ -502,5 +518,12 @@
      document.body.innerHTML = originalContents;
   }
 </script>
+
+
+  <div class="modal fade" id="modal-book-date">
+    <div class="modal-dialog">
+      <div class="modal-content"></div>
+    </div>
+  </div>
 
 {% endblock %}

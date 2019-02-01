@@ -111,7 +111,7 @@
 
                     <tbody>
                       
-                      {% include "accounting_double_entry/ledger_list_2.html" %}
+                      {% include "accounting_double_entry/group1_list2.html" %}
 
                     </tbody>
                     
@@ -121,7 +121,10 @@
                   </table>
 
                   <div class="box-footer">
-                    
+                    <br>
+                     <div class="pull-left">
+                        <p>Showing item {{ page_obj.start_index }} to {{ page_obj.end_index }} of {{ page_obj.paginator.count }} entries</p>
+                    </div>
 
 
                   <div class="pull-right">
@@ -145,7 +148,7 @@
                                   <li class="disabled"><span>Next</span></li>
                               {% endif %}
                           </ul>
-                      {% endif %}
+                        {% endif %}
                     </div>
                   </div>
                   

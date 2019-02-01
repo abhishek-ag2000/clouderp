@@ -45,7 +45,7 @@ class groupsummaryListView(LoginRequiredMixin,ListView):
 			pass
 
 	def get_queryset(self):
-		return self.model.objects.filter(User=self.request.user, Company=self.kwargs['pk']).order_by('-id')
+		return self.model.objects.filter(User=self.request.user, Company=self.kwargs['pk'])
 
 	def get_context_data(self, **kwargs):
 		context = super(groupsummaryListView, self).get_context_data(**kwargs) 
@@ -1015,24 +1015,39 @@ class Multiplae_Journal_objectsCreateView(LoginRequiredMixin,CreateView):
 
 ################## Views For Daterange Display ###################################
 
-class datecreateview(LoginRequiredMixin,CreateView):
-	form_class = DateRangeForm
-	template_name = "company/selectdate.html"
+def save_all(request,form,template_name):
+	data = dict()
+	if request.method == 'POST':
+		if form.is_valid():
+			form.save()
+			data['form_is_valid'] = True
+			selectdatefield_details = selectdatefield.objects.filter(User=request.user)
+			data['selectdatefields_list'] = render_to_string('company/company_list_2.html',{'selectdatefield_details':selectdatefield_details})
+		else:
+			data['form_is_valid'] = False
+	context = {
+	'form':form
+	}
+	data['html_form'] = render_to_string(template_name,context,request=request)
+	return JsonResponse(data)
 
-	def get_success_url(self,**kwargs):
-		return reverse('company:list')
+def selectdate_create(request):
+	if request.method == 'POST':
+		form = DateRangeForm(request.POST)
+		if form.is_valid():
+			form.instance.User = request.user
+			form.save()
+	else:
+		form = DateRangeForm()
+	return save_all(request,form,"company/selectdate_create.html")
 
-	def form_valid(self, form):
-		form.instance.User = self.request.user
-		return super(datecreateview, self).form_valid(form)
-
-class dateupdateview(LoginRequiredMixin,UpdateView):
-	model = selectdatefield
-	form_class = DateRangeForm
-	template_name = "company/selectdate.html"
-
-	def get_success_url(self,**kwargs):
-		return reverse('company:list')
+def selectdate_update(request,pk):
+	selectdatefield_details = get_object_or_404(selectdatefield, pk=pk)
+	if request.method == 'POST':
+		form = DateRangeForm(request.POST,instance=selectdatefield_details)
+	else:
+		form = DateRangeForm(instance=selectdatefield_details)
+	return save_all(request,form,'company/selectdate_update.html')
 
 
 

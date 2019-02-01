@@ -42,34 +42,32 @@
 
       <div class="row">
         <div class="col-xs-12">
-          <div class="box box-default">
+          <div class="box box-default" >
             <!-- <div class="box-header with-border">
               <h3 class="box-title">Modal Examples</h3>
             </div> -->
             <div class="box-body">
-              <!-- <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default">
-                Change Company
-              </button>
-              <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-success">
-                Edit Company details
-              </button> -->
-              <!-- <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-info">
-                Launch Info Modal
-              </button> -->
               <a href="{% url 'company:list' %}" class="btn btn-success" role="button">Select Company </a>
               <a href="{% url 'company:update' pk=company_details.pk %}" class="btn btn-warning" role="button">Update Company details</a>
               <a href="{% url 'company:delete' pk=company_details.pk pk3=selectdatefield_details.pk %}" class="btn btn-danger" role="button">Delete Company</a>
               
               {% if not selectdatefield_details %}
 
-                   <a type="button" class="btn btn-primary pull-right" href="{% url 'accounting_double_entry:datecreate' %}">Select Date Range</a>
+                  
+                     <button class="btn btn-primary show-form pull-right" data-url="{% url 'accounting_double_entry:datecreate' %}">
+                      <span class="glyphicon glyphicon-plus"></span>
+                        Select Date Range
+                      </button>
 
                 {% else %} 
               
   
-                      <a type="button" class='btn btn-warning pull-right'  href="{% url 'accounting_double_entry:dateupdate' pk=selectdatefield_details.pk %}">Update Date Range</a>
+                            <button  class="btn btn-warning show-form-update pull-right" data-url="{% url 'accounting_double_entry:dateupdate' pk=selectdatefield_details.pk %}">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                              Update Date Range 
+                            </button>
 
-                      <a class="pull-right"><strong>Selected Period: From</strong> {{ selectdatefield_details.Start_Date|date }} <strong>To</strong> {{ selectdatefield_details.End_Date|date }}  &nbsp;</a> 
+                      <a id="book-table-date" class="pull-right"><strong>Selected Period: From</strong> {{ selectdatefield_details.Start_Date|date }} <strong>To</strong> {{ selectdatefield_details.End_Date|date }}  &nbsp;</a>  
 
                  
 
@@ -173,7 +171,7 @@
                                 <a href="{% url 'todogst:complete' todo.id %}"><span class="text">{{todo.text}}</span></a>
                               {% endif %}
                               <!-- Emphasis label -->
-                              <small class="label label-danger"><i class="fa fa-clock-o"></i>{{ todo.Date|timesince }} ago</small>
+                              <small class="label label-danger"><i class="fa fa-clock-o"></i> {{ todo.Date|timesince }} ago</small>
                               <!-- General tools such as edit or delete-->
                               
                             </li>
@@ -456,7 +454,14 @@
       </div>
 
 
-</section>		
+</section>	
+
+
+  <div class="modal fade" id="modal-book-date">
+    <div class="modal-dialog">
+      <div class="modal-content"></div>
+    </div>
+  </div>	
 
 <!-- /.content-wrapper -->
 

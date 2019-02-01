@@ -317,6 +317,7 @@ class journal(models.Model):
 
 
 
+
 class Payment(models.Model):
 	User       = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,null=True,blank=True)
 	Company    = models.ForeignKey(company,on_delete=models.CASCADE,null=True,blank=True,related_name='Companynamepayment')

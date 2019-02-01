@@ -43,16 +43,23 @@
 
         
         
-                {% if not selectdatefield_details %}
+              {% if not selectdatefield_details %}
 
-                   <a type="button" class="btn btn-primary pull-right" href="{% url 'accounting_double_entry:datecreate' %}">Select Date Range</a>
+                  
+                     <button class="btn btn-primary show-form pull-right" data-url="{% url 'accounting_double_entry:datecreate' %}">
+                      <span class="glyphicon glyphicon-plus"></span>
+                        Select Date Range
+                      </button>
 
                 {% else %} 
               
   
-                      <a type="button" class='btn btn-warning pull-right'  href="{% url 'accounting_double_entry:dateupdate' pk=selectdatefield_details.pk %}">Update Date Range</a>
+                            <button  class="btn btn-warning show-form-update pull-right" data-url="{% url 'accounting_double_entry:dateupdate' pk=selectdatefield_details.pk %}">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                              Update Date Range 
+                            </button>
 
-                      <a class="pull-right"><strong>Selected Period: From</strong> {{ selectdatefield_details.Start_Date|date }} <strong>To</strong> {{ selectdatefield_details.End_Date|date }}  &nbsp;</a> 
+                      <a id="book-table-date" class="pull-right"><strong>Selected Period: From</strong> {{ selectdatefield_details.Start_Date|date }} <strong>To</strong> {{ selectdatefield_details.End_Date|date }}  &nbsp;</a>  
 
                  
 
@@ -138,13 +145,14 @@
                }
         </style>
 
-        <table class="table table-bordered table-hover">
+        <table class="table table-bordered table-striped">
           <tr>
                
                   <th class="col-lg-4 col-md-4 col-sm-4 col-xs-4"></th>
-                   <th class="col-lg-4 col-md-4 col-sm-4 col-xs-4"> Opening Balance:</th>
+                   <th class="col-lg-4 col-md-4 col-sm-4 col-xs-4"><center>Opening Balance:</center></th>
                    
-                    <th class="col-lg-4 col-md-4 col-sm-4 col-xs-4"> Closing Balance:</th>
+                    <th class="col-lg-4 col-md-4 col-sm-4 col-xs-4"><center>Closing Balance:</center></th>
+
                       
               </tr>
 
@@ -153,7 +161,7 @@
               
           
 
-            <table class="table table-bordered table-hover">
+           <table class="table table-bordered table-striped">
 
 
 
@@ -444,6 +452,14 @@
 		
 	</section>
 </div>
+
+
+
+  <div class="modal fade" id="modal-book-date">
+    <div class="modal-dialog">
+      <div class="modal-content"></div>
+    </div>
+  </div>
 
 <script type="text/javascript">
   

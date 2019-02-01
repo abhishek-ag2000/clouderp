@@ -55,8 +55,8 @@ urlpatterns = [
 
 ####### Daterange Urls ########################################  
   
-    url(r'^daterangecreate/$',views.datecreateview.as_view(),name='datecreate'),
-    url(r'^daterangeupdate/(?P<pk>\d+)/$',views.dateupdateview.as_view(),name='dateupdate'),
+    url(r'^daterangecreate/$',views.selectdate_create,name='datecreate'),
+    url(r'^daterangeupdate/(?P<pk>\d+)/$',views.selectdate_update,name='dateupdate'),
 
 ####### Payment Urls ######################################## 
 

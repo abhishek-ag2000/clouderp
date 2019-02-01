@@ -43,20 +43,27 @@
 
         
         
-                {% if not selectdatefield_details %}
+              {% if not selectdatefield_details %}
 
-                   <a type="button" class="btn btn-primary pull-right" href="{% url 'accounting_double_entry:datecreate' %}">Select Date Range</a>
+                  
+                     <button class="btn btn-primary show-form pull-right" data-url="{% url 'accounting_double_entry:datecreate' %}">
+                      <span class="glyphicon glyphicon-plus"></span>
+                        Select Date Range
+                      </button>
 
                 {% else %} 
               
   
-                      <a type="button" class='btn btn-warning pull-right'  href="{% url 'accounting_double_entry:dateupdate' pk=selectdatefield_details.pk %}">Update Date Range</a>
+                            <button  class="btn btn-warning show-form-update pull-right" data-url="{% url 'accounting_double_entry:dateupdate' pk=selectdatefield_details.pk %}">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                              Update Date Range 
+                            </button>
 
-                      <a class="pull-right"><strong>Selected Period: From</strong> {{ selectdatefield_details.Start_Date|date }} <strong>To</strong> {{ selectdatefield_details.End_Date|date }}  &nbsp;</a> 
+                      <a id="book-table-date" class="pull-right"><strong>Selected Period: From</strong> {{ selectdatefield_details.Start_Date|date }} <strong>To</strong> {{ selectdatefield_details.End_Date|date }}  &nbsp;</a>  
 
                  
 
-                {% endif %} 
+                {% endif %}
         
         </div>
       
@@ -138,7 +145,7 @@
                }
         </style>
 
-          <table class="table table-bordered table-hover">
+          <table class="table table-bordered table-striped">
               <tr>
                 <th class="col-lg-3 col-md-3 col-sm-3 col-xs-3"></th>
                 <th class="col-lg-9 col-md-9 col-sm-9 col-xs-9"><center>Closing Balance</center></th>
@@ -146,8 +153,9 @@
               </tr>
           </table>
 
-            <table class="table table-bordered table-hover">
+            <table class="table table-bordered table-striped">
 
+              <thead>
               <tr>
                <th class="col-lg-3 col-md-3 col-sm-3 col-xs-3"><center>Particulars</center></th>
                 <th class="col-lg-3 col-md-3 col-sm-3 col-xs-3">Total Quantity</th>
@@ -155,7 +163,10 @@
                 <th class="col-lg-3 col-md-3 col-sm-3 col-xs-3">Value(&#8377)</th>
                   
               </tr>
+              </thead>
+             
 
+          <tbody>
             {% for stockdata in Totalquantity %}
               <tr>
 
@@ -167,6 +178,8 @@
                 <td>{{ stockdata.total|floatformat:2|abs }}</td>
               </tr>
             {% endfor %}
+          </tbody>
+            
             </table>
           </div>
 
@@ -216,6 +229,12 @@
 		
 	</section>
 </div>
+
+  <div class="modal fade" id="modal-book-date">
+    <div class="modal-dialog">
+      <div class="modal-content"></div>
+    </div>
+  </div>
 
 
 <script type="text/javascript">
