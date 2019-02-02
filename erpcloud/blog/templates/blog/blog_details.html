@@ -122,6 +122,7 @@
             
 
                 
+        {% if user.is_authenticated %}
 
           <div class='pull-right'>
             <a href="{% url 'blog:bloglist' %}" class="btn btn-info" role="button">Show my Posts</a>
@@ -129,6 +130,12 @@
               
 
           </div>
+
+        {% else %}
+
+          {% include 'blog/unauthorised_modal_2.html' %}
+
+        {% endif %}
         
         
         
@@ -225,11 +232,18 @@
       </div>
       <!-- /.row -->
 
+    {% if user.is_authenticated %}
       <div id="like-section">
         
         {% include 'blog/like_section.html' %}
 
       </div>
+    {% else %}
+
+      <div>
+        {% include 'blog/unauthorised_modal.html' %}
+      </div>
+    {% endif %}
 
       
 

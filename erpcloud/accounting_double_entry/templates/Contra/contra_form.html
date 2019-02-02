@@ -192,12 +192,14 @@
 
                         
 
-                        <tr>
-                            <td class="col-md-6"></td>
-                            <td class="col-md-6 totaled"><input type="text" name="total"></td>
-                        </tr>
 
                         </tbody>
+
+
+                        <tr>
+                            <td class="col-md-6"></td>
+                            <td class="col-md-6" id="totaled"><input type="text" name="total"></td>
+                        </tr>
                 </table>
                 
               </div>
@@ -238,18 +240,16 @@
     });
 </script>
 
-<script type="text/javascript">
-  
-$(document).ready(function(e){
-  $('#calculate tbody').change(function(){
-      var totals = 0;
-      $(".amounts").each(function(){
-          totals = totals + parseInt($(this).innerHTML());
 
-      })
-      $("input[name=total]").val(totals);
-  });
-});
+<script type="text/javascript">
+        $(document).ready(function(){
+            let tableInstance = $('#calculate td.amounts');
+            let totals = 0;
+            tableInstance.each(function(){
+                totals = totals + parseInt($(this).text());
+            });
+            $("#totaled :input").val(totals);
+        });
 </script>
 
 </section>

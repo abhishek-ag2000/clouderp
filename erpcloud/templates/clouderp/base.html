@@ -333,16 +333,21 @@
                 <div class="pull-left">
                   <a href="{% url 'userprofile:profiledetail' %}" class="btn btn-default btn-flat">Profile</a>
                 </div>
+                {% if user.is_authenticated %}
                 <div class="pull-right">
                   <a href="{% url 'accounts:logout' %}" class="btn btn-default btn-flat">Sign out</a>
                 </div>
+                {% endif %}
               </li>
             </ul>
           </li>
         {% if user.has_usable_password %}
           <li><a href="{% url 'accounts:change_password' %}" class="btn btn-simple">Change Password</a></li>
         {% endif %}
+        {% if user.is_authenticated %} 
            <li><a href="{% url 'accounts:logout' %}" class="btn btn-simple">Sign out</a></li>
+      
+        {% endif %} 
           <!-- Control Sidebar Toggle Button -->
           <li>
             <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
@@ -668,113 +673,25 @@
                 </ul>
 
 
-
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-share"></i> <span>Vouchers</span>
+            <i class="fa fa-table"></i> <span>Vouchers</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            
-            
-            <li class="treeview">
-              <a href="#"><i class="fa fa-circle-o"></i> Journal
-                <span class="pull-right-container">
-                  <i class="fa fa-angle-left pull-right"></i>
-                </span>
-              </a>
-              <ul class="treeview-menu">
-               
-                 <li><a href="{% url 'accounting_double_entry:create' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Create</a></li>
-                 
-                 
-                   
-              </ul>
-            </li>
+            <li><a href="{% url 'accounting_double_entry:create' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Journal</a></li>
+            <li><a href="{% url 'stockkeeping:salescreate' pk=company_details.pk pk3=selectdatefield_details.pk  %}"><i class="fa fa-circle-o"></i> Sales Invoice</a></li>
 
-                        <li class="treeview">
-              <a href="#"><i class="fa fa-circle-o"></i>Sales Invoice
-                <span class="pull-right-container">
-                  <i class="fa fa-angle-left pull-right"></i>
-                </span>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="{% url 'stockkeeping:salescreate' pk=company_details.pk pk3=selectdatefield_details.pk  %}"><i class="fa fa-circle-o"></i> Create</a></li>
-                
-                  
-                  <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Alter</a></li> -->
-                   
-              </ul>
-            </li>
-            <li class="treeview">
-              <a href="#"><i class="fa fa-circle-o"></i>Purchase Invoice
-                <span class="pull-right-container">
-                  <i class="fa fa-angle-left pull-right"></i>
-                </span>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="{% url 'stockkeeping:purchasecreate' pk=company_details.pk pk3=selectdatefield_details.pk  %}"><i class="fa fa-circle-o"></i> Create</a></li>
-                
-                  
-                  <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Alter</a></li> -->
-                   
-              </ul>
-            </li>
+            <li><a href="{% url 'stockkeeping:purchasecreate' pk=company_details.pk pk3=selectdatefield_details.pk  %}"><i class="fa fa-circle-o"></i> Purchase Invoice</a></li>
 
-                        <li class="treeview">
-              <a href="#"><i class="fa fa-circle-o"></i>Payment
-                <span class="pull-right-container">
-                  <i class="fa fa-angle-left pull-right"></i>
-                </span>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="{% url 'accounting_double_entry:paymentcreate' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Create</a></li>
-                
-                  
-                  <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Alter</a></li> -->
-                   
-              </ul>
-            </li>
-
-            <li class="treeview">
-              <a href="#"><i class="fa fa-circle-o"></i>Receipts
-                <span class="pull-right-container">
-                  <i class="fa fa-angle-left pull-right"></i>
-                </span>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="{% url 'accounting_double_entry:receiptcreate' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Create</a></li>
-                
-                  
-                  <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Alter</a></li> -->
-                   
-              </ul>
-            </li>
-
-                        <li class="treeview">
-              <a href="#"><i class="fa fa-circle-o"></i>Contra
-                <span class="pull-right-container">
-                  <i class="fa fa-angle-left pull-right"></i>
-                </span>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="{% url 'accounting_double_entry:contracreate' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Create</a></li>
-                
-                  
-                  <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Alter</a></li> -->
-                   
-              </ul>
-            </li>
-
-
-
-
+            <li><a href="{% url 'accounting_double_entry:paymentcreate' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Payment</a></li>
+            <li><a href="{% url 'accounting_double_entry:receiptcreate' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Receipts</a></li>
+            <li><a href="{% url 'accounting_double_entry:contracreate' pk=company_details.pk pk3=selectdatefield_details.pk %}"><i class="fa fa-circle-o"></i> Contra</a></li>
 
           </ul>
         </li>
-
 
             
         <li class="treeview">
@@ -1048,13 +965,6 @@
 
 
 
-
-
-           
-
-
-
-
   <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
        immediately after the control sidebar -->
@@ -1093,6 +1003,7 @@
 
 <script src="{% static 'clouderp/bower_components/chart.js/Chart.js' %}"></script>
 <!-- AdminLTE App -->
+<script src="{% static 'clouderp/dist/js/adminlte.min.js' %}"></script>
 
 <script src="{% static 'clouderp/js/main.min.js' %}"></script>
 
@@ -1103,6 +1014,9 @@
 <!-- date-range-picker -->
 <script src="{% static 'clouderp/bower_components/moment/min/moment.min.js' %}"></script>
 <script src="{% static 'clouderp/bower_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+
+
+
 
 <script>
 

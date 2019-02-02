@@ -143,6 +143,52 @@
             
           </form>
 
+
+         
+          </div>
+          
+            <div class="box-body table-responsive no-padding">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th><h3><center></center></h3></th>
+                  <th><h3><center>Creation Date</center></h3></th>
+                  <th><h3><center>TODO LIST<br>(Just Click on the todo if it is completed)</center></h3></th>
+                  <th><h3><center>Status</center></h3></th>
+                  <th><h3><center>Time Elapsed</center></h3></th>
+                </tr>
+                </thead>
+
+                <tbody>
+                  {% for todo in todo_list %}
+                    {% if todo.complete %}
+                      <tr>
+                        <td><center><h4><i class="fa fa-check"></i></h4></center></td>
+                        <td><center><h4>{{ todo.Date }}</h4></center></td>
+                        <th><center><h4>{{ todo.text }}</h4></center></th>
+                        <td><center><h4>Completed</h4></center></td>
+                        <td><center><h4>{{ todo.Date|timesince }} ago</h4></center></td>
+                      </tr>
+
+                    {% else %}
+                      <tr>
+                        <td><center><h4><i class="fa fa-times"></i></h4></center></td>
+                        <td><center><h4>{{ todo.Date }}</h4></center></td>
+                         <th><center><h4><a href="{% url 'todogst:complete' todo.id %}">{{ todo.text }}</a></h4></center></th>
+                        <td><center><h4>Not Completed</h4></center></td>
+                        <td><center><h4>{{ todo.Date|timesince }} ago</h4></center></td>
+                      </tr>
+                       
+                    {% endif %}
+                  
+                  {% endfor %}
+                </tbody>
+
+                
+              </table>
+            </div>
+
+             <div class="box-footer">
           <div class="row t10">
             <div class="col-lg-12">
               <div class="btn-toolbar">
@@ -159,75 +205,8 @@
               </div>
             </div>
           </div>
-         
-          </div>
-          
-            <div class="box-body table-responsive no-padding">
-              <table class="table table-striped">
-                <tr>
-                  <th><h3><center></center></h3></th>
-                  <th><h3><center>Creation Date</center></h3></th>
-                  <th><h3><center>TODO LIST<br>(Just Click on the todo if it is completed)</center></h3></th>
-                  <th><h3><center>Status</center></h3></th>
-                  <th><h3><center>Time Elapsed</center></h3></th>
-                </tr>
-                {% for todo in todo_list %}
-                  {% if todo.complete %}
-                    <tr>
-                      <td><center><h4><i class="fa fa-check"></i></h4></center></td>
-                      <td><center><h4>{{ todo.Date }}</h4></center></td>
-                      <th><center><h4>{{ todo.text }}</h4></center></th>
-                      <td><center><h4>Completed</h4></center></td>
-                      <td><center><h4>{{ todo.Date|timesince }} ago</h4></center></td>
-                    </tr>
-
-                  {% else %}
-                    <tr>
-                      <td><center><h4><i class="fa fa-times"></i></h4></center></td>
-                      <td><center><h4>{{ todo.Date }}</h4></center></td>
-                       <th><center><h4><a href="{% url 'todogst:complete' todo.id %}">{{ todo.text }}</a></h4></center></th>
-                      <td><center><h4>Not Completed</h4></center></td>
-                      <td><center><h4>{{ todo.Date|timesince }} ago</h4></center></td>
-                    </tr>
-                     
-                  {% endif %}
-                  
-              {% endfor %}
-              </table>
-            </div>
-
-             <div class="box-footer">
-                
-                <ul class="pagination">
-                  {% if posts.has_previous %}
-                      <li class="page-item">
-                        <a href="?page={{ posts.previous_page_number }}">previous</a>
-                      </li>
-                  {% endif %}
-                  {% for p in posts.paginator.page_range %}
-                      {% if posts.number == p %}
-                          <li class="page-item active">
-                            <a href="?page={{ p }}" class="page-link">{{ p }}</a>
-                          </li>
-                      {% else %}
-                          <li class="page-item">
-                                <a href="?page={{ p }}" class="page-link">{{ p }}</a>
-                          </li>
-                      {% endif %}
-                  {% endfor %}
-
-                  {% if posts.has_next %}
-                      <li class="page-item">
-                        <a href="?page={{ posts.next_page_number }}" class="page-link">Next</a>
-                      </li>
-                  {% endif %}
-                </ul>
-                  
-
-
-
-
-          
+              
+                      
               </div>
       </div>
     </div>

@@ -447,7 +447,7 @@ def Stockitems_Monthly_view(request, pk, pk2, pk3):
 	y = 0
 	z = 0
 
-	while date_cursor < selectdatefield_details.End_Date:
+	while date_cursor <= selectdatefield_details.End_Date:
 		month_partial_purchase_quantity = result2.filter(purchases__date__month=date_cursor.month).aggregate(partial_total_purchase_quantity=Sum('real_total_quantity_p'))['partial_total_purchase_quantity']
 		month_partial_sale_quantity = result1.filter(sales__date__month=date_cursor.month).aggregate(partial_total_sale_quantity=Sum('real_total_quantity_s'))['partial_total_sale_quantity']
 		month_partial_purchase = result3.filter(purchases__date__month=date_cursor.month).aggregate(partial_total_purchase=Sum('real_total_p'))['partial_total_purchase']
@@ -890,7 +890,7 @@ class Purchase_Register_view(LoginRequiredMixin,ListView):
 
 		z = 0
 
-		while date_cursor < selectdatefield_details.End_Date:
+		while date_cursor <= selectdatefield_details.End_Date:
 			month_partial_total = result.filter(date__month=date_cursor.month).aggregate(partial_total=Sum('real_total'))['partial_total']
 
 			if month_partial_total == None:
@@ -939,7 +939,7 @@ class Sales_Register_view(LoginRequiredMixin,ListView):
 
 		z = 0
 
-		while date_cursor < selectdatefield_details.End_Date:
+		while date_cursor <= selectdatefield_details.End_Date:
 			month_partial_total = result.filter(date__month=date_cursor.month).aggregate(partial_total=Sum('real_total'))['partial_total']
 
 			if month_partial_total == None:

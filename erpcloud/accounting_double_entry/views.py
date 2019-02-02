@@ -2,24 +2,18 @@ from django.shortcuts import render
 from django.views.generic import (ListView,DetailView,
 								  CreateView,UpdateView,DeleteView)
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from accounting_double_entry.models import journal,group1,ledger1,selectdatefield,Payment,Particularspayment,Receipt,Particularsreceipt,Contra,Particularscontra,Multijournal,Multijournaltotal
 from stockkeeping.models import Stockgroup,Simpleunits,Compoundunits,Stockdata,Purchase,Sales,Stock_Total,Stock_Total_sales
 from accounting_double_entry.forms import journalForm,group1Form,Ledgerform,DateRangeForm,PaymentForm,Payment_formSet,ParticularspaymentForm,ReceiptForm,ParticularsreceiptForm,Receipt_formSet,ContraForm,ParticularscontraForm,Contra_formSet,MultijournalForm,MultijournaltotalForm,Multijournal_formSet
 from userprofile.models import Profile
 from company.models import company
-from django.db.models import Q
 from django.shortcuts import get_object_or_404
-from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from django.db.models import F, ExpressionWrapper, Sum, Subquery, OuterRef
-from django.db.models.fields import DecimalField
 import datetime
-from django.db.models import Value
 from django.db.models.functions import Coalesce 
 from itertools import zip_longest
-from bootstrap_modal_forms.mixins import PassRequestMixin, DeleteAjaxMixin  
-from django.db.models import Case, When, CharField, Value, Sum, F, ExpressionWrapper, Subquery, OuterRef, Count
+from django.db.models import Case, When, CharField, Value, Sum, F, Q, ExpressionWrapper, Subquery, OuterRef, Count
 from django.db.models.fields import DecimalField
 import calendar
 import dateutil
@@ -343,7 +337,7 @@ def ledger_monthly_detail_view(request, pk, pk2, pk3):
 	z = 0
 	k = 0
 
-	while date_cursor < selectdatefield_details.End_Date:
+	while date_cursor <= selectdatefield_details.End_Date:
 		month_partial_total_debit = qscb.filter(Date__month=date_cursor.month).aggregate(partial_total_debit=Sum('real_total_debit'))['partial_total_debit']
 		month_partial_total_credit = qscb2.filter(Date__month=date_cursor.month).aggregate(partial_total_credit=Sum('real_total_credit'))['partial_total_credit']
 
@@ -351,7 +345,7 @@ def ledger_monthly_detail_view(request, pk, pk2, pk3):
 
 			month_partial_total_debit = int(0)
 
-			e = month_partial_total_debit
+			e = month_partial_total_debit 
 
 		else:
 
@@ -463,9 +457,9 @@ def ledger1_detail_view(request, pk, pk2, pk3):
 	
 
 	if(ledger1_details.group1_Name.balance_nature == 'Debit'):
-		closing_balance = abs(opening_balance) + abs(total_debitcb) - abs(total_creditcb)
+		closing_balance = opening_balance + abs(total_debitcb) - abs(total_creditcb)
 	else:
-		closing_balance = abs(opening_balance) + abs(total_creditcb) - abs(total_debitcb)
+		closing_balance = opening_balance + abs(total_creditcb) - abs(total_debitcb)
 
 	ledger1_detail = ledger1.objects.get(pk=ledger1_details.pk)
 	ledger1_detail.Closing_balance = closing_balance
@@ -608,7 +602,7 @@ class Journal_Register_view(LoginRequiredMixin,ListView):
 
 		z = 0
 
-		while date_cursor < selectdatefield_details.End_Date:
+		while date_cursor <= selectdatefield_details.End_Date:
 			month_partial_total = result.filter(Date__month=date_cursor.month).aggregate(partial_total=Count('real_total'))['partial_total']
 
 			if month_partial_total == None:

@@ -137,7 +137,7 @@
 
           <div class="box-body table-responsive no-padding">
 
-          <style type="text/css">
+        <style type="text/css">
 
           .table-bordered td, .table-bordered th{
             border-color: #bfbfbf !important;
@@ -177,7 +177,9 @@
                 <td>{{ stockdata.total|div:stockdata.difference|floatformat:2|abs }}</td>
                 <td>{{ stockdata.total|floatformat:2|abs }}</td>
               </tr>
+
             {% endfor %}
+            
           </tbody>
             
             </table>

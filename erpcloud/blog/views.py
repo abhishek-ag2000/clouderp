@@ -15,7 +15,7 @@ from django.template.loader import render_to_string
 
 # Create your views here.
 
-class viewbloglistview(LoginRequiredMixin,ListView):
+class viewbloglistview(ListView):
 	model = Blog
 	paginate_by = 6
 
@@ -34,7 +34,7 @@ class viewbloglistview(LoginRequiredMixin,ListView):
 		context['categories_count'] = Blog.categories_count()
 		return context
 
-class likebloglistview(LoginRequiredMixin,ListView):
+class likebloglistview(ListView):
 	model = Blog
 	paginate_by = 6
 
@@ -55,7 +55,7 @@ class likebloglistview(LoginRequiredMixin,ListView):
 
 
 
-class latestbloglistview(LoginRequiredMixin,ListView):
+class latestbloglistview(ListView):
 	model = Blog
 	paginate_by = 6
 

@@ -199,10 +199,21 @@
                     <div class="comment-text">
                           <span class="username">
                             {{ answer.User }}
-                            <span class="text-muted pull-right">{{ answer.Date|date:"H:i" }}{{ answer.Date|timesince }} ago</span>
+                            <span class="text-muted">{{ answer.Date|date }}</span>   <span class="text-muted pull-right"> {{ answer.Date|timesince }} ago</span>
                           </span><!-- /.username -->
                       {{ answer.text }}
                     </div>
+
+                    <div id="book-table">
+                      <button class="show-form-delete pull-right">
+                      <span class="glyphicon glyphicon-trash"></span>
+                      </button>
+
+                      <button class="show-form-update pull-right">
+                      <span class="glyphicon glyphicon-pencil"></span>
+                      </button>
+                    </div>
+
 
                     {% if not forloop.last %}
                       <hr>

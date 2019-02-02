@@ -12,6 +12,13 @@
     </div>
     <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-    <button type="submit" class="btn btn-primary">Add</button>
+    <button type="submit" id="create_reload" class="btn btn-primary">Add</button>
     </div>
 </form>
+
+
+<script type="text/javascript">
+$('#create_reload').click(function() {
+    location.reload();
+});
+</script>
