@@ -32,6 +32,8 @@ urlpatterns = [
     url(r"^accounts/", include("accounts.urls", namespace="accounts")),
     url(r"^accounts/", include("django.contrib.auth.urls")),
     url(r'^auth/', include('social_django.urls', namespace='social')),
+    url(r"^products/", include("ecommerce_integration.urls", namespace="products")),
+    url(r"^carts/", include("ecommerce_cart.urls", namespace="carts")),
     url(r"^accounting_double_entry/", include("accounting_double_entry.urls", namespace="accounting_double_entry")),
     url(r"^company/", include("company.urls", namespace="company")),
     url(r"^todo/", include("todogst.urls", namespace="todogst")),

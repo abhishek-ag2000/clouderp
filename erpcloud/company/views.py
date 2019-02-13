@@ -5,6 +5,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic.edit import FormMixin
 from company.models import company
+from ecommerce_integration.models import coupon, Product, Product_review, Services, API
+from userprofile.models import Profile, Product_activation
 from company.forms import companyform
 from django.shortcuts import redirect
 from todogst.models import Todo
@@ -15,14 +17,23 @@ from django.urls import reverse
 from accounting_double_entry.models import group1,ledger1,journal,selectdatefield
 from stockkeeping.models import Stockgroup,Simpleunits,Compoundunits,Stockdata,Purchase,Sales,Stock_Total,Stock_Total_sales
 from django.db.models.functions import Coalesce
-from django.db.models import Value, Sum, F, ExpressionWrapper, Subquery, OuterRef, FloatField
+from django.db.models import Value, Sum, Count, F, ExpressionWrapper, Subquery, OuterRef, FloatField
 from django.db.models.fields import DecimalField
 from django.db.models.functions import Coalesce 
+from django.core.exceptions import PermissionDenied
 
 # Create your views here.
 
+class ProductExistsRequiredMixin:
 
-class companyListView(LoginRequiredMixin,ListView):
+    def dispatch(self, request, *args, **kwargs):
+        if Product_activation.objects.filter(User= request.user, product__id = 1, activate=True):
+            return super().dispatch(request, *args, **kwargs)
+        else:
+            raise PermissionDenied
+
+
+class companyListView(ProductExistsRequiredMixin,LoginRequiredMixin,ListView):
 	model = company
 	paginate_by = 10
 
@@ -32,6 +43,10 @@ class companyListView(LoginRequiredMixin,ListView):
 	def get_context_data(self, **kwargs):
 		context = super(companyListView, self).get_context_data(**kwargs)
 		context['selectdates'] = selectdatefield.objects.filter(User=self.request.user)
+		context['Products'] = Product_activation.objects.filter(User=self.request.user,product__id = 1, activate=True)
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum']
+
 
 		# Capital Account
 		qs = company.objects.filter(User= self.request.user)
@@ -223,20 +238,23 @@ class companyListView(LoginRequiredMixin,ListView):
 		context['Assets'] = Assets
 		return context
 
-class companyDetailView(LoginRequiredMixin,DetailView):
+class companyDetailView(ProductExistsRequiredMixin,LoginRequiredMixin,DetailView):
 	context_object_name = 'company_details'
 	model = company
 	template_name = 'company/Dashboard.html'
 
 	def get_context_data(self, **kwargs):
 		context = super(companyDetailView, self).get_context_data(**kwargs)
-		context['todo_list'] = Todo.objects.filter(User=self.request.user).order_by('-id')
+		context['todo_list'] = Todo.objects.filter(User=self.request.user)
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum']
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
+		context['Products'] = Product_activation.objects.filter(User=self.request.user,product__id = 1, activate=True)
 		return context
 
 
-class companyCreateView(LoginRequiredMixin,CreateView):
+class companyCreateView(ProductExistsRequiredMixin,LoginRequiredMixin,CreateView):
 	form_class  = companyform
 	template_name = "company/company_form.html"
 
@@ -247,8 +265,15 @@ class companyCreateView(LoginRequiredMixin,CreateView):
 		form.instance.User = self.request.user
 		return super(companyCreateView, self).form_valid(form)
 
+	def get_context_data(self, **kwargs):
+		context = super(companyCreateView, self).get_context_data(**kwargs)
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Products'] = Product_activation.objects.filter(User=self.request.user,product__id = 1, activate=True)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
+		return context
 
-class companyUpdateView(LoginRequiredMixin,UpdateView):
+
+class companyUpdateView(ProductExistsRequiredMixin,LoginRequiredMixin,UpdateView):
 	model = company
 	form_class  = companyform
 	template_name = "company/company_form.html"
@@ -256,7 +281,14 @@ class companyUpdateView(LoginRequiredMixin,UpdateView):
 	def get_success_url(self,**kwargs):
 		return reverse('company:list')
 
-class companyDeleteView(LoginRequiredMixin,DeleteView):
+	def get_context_data(self, **kwargs):
+		context = super(companyUpdateView, self).get_context_data(**kwargs)
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Products'] = Product_activation.objects.filter(User=self.request.user,product__id = 1, activate=True)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
+		return context
+
+class companyDeleteView(ProductExistsRequiredMixin,LoginRequiredMixin,DeleteView):
 	model = company
 	success_url = reverse_lazy("company:list")
 
@@ -264,8 +296,11 @@ class companyDeleteView(LoginRequiredMixin,DeleteView):
 		return reverse('company:list')
 
 	def get_context_data(self, **kwargs):
-		context = super(companyDeleteView, self).get_context_data(**kwargs) 
+		context = super(companyDeleteView, self).get_context_data(**kwargs)
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
+		context['Products'] = Product_activation.objects.filter(User=self.request.user,product__id = 1, activate=True)
 		context['selectdatefield_details'] = selectdatefield_details
 		return context
 

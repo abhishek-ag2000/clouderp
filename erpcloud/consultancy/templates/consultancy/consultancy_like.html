@@ -1,3 +1,4 @@
+{% load staticfiles %}          
           <form action="{% url 'consultancy:like_question' %}" method="post">
             {% csrf_token %}
 
@@ -16,3 +17,5 @@
             {% endif %}
 
           </form>
+
+           <span class="pull-right text-muted"> - {{ total_like }} follow{{ total_like|pluralize }} </span>

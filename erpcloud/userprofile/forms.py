@@ -6,6 +6,7 @@ class profileform(forms.ModelForm):
 	def __init__(self, *args, **kwargs):
 		super(profileform, self).__init__(*args, **kwargs)
 		self.fields['E_mail'].widget.attrs = {'class': 'form-control',}
+		self.fields['user_type'].widget.attrs = {'class': 'form-control select2',}
 		self.fields['Qualification'].widget.attrs = {'class': 'form-control',}
 		self.fields['Phone_no'].widget.attrs = {'class': 'form-control',}
 		self.fields['Skills'].widget.attrs = {'class': 'form-control',}
@@ -20,7 +21,7 @@ class profileform(forms.ModelForm):
 
 	class Meta:
 		model = Profile
-		fields = ('Full_Name', 'E_mail','Qualification','Permanant_Address','District','State','Country', 'Phone_no', 'Skills', 'image')
+		fields = ('Full_Name', 'user_type', 'E_mail','Qualification','Permanant_Address','District','State','Country', 'Phone_no', 'Skills', 'image')
 
 
 	def clean(self):

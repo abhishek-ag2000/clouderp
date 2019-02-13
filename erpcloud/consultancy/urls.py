@@ -14,5 +14,9 @@ urlpatterns = [
 
 	url(r'^myquestions/$',views.myconsultancyListView.as_view(),name='myquestions'),
 
+	url(r'^answers/(?P<id>\d+)/update$', views.answer_update, name='answersupdate'),
+
+	url(r'^answers/(?P<id>\d+)/delete$', views.answer_delete, name='answersdelete'),
+
 
 ]

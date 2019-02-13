@@ -22,7 +22,7 @@ class consultancy(models.Model):
 
 class Answer(models.Model):
 	User = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,null=True,blank=True)
-	Questions = models.ForeignKey(consultancy,on_delete=models.CASCADE)
+	Questions = models.ForeignKey(consultancy,on_delete=models.CASCADE,related_name='consultancies')
 	text = models.TextField()
 	Date = models.DateTimeField(auto_now_add=True)
 

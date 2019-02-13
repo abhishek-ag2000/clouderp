@@ -4,20 +4,26 @@ from django.views.generic import (ListView,DetailView,
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from blog.models import Blog,categories
+from ecommerce_integration.models import coupon, Product, Product_review, Services, API
+from userprofile.models import Profile, Product_activation
 from blog.forms import Blogform,BlogSearchForm
 from django.db.models import Q
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.db.models import Count
+from todogst.models import Todo
 from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
+from django.db.models.functions import Coalesce
+from django.db.models import Value, Sum, Count, F, ExpressionWrapper, Subquery, OuterRef, FloatField
+
 
 
 # Create your views here.
 
 class viewbloglistview(ListView):
 	model = Blog
-	paginate_by = 6
+	paginate_by = 3
 
 	def get_template_names(self):
 		if True:  
@@ -31,12 +37,14 @@ class viewbloglistview(ListView):
 	def get_context_data(self, **kwargs):
 		context = super(viewbloglistview, self).get_context_data(**kwargs) 
 		context['categories_list'] = categories.objects.all()
-		context['categories_count'] = Blog.categories_count()
+		context['Products'] = Product_activation.objects.filter(User=self.request.user,product__id = 1, activate=True)
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
 class likebloglistview(ListView):
 	model = Blog
-	paginate_by = 6
+	paginate_by = 3
 
 	def get_template_names(self):
 		if True:  
@@ -50,14 +58,16 @@ class likebloglistview(ListView):
 	def get_context_data(self, **kwargs):
 		context = super(likebloglistview, self).get_context_data(**kwargs) 
 		context['categories_list'] = categories.objects.all()
-		context['categories_count'] = Blog.categories_count()
+		context['Products'] = Product_activation.objects.filter(User=self.request.user,product__id = 1, activate=True)
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
 
 
 class latestbloglistview(ListView):
 	model = Blog
-	paginate_by = 6
+	paginate_by = 3
 
 	def get_template_names(self):
 		if True:  
@@ -71,14 +81,16 @@ class latestbloglistview(ListView):
 	def get_context_data(self, **kwargs):
 		context = super(latestbloglistview, self).get_context_data(**kwargs) 
 		context['categories_list'] = categories.objects.all()
-		context['categories_count'] = Blog.categories_count()
+		context['Products'] = Product_activation.objects.filter(User=self.request.user,product__id = 1, activate=True)
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
 
 
 class bloglistview(LoginRequiredMixin,ListView):
 	model = Blog
-	paginate_by = 4
+	paginate_by = 3
 	
 	
 	def get_queryset(self):
@@ -87,13 +99,15 @@ class bloglistview(LoginRequiredMixin,ListView):
 	def get_context_data(self, **kwargs):
 		context = super(bloglistview, self).get_context_data(**kwargs) 
 		context['categories_list'] = categories.objects.all()
-		context['categories_count'] = Blog.categories_count()
+		context['Products'] = Product_activation.objects.filter(User=self.request.user,product__id = 1, activate=True)
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
 
 class allbloglistview(ListView):
 	model = Blog
-	paginate_by = 6
+	paginate_by = 3
 
 
 	def get_template_names(self):
@@ -103,12 +117,14 @@ class allbloglistview(ListView):
 			return ['blog/blog_list.html']
 		
 	def get_queryset(self):
-		return Blog.objects.all().order_by('id')
+		return Blog.objects.all().order_by('-id')
 
 	def get_context_data(self, **kwargs):
 		context = super(allbloglistview, self).get_context_data(**kwargs) 
 		context['categories_list'] = categories.objects.all()
-		context['categories_count'] = Blog.categories_count()
+		context['Products'] = Product_activation.objects.filter(User=self.request.user,product__id = 1, activate=True)
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
 
@@ -123,12 +139,17 @@ def post_detail(request, pk):
 	is_liked = False
 	if blog_details.likes.filter(pk=request.user.id).exists():
 		is_liked = True
+
+
 	context = {
 		'blog_details' : blog_details,
 		'is_liked' : is_liked,
 		'total_likes' : blog_details.total_likes(),
+		'Products'	: Product_activation.objects.filter(User=request.user,product__id = 1, activate=True),
 		'categories_list' : categories.objects.all(),
-		'categories_count' : blog_details.categories_count(),
+		'Todos'		 : Todo.objects.filter(User=request.user, complete=False),
+		'Todos_total' 	: Todo.objects.filter(User=request.user, complete=False).aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
+		
 		
 	}
 
@@ -167,15 +188,37 @@ class blogcreateview(LoginRequiredMixin,CreateView):
 		form.instance.User = self.request.user
 		return super(blogcreateview, self).form_valid(form)
 
+	def get_context_data(self, **kwargs):
+		context = super(blogcreateview, self).get_context_data(**kwargs)
+		context['Products'] = Product_activation.objects.filter(User=self.request.user,product__id = 1, activate=True)
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
+		return context
+
 class blogupdateview(LoginRequiredMixin,UpdateView):
 	model = Blog
 	form_class = Blogform
 	template_name = 'blog/blog_form.html'
 
 
+	def get_context_data(self, **kwargs):
+		context = super(blogupdateview, self).get_context_data(**kwargs)
+		context['Products'] = Product_activation.objects.filter(User=self.request.user,product__id = 1, activate=True)
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
+		return context
+
+
 class blogdeleteview(LoginRequiredMixin,DeleteView):
 	model = Blog
 	success_url = reverse_lazy("blog:bloglist")
+
+	def get_context_data(self, **kwargs):
+		context = super(blogdeleteview, self).get_context_data(**kwargs)
+		context['Products'] = Product_activation.objects.filter(User=self.request.user,product__id = 1, activate=True)
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
+		return context
 
 
 class categoryListView(LoginRequiredMixin,ListView):
@@ -185,6 +228,13 @@ class categoryListView(LoginRequiredMixin,ListView):
 
 	def get_queryset(self):
 		return Blog.objects.order_by('-id')
+
+	def get_context_data(self, **kwargs):
+		context = super(categoryListView, self).get_context_data(**kwargs)
+		context['Products'] = Product_activation.objects.filter(User=self.request.user,product__id = 1, activate=True)
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
+		return context
 
 
 class categoryDetailView(LoginRequiredMixin,DetailView):
@@ -196,8 +246,10 @@ class categoryDetailView(LoginRequiredMixin,DetailView):
 	def get_context_data(self, **kwargs):
 		context = super(categoryDetailView, self).get_context_data(**kwargs)
 		context['blog_list'] = Blog.objects.all()
+		context['Products'] = Product_activation.objects.filter(User=self.request.user,product__id = 1, activate=True)
 		context['categories_list'] = categories.objects.all()
-		context['categories_count'] = Blog.categories_count()
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
 def search(request):
@@ -213,6 +265,9 @@ def search(request):
 	context = {
 		'blogs':result,
 		'categories_l':categories.objects.all(),
+		'Products'	: Product_activation.objects.filter(User=request.user,product__id = 1, activate=True),
+		'Todos'					  : Todo.objects.filter(User=request.user, complete=False),
+		'Todos_total' 			  : Todo.objects.filter(User=request.user, complete=False).aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 	}
 
 	return render(request, template, context)

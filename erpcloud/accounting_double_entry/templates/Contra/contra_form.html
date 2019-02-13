@@ -170,7 +170,7 @@
             <div class="box box-success">
 
               <div class="box-body table-responsive no-padding">
-                <table class="table" id="calculate">
+                <table class="table">
                     {{ contras.management_form }}
 
                         <thead>
@@ -180,7 +180,7 @@
                         </tr>
                         </thead>
 
-                        <tbody>
+                        <tbody id="calculate">
                             {% for form in contras.forms %}
                               
                                 <tr class='{% cycle "row1" "row2" %}  formset_row'>
@@ -242,14 +242,16 @@
 
 
 <script type="text/javascript">
-        $(document).ready(function(){
-            let tableInstance = $('#calculate td.amounts');
-            let totals = 0;
-            tableInstance.each(function(){
-                totals = totals + parseInt($(this).text());
-            });
-            $("#totaled :input").val(totals);
-        });
+
+$(document).ready(function() {
+  let tableInstance = $('#calculate td.amounts');
+  let totals = 0;
+  tableInstance.each(function() {
+    totals = totals + Math.floor($(this).text() * 100) / 100;
+  });
+  $(".totaled :input").val(totals);
+});
+
 </script>
 
 </section>

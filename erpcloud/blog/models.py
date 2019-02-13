@@ -43,20 +43,17 @@ class Blog(models.Model):
 	def total_likes(self):
 		return self.likes.count()
 
-	@classmethod
-	def categories_count(cls):
-		categories_count = categories.objects.annotate(blog_count=Count('blogs')).values_list('Title','blog_count')
-		return categories_count
 
 
 	def save(self, *args, **kwargs):
-		imageTemproary = Image.open(self.Blog_image)
-		outputIoStream = BytesIO()
-		imageTemproaryResized = imageTemproary.resize( (900,300) ) 
-		imageTemproaryResized.save(outputIoStream , format='JPEG', quality=150)
-		outputIoStream.seek(0)
-		self.Blog_image = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" %self.Blog_image.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
-		super(Blog, self).save(*args, **kwargs)
+		if self.Blog_image:
+			imageTemproary = Image.open(self.Blog_image)
+			outputIoStream = BytesIO()
+			imageTemproaryResized = imageTemproary.resize( (1000,400) ) 
+			imageTemproaryResized.save(outputIoStream , format='JPEG', quality=300)
+			outputIoStream.seek(0)
+			self.Blog_image = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" %self.Blog_image.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
+			super(Blog, self).save(*args, **kwargs)
 
 	class Meta:
 		ordering = ['-id']

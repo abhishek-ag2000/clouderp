@@ -4,7 +4,9 @@ from django.views.decorators.http import require_POST
 from .models import Todo
 from .forms import TodoForm
 from django.contrib.auth.decorators import login_required
-
+from django.db.models.functions import Coalesce 
+from django.db.models import Count, Value
+from userprofile.models import Profile, Product_activation
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
@@ -14,7 +16,17 @@ def index(request):
 
     form = TodoForm()
 
-    context = {'todo_list' : todo_list, 'form' : form}
+
+
+    context = {
+
+        'todo_list'     : todo_list, 
+        'form'          : form,
+        'Todos'         : Todo.objects.filter(User=request.user, complete=False),
+        'Products'      : Product_activation.objects.filter(User=request.user,product__id = 1, activate=True),
+        'Todos_total'   : Todo.objects.filter(User=request.user, complete=False).aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
+
+    }
 
     return render(request, 'todogst/index.html', context)
 

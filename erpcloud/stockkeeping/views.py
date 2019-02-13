@@ -8,23 +8,34 @@ from accounting_double_entry.models import group1,ledger1,journal,selectdatefiel
 from company.models import company
 from stockkeeping.models import Stockgroup,Simpleunits,Compoundunits,Stockdata,Purchase,Sales,Stock_Total,Stock_Total_sales
 from stockkeeping.forms import Stockgroup_form,Simpleunits_form,Compoundunits_form,Stockdata_form,Purchase_form,Sales_form,Purchase_formSet,Sales_formSet,Stock_Totalform
-from userprofile.models import Profile
+from userprofile.models import Profile, Product_activation
+from ecommerce_integration.models import coupon, Product, Product_review, Services, API
+from todogst.models import Todo
 from django.shortcuts import get_object_or_404
 from django.db import transaction
 from django.db.models.functions import Coalesce
-from django.db.models import Case, When, CharField, Value, Sum, F, ExpressionWrapper, Subquery, OuterRef, FloatField
+from django.db.models import Case, When, CharField, Value, Sum, Count, F, ExpressionWrapper, Subquery, OuterRef, FloatField
 from django.db.models.fields import DecimalField
 import calendar
 import dateutil
 import collections
+from ecommerce_integration.decorators import product_1_activation
+from django.core.exceptions import PermissionDenied
 
 # Create your views here.
 
 
+class ProductExistsRequiredMixin:
+
+    def dispatch(self, request, *args, **kwargs):
+        if Product_activation.objects.filter(User=request.user,id=1, activate=True):
+            return super().dispatch(request, *args, **kwargs)
+        else:
+            raise PermissionDenied
 
 ##################################### Simple Unit Views #####################################
 
-class Simpleunits_listview(LoginRequiredMixin,ListView):
+class Simpleunits_listview(ProductExistsRequiredMixin,LoginRequiredMixin,ListView):
 	model = Simpleunits
 	template_name = 'stockkeeping/simpleunits/simpleunits_list.html'
 	paginate_by = 15
@@ -40,9 +51,11 @@ class Simpleunits_listview(LoginRequiredMixin,ListView):
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
-class Simpleunits_detailsview(LoginRequiredMixin,DetailView):
+class Simpleunits_detailsview(ProductExistsRequiredMixin,LoginRequiredMixin,DetailView):
 	context_object_name = 'simpleunits_details'
 	model = Simpleunits
 	template_name = 'stockkeeping/simpleunits/simpleunits_details.html'
@@ -64,9 +77,11 @@ class Simpleunits_detailsview(LoginRequiredMixin,DetailView):
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
-class Simpleunits_createview(LoginRequiredMixin,CreateView):
+class Simpleunits_createview(ProductExistsRequiredMixin,LoginRequiredMixin,CreateView):
 	form_class  = Simpleunits_form
 	template_name = "stockkeeping/simpleunits/simpleunits_form.html"
 
@@ -88,9 +103,11 @@ class Simpleunits_createview(LoginRequiredMixin,CreateView):
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
-class Simpleunits_updateview(LoginRequiredMixin,UpdateView):
+class Simpleunits_updateview(ProductExistsRequiredMixin,LoginRequiredMixin,UpdateView):
 	model = Simpleunits
 	form_class  = Simpleunits_form
 	template_name = "stockkeeping/simpleunits/simpleunits_form.html"
@@ -116,10 +133,12 @@ class Simpleunits_updateview(LoginRequiredMixin,UpdateView):
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
 
-class Simpleunits_deleteview(LoginRequiredMixin,DeleteView):
+class Simpleunits_deleteview(ProductExistsRequiredMixin,LoginRequiredMixin,DeleteView):
 	model = Simpleunits
 	template_name = "stockkeeping/simpleunits/simpleunits_confirm_delete.html"
 
@@ -142,6 +161,8 @@ class Simpleunits_deleteview(LoginRequiredMixin,DeleteView):
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
 
@@ -149,7 +170,7 @@ class Simpleunits_deleteview(LoginRequiredMixin,DeleteView):
 
 
 
-class Compoundunit_listview(LoginRequiredMixin,ListView):
+class Compoundunit_listview(ProductExistsRequiredMixin,LoginRequiredMixin,ListView):
 	model = Compoundunits
 	template_name = 'stockkeeping/compoundunits/compoundunits_list.html'
 	paginate_by = 15
@@ -165,10 +186,12 @@ class Compoundunit_listview(LoginRequiredMixin,ListView):
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
 
-class Compoundunits_detailsview(LoginRequiredMixin,DetailView):
+class Compoundunits_detailsview(ProductExistsRequiredMixin,LoginRequiredMixin,DetailView):
 	context_object_name = 'compoundunits_details'
 	model = Compoundunits
 	template_name = 'stockkeeping/compoundunits/compoundunits_details.html'
@@ -190,9 +213,11 @@ class Compoundunits_detailsview(LoginRequiredMixin,DetailView):
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
-class Compoundunits_createview(LoginRequiredMixin,CreateView):
+class Compoundunits_createview(ProductExistsRequiredMixin,LoginRequiredMixin,CreateView):
 	form_class  = Compoundunits_form
 	template_name = "stockkeeping/compoundunits/compoundunits_form.html"
 
@@ -222,9 +247,11 @@ class Compoundunits_createview(LoginRequiredMixin,CreateView):
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
-class Compoundunits_updateview(LoginRequiredMixin,UpdateView):
+class Compoundunits_updateview(ProductExistsRequiredMixin,LoginRequiredMixin,UpdateView):
 	model = Compoundunits
 	form_class  = Compoundunits_form
 	template_name = "stockkeeping/compoundunits/compoundunits_form.html"
@@ -258,9 +285,11 @@ class Compoundunits_updateview(LoginRequiredMixin,UpdateView):
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
-class Compoundunits_deleteview(LoginRequiredMixin,DeleteView):
+class Compoundunits_deleteview(ProductExistsRequiredMixin,LoginRequiredMixin,DeleteView):
 	model = Compoundunits
 	template_name = "stockkeeping/compoundunits/compoundunits_confirm_delete.html"
 
@@ -283,12 +312,14 @@ class Compoundunits_deleteview(LoginRequiredMixin,DeleteView):
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
 		
 ##################################### Stockgroup Views #####################################
 
-class Stockgroup_listview(LoginRequiredMixin,ListView):
+class Stockgroup_listview(ProductExistsRequiredMixin,LoginRequiredMixin,ListView):
 	model = Stockgroup
 	template_name = 'stockkeeping/stockgroup/stockgroup_list.html'
 	paginate_by = 15
@@ -304,9 +335,11 @@ class Stockgroup_listview(LoginRequiredMixin,ListView):
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
-class Stockgroup_detailsview(LoginRequiredMixin,DetailView):
+class Stockgroup_detailsview(ProductExistsRequiredMixin,LoginRequiredMixin,DetailView):
 	context_object_name = 'stockgrp_details'
 	model = Stockgroup
 	template_name = 'stockkeeping/stockgroup/stockgroup_details.html'
@@ -330,9 +363,11 @@ class Stockgroup_detailsview(LoginRequiredMixin,DetailView):
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
-class Stockgroup_createview(LoginRequiredMixin,CreateView):
+class Stockgroup_createview(ProductExistsRequiredMixin,LoginRequiredMixin,CreateView):
 	form_class  = Stockgroup_form
 	template_name = "stockkeeping/stockgroup/stockgroup_form.html"
 
@@ -362,9 +397,11 @@ class Stockgroup_createview(LoginRequiredMixin,CreateView):
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
-class Stockgroup_updateview(LoginRequiredMixin,UpdateView):
+class Stockgroup_updateview(ProductExistsRequiredMixin,LoginRequiredMixin,UpdateView):
 	model = Stockgroup
 	form_class  = Stockgroup_form
 	template_name = "stockkeeping/stockgroup/stockgroup_form.html"
@@ -398,9 +435,11 @@ class Stockgroup_updateview(LoginRequiredMixin,UpdateView):
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
-class Stockgroup_deleteview(LoginRequiredMixin,DeleteView):
+class Stockgroup_deleteview(ProductExistsRequiredMixin,LoginRequiredMixin,DeleteView):
 	model = Stockgroup
 	template_name = "stockkeeping/stockgroup/stockgroup_confirm_delete.html"
 
@@ -423,11 +462,14 @@ class Stockgroup_deleteview(LoginRequiredMixin,DeleteView):
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
 ##################################### Stockitems Monthly Views #####################################
 
 @login_required
+@product_1_activation
 def Stockitems_Monthly_view(request, pk, pk2, pk3):
 	company_details = get_object_or_404(company, pk=pk)
 	selectdatefield_details = get_object_or_404(selectdatefield, pk=pk3)
@@ -515,6 +557,8 @@ def Stockitems_Monthly_view(request, pk, pk2, pk3):
 		'total_sale'                  : total_sale,
 		'data'			              : results.items(),
 		'Closing_balance'			  : Closing_balance,
+		'Todos'					      : Todo.objects.filter(User=request.user, complete=False),
+		'Todos_total' 			      : Todo.objects.filter(User=request.user, complete=False).aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 
 				
 	}
@@ -525,7 +569,7 @@ def Stockitems_Monthly_view(request, pk, pk2, pk3):
 
 ##################################### Stockitems Views #####################################
 
-class closing_list_view(LoginRequiredMixin,ListView):
+class closing_list_view(ProductExistsRequiredMixin,LoginRequiredMixin,ListView):
 	model = Stockdata
 	paginate_by = 15
 
@@ -576,6 +620,9 @@ class closing_list_view(LoginRequiredMixin,ListView):
 	    	total = ExpressionWrapper((F('purchase_tot') / F('purchase_sum')) * (F('purchase_sum') - F('sales_sum')), output_field=FloatField())
 		) 
 		context['Totalquantity'] = qs1.values()
+
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
 class Stockdata_listview(LoginRequiredMixin,ListView):
@@ -594,10 +641,12 @@ class Stockdata_listview(LoginRequiredMixin,ListView):
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
 
-class Stockdata_detailsview(LoginRequiredMixin,DetailView):
+class Stockdata_detailsview(ProductExistsRequiredMixin,LoginRequiredMixin,DetailView):
 	context_object_name = 'stockdata_details'
 	model = Stockdata
 	template_name = 'stockkeeping/stockitem/stockdata_details.html'
@@ -619,9 +668,12 @@ class Stockdata_detailsview(LoginRequiredMixin,DetailView):
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
+
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
-class Stockdata_createview(LoginRequiredMixin,CreateView):
+class Stockdata_createview(ProductExistsRequiredMixin,LoginRequiredMixin,CreateView):
 	form_class  = Stockdata_form
 	template_name = "stockkeeping/stockitem/stockdata_form.html"
 
@@ -651,9 +703,11 @@ class Stockdata_createview(LoginRequiredMixin,CreateView):
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
-class Stockdata_updateview(LoginRequiredMixin,UpdateView):
+class Stockdata_updateview(ProductExistsRequiredMixin,LoginRequiredMixin,UpdateView):
 	model = Stockdata
 	form_class  = Stockdata_form
 	template_name = "stockkeeping/stockitem/stockdata_form.html"
@@ -687,9 +741,11 @@ class Stockdata_updateview(LoginRequiredMixin,UpdateView):
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
-class Stockdata_deleteview(LoginRequiredMixin,DeleteView):
+class Stockdata_deleteview(ProductExistsRequiredMixin,LoginRequiredMixin,DeleteView):
 	model = Stockdata
 	template_name = "stockkeeping/stockitem/stockdataunits_confirm_delete.html"
 
@@ -712,11 +768,13 @@ class Stockdata_deleteview(LoginRequiredMixin,DeleteView):
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
 ##################################### Purchase Views #####################################
 
-class Purchase_listview(LoginRequiredMixin,ListView):
+class Purchase_listview(ProductExistsRequiredMixin,LoginRequiredMixin,ListView):
 	model = Purchase
 	template_name = 'stockkeeping/purchase/purchase_list.html'
 	paginate_by = 15
@@ -733,6 +791,8 @@ class Purchase_listview(LoginRequiredMixin,ListView):
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
 
@@ -760,10 +820,12 @@ class Purchase_detailsview(LoginRequiredMixin,DetailView):
 		purchase_details = get_object_or_404(Purchase, pk=self.kwargs['pk2'])
 		qsob  = Stock_Total.objects.filter(purchases=purchase_details.pk)
 		context['stocklist'] = qsob
-		
+
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
-class Purchase_createview(LoginRequiredMixin,CreateView):
+class Purchase_createview(ProductExistsRequiredMixin,LoginRequiredMixin,CreateView):
 	form_class  = Purchase_form
 	template_name = 'stockkeeping/purchase/purchase_form.html'
 
@@ -783,6 +845,8 @@ class Purchase_createview(LoginRequiredMixin,CreateView):
 			context['stocks'] = Purchase_formSet(self.request.POST)
 		else:
 			context['stocks'] = Purchase_formSet()
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
 	def form_valid(self, form):
@@ -808,7 +872,7 @@ class Purchase_createview(LoginRequiredMixin,CreateView):
 
 
 
-class Purchase_updateview(LoginRequiredMixin,UpdateView):
+class Purchase_updateview(ProductExistsRequiredMixin,LoginRequiredMixin,UpdateView):
 	model = Purchase
 	form_class  = Purchase_form
 	template_name = 'stockkeeping/purchase/purchase_form.html'
@@ -842,9 +906,11 @@ class Purchase_updateview(LoginRequiredMixin,UpdateView):
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
-class Purchase_deleteview(LoginRequiredMixin,DeleteView):
+class Purchase_deleteview(ProductExistsRequiredMixin,LoginRequiredMixin,DeleteView):
 	model = Purchase
 	template_name = "stockkeeping/purchase/purchase_confirm_delete.html"
 
@@ -867,13 +933,14 @@ class Purchase_deleteview(LoginRequiredMixin,DeleteView):
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
 
 ##################################### Purchase Register Views #####################################
 
-
-class Purchase_Register_view(LoginRequiredMixin,ListView):
+class Purchase_Register_view(ProductExistsRequiredMixin,LoginRequiredMixin,ListView):
 	model = Purchase
 	template_name = 'stockkeeping/purchase/Purchase_Register.html'
 
@@ -916,13 +983,16 @@ class Purchase_Register_view(LoginRequiredMixin,ListView):
 		context['data'] = results.items()
 		
 		context['total_purchase'] = total_purchase
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
 
 ##################################### Sales Register Views #####################################
 
 
-class Sales_Register_view(LoginRequiredMixin,ListView):
+
+class Sales_Register_view(ProductExistsRequiredMixin,LoginRequiredMixin,ListView):
 	model = Sales
 	template_name = 'stockkeeping/sales/Sales_Register.html'
 
@@ -966,12 +1036,14 @@ class Sales_Register_view(LoginRequiredMixin,ListView):
 		context['data'] = results.items()
 		
 		context['total_sale'] = total_sale
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
 
 ##################################### Sales Views #####################################
 
-class Sales_listview(LoginRequiredMixin,ListView):
+class Sales_listview(ProductExistsRequiredMixin,LoginRequiredMixin,ListView):
 	model = Sales
 	template_name = 'stockkeeping/sales/sales_list.html'
 	paginate_by = 15
@@ -988,10 +1060,14 @@ class Sales_listview(LoginRequiredMixin,ListView):
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
+		
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
 
-class Sales_detailsview(LoginRequiredMixin,DetailView):
+
+class Sales_detailsview(ProductExistsRequiredMixin,LoginRequiredMixin,DetailView):
 	context_object_name = 'sales_details'
 	model = Sales
 	template_name = 'stockkeeping/sales/sales_details.html'
@@ -1016,9 +1092,12 @@ class Sales_detailsview(LoginRequiredMixin,DetailView):
 		sales_details = get_object_or_404(Sales, pk=self.kwargs['pk2'])
 		qsjb  = Stock_Total_sales.objects.filter(sales=sales_details.pk)
 		context['stocklist'] = qsjb
+
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
-class Sales_createview(LoginRequiredMixin,CreateView):
+class Sales_createview(ProductExistsRequiredMixin,LoginRequiredMixin,CreateView):
 	form_class  = Sales_form
 	template_name = 'stockkeeping/sales/sales_form.html'
 
@@ -1060,13 +1139,15 @@ class Sales_createview(LoginRequiredMixin,CreateView):
 			context['stocksales'] = Sales_formSet(self.request.POST)
 		else:
 			context['stocksales'] = Sales_formSet()
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
 
 
 
 
-class Sales_updateview(LoginRequiredMixin,UpdateView):
+class Sales_updateview(ProductExistsRequiredMixin,LoginRequiredMixin,UpdateView):
 	model = Sales
 	form_class  = Sales_form
 	template_name = 'stockkeeping/sales/sales_form.html'
@@ -1096,6 +1177,8 @@ class Sales_updateview(LoginRequiredMixin,UpdateView):
 			context['stocksales'] = Sales_formSet(self.request.POST)
 		else:
 			context['stocksales'] = Sales_formSet()
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context
 
 	def form_valid(self, form):
@@ -1121,7 +1204,7 @@ class Sales_updateview(LoginRequiredMixin,UpdateView):
 
 
 
-class Sales_deleteview(LoginRequiredMixin,DeleteView):
+class Sales_deleteview(ProductExistsRequiredMixin,LoginRequiredMixin,DeleteView):
 	model = Sales
 	template_name = "stockkeeping/sales/sales_confirm_delete.html"
 
@@ -1144,13 +1227,15 @@ class Sales_deleteview(LoginRequiredMixin,DeleteView):
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 		return context	
 
 
 
 ##################################### Stock_Total #####################################
 
-class Stock_Total_createview(LoginRequiredMixin,CreateView):
+class Stock_Total_createview(ProductExistsRequiredMixin,LoginRequiredMixin,CreateView):
 	form_class  = Stock_Totalform
 	template_name = 'stockkeeping/purchase/purchase_form.html'
 
@@ -1166,6 +1251,9 @@ class Stock_Total_createview(LoginRequiredMixin,CreateView):
 		context['company_details'] = company_details
 		selectdatefield_details = get_object_or_404(selectdatefield, pk=self.kwargs['pk3'])
 		context['selectdatefield_details'] = selectdatefield_details
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
+		return context
 
 	def form_valid(self, form):
 		form.instance.User = self.request.user
@@ -1186,6 +1274,7 @@ class Stock_Total_createview(LoginRequiredMixin,CreateView):
 
 
 @login_required
+@product_1_activation
 def profit_and_loss_view(request,pk,pk3):
 	company_details = get_object_or_404(company, pk=pk)
 	selectdatefield_details = get_object_or_404(selectdatefield, pk=pk3)
@@ -1409,7 +1498,9 @@ def profit_and_loss_view(request,pk,pk3):
 		'tradingprofit': tradingp,
 		'tradingprofit2': tgp,
 		'totalpl' : tp,
-		'totalplright' : tc
+		'totalplright' : tc,
+		'Todos'					  : Todo.objects.filter(User=request.user, complete=False),
+		'Todos_total' 			  : Todo.objects.filter(User=request.user, complete=False).aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 	}
 
 
@@ -1418,6 +1509,7 @@ def profit_and_loss_view(request,pk,pk3):
 ##################################### Trial Balance #####################################
 
 @login_required
+@product_1_activation
 def trial_balance_view(request,pk,pk3):
 	company_details = get_object_or_404(company, pk=pk)
 	selectdatefield_details = get_object_or_404(selectdatefield, pk=pk3)
@@ -1511,6 +1603,9 @@ def trial_balance_view(request,pk,pk3):
 
 		'total_credit_closing' : total_credit_closing,
 		'total_credit_opening' : total_credit_opening,
+
+		'Todos'			: Todo.objects.filter(User=request.user, complete=False),
+		'Todos_total' 	: Todo.objects.filter(User=request.user, complete=False).aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 	}
 
 	return render(request, 'stockkeeping/Trial_Balance/trial_bal.html', context)
@@ -1518,6 +1613,7 @@ def trial_balance_view(request,pk,pk3):
 ##################################### Balance Sheet #####################################
 
 @login_required
+@product_1_activation
 def balance_sheet_view(request,pk,pk3):
 	company_details = get_object_or_404(company, pk=pk)
 	selectdatefield_details = get_object_or_404(selectdatefield, pk=pk3)
@@ -1992,6 +2088,10 @@ def balance_sheet_view(request,pk,pk3):
 		# Total
 		'total_liabilities' : total_liabilities,
 		'total_asset' : total_asset,
+
+
+		'Todos'					  : Todo.objects.filter(User=request.user, complete=False),
+		'Todos_total' 			  : Todo.objects.filter(User=request.user, complete=False).aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 
 
 	}

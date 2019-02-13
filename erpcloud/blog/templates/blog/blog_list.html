@@ -1,83 +1,13 @@
-{% extends "clouderp/base.html" %}
+{% extends "clouderp/base_2.html" %}
 {% load staticfiles %}
 
 {% block title %}All Blogs{% endblock %}
 
-{% block main-sidebar %}
- <section class="sidebar">
 
-        <div class="user-panel">
-        <div class="pull-left image">
-                {% if user.profile.image %}
-                  <img class="img-circle" src="{{ user.profile.image.url }}/" alt="User profile picture">
-                {% else %}
-                    <img class="img-circle" src="{% static 'userprofile/download (1).jpg' %}">
-                {% endif %}
-          
-        </div>
-        <div class="pull-left info">
-          <p>{{ user.profile.Full_Name }}</p>
-          <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-        </div>
-      </div>
-    
-      <!-- Sidebar user panel -->
-     
-      <!-- search form -->
-      <form action="#" method="get" class="sidebar-form">
-        <div class="input-group">
-          <input type="text" name="q" class="form-control" placeholder="Search...">
-              <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                </button>
-              </span>
-        </div>
-      </form>
-      <!-- /.search form -->
-      <!-- sidebar menu: : style can be found in sidebar.less -->
-       <ul class="sidebar-menu" data-widget="tree">
-        <li class="header">MAIN NAVIGATION</li>
-        
-     
-        <li><a href="{% url 'company:list' %}"><i class="fa fa-book"></i> <span>Select Company</span></a></li>
-
-        
-        
-        <li>
-          <a href="pages/mailbox/mailbox.html">
-            <i class="fa fa-envelope"></i> <span>Chatbox</span>
-            <span class="pull-right-container">
-              <small class="label pull-right bg-yellow">12</small>
-              <small class="label pull-right bg-green">16</small>
-              <small class="label pull-right bg-red">5</small>
-            </span>
-          </a>
-        </li>
-        
-        
-        <li><a href="{% url 'userprofile:profiledetail' %}"><i class="fa fa-book"></i> <span>Profile Settings</span></a></li>
-
-        <li class="header">MARKET PLACE</li>
-        <li><a href="{% url 'blog:allbloglist' %}"><i class="fa fa-circle-o text-red"></i> <span>Read Blogs & Articles</span></a></li>
-
-        <li><a href="{% url 'consultancy:consultancylist' %}"><i class="fa fa-circle-o text-red"></i> <span>Consultancy Forum</span></a></li>
-        <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Subscribe Newsletter</span></a></li>
-        <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Bills to Scanner App</span></a></li>
-        <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Automated Return Filing</span></a></li>
-        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Find Professional</span></a></li>
-        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>E-Commerce Integration</span></a></li>
-        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Investing - Trading & MFs</span></a></li>
-      </ul>
-      
-    </section>
-
- {% endblock %}
 
 
 
 {% block content %}
-
-
 
 <div class="content-wrapper">
 
@@ -85,7 +15,7 @@
  <section class="content-header">
         <!-- <div class="col-md-12 col-md-offset-4"> -->
           <h1>
-            <strong>All Blogs </strong>
+            <strong>All Blogs</strong>
           </h1>
                 <ol class="breadcrumb">
                        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -143,155 +73,64 @@
 </div>
 
 
-                  
 
+    <div class="row">
+
+      <!-- Blog Entries Column -->
+
+      <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+
+
+        <!-- Blog Post -->
+        {% for blog in blog_list %}
+          <div class="box box-info">
                     
-                      <div class="row">
-                                
-<style type="text/css">
+            {% if blog.Blog_image %}
+                <img width="100%" height="100%" src="{{ blog.Blog_image.url }}/" alt="">
+            {% endif %}
 
-.col-xs-3 {
-   width: 30%;
-}
-
-
-.col-xs-9 {
-  width: 70%;
-}
-
-.blog-grids {
-    overflow: hidden;
-    margin: 0 -15px;
-}
-
-.blog-grids .grid {
-    background-color: #fff;
-    width: calc(33.33% - 30px);
-    float: left;
-    padding: 15px;
-    margin: 20px 15px 15px;
-    border-radius: 10px;
-    -webkit-box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
-}
-
-.entry-media img {
-    border-radius: 10px;
-    width: 100%;
-    max-height: 188px;
-}
-
-.entry-body {
-    padding: 27px 10px;
-}
-
-.entry-body .cat {
-    font-family: "Poppins", sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    color: #6220d9;
-    text-transform: uppercase;
-}
-
-.entry-body h3 {
-    font-size: 21px;
-    font-weight: 600;
-    line-height: 1.30em;
-    margin: 3px 0 0.73em;
-}
-
-.entry-body h3 a {
-    color: #41516a;
-}
-
-.entry-body h3 a:hover {
-    color: #6220d9;
-    text-decoration: none;
-}
-
-.entry-body p {
-    margin-bottom: 2em;
-    color: #90949a;
-    line-height: 1.8em;
-}
-
-.read-more-date {
-    position: relative;
-}
-
-.read-more-date a {
-    font-family: "Poppins", sans-serif;
-    font-size: 16px;
-    font-size: 1.06667rem;
-    font-weight: 600;
-
-    text-transform: uppercase;
-}
-
-.read-more-date .date {
-    position: absolute;
-    right: 0;
-    color: #90949a;
-}
+            <div class="box-body">
+              <div class="box-header">
+                <h3 class="box-title"><a href="../{{ blog.id}}">{{ blog.Blog_title }}</a></h3>
+              </div>
+              <p>{{ blog.Description|safe|truncatewords:"50"|linebreaks}}</p>
+              <a href="../{{ blog.id}}" class="btn btn-info btn-block">Read More &rarr;</a>
+            </div>
+            <div class="box-footer text-muted">
+              Posted  {{ blog.Date|timesince}} ago by
+              <a href="{% url 'userprofile:specific_profile' pk=blog.User.profile.pk %}">{{ blog.User }}</a>
+            </div>
+          
+          </div>
+        {% endfor %}
 
 
-                        
-                      </style>
+        {% for blog in blogs %}
+          <div class="box box-info">
                     
+            {% if blog.Blog_image %}
+                <img width="100%" height="100%" src="{{ blog.Blog_image.url }}/" alt="">
+            {% endif %}
 
-                        <small>
-                          <div class="col col-md-9">
-                                          
-                                            <div class="blog-grids">
-
-                                            {% for blog in blog_list %}
-                                                <div class="grid">
-                                                    <div class="entry-media">
-                                                        {% if blog.Blog_image %}
-                                                          <img src="{{ blog.Blog_image.url }}/" alt="">
-                                                        {% endif %}
-                                                    </div>
-                                                    <div class="entry-body">
-                                                        
-                                                        <h3><a href="../{{ blog.id}}">{{ blog.Blog_title|safe|truncatewords:"5"}}</a></h3>
-                                                        <p>{{ blog.Description|safe|truncatewords:"9"|linebreaks}}</p>
-                                                        <div class="read-more-date">
-                                                            <a href="../{{ blog.id}}" class="btn btn-info btn-block">Read More</a>
-                                                            <span class="date">{{ blog.Date|timesince}} ago</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            {% endfor %}
-                                               
-                                            </div>
+            <div class="box-body">
+              <div class="box-header">
+                <h3 class="box-title"><a href="../{{ blog.id}}">{{ blog.Blog_title }}</a></h3>
+              </div>
+              <p>{{ blog.Description|safe|truncatewords:"50"|linebreaks}}</p>
+              <a href="../{{ blog.id}}" class="btn btn-info btn-block">Read More &rarr;</a>
+            </div>
+            <div class="box-footer text-muted">
+              Posted  {{ blog.Date|timesince}} ago by
+              <a href="{% url 'userprofile:specific_profile' pk=blog.User.profile.pk %}">{{ blog.User }}</a>
+            </div>
+          
+          </div>
+        {% endfor %}
 
 
-                                          <div class="blog-grids">
 
-                                            {% for blog in blogs %}
-                                                <div class="grid">
-                                                    <div class="entry-media">
-                                                        {% if blog.Blog_image %}
-                                                          <img src="{{ blog.Blog_image.url }}/" alt="">
-                                                        {% endif %}
-                                                    </div>
-                                                    <div class="entry-body">
-                                                        
-                                                        <h3><a href="../{{ blog.id}}">{{ blog.Blog_title|safe|truncatewords:"5"}}</a></h3>
-                                                        <p>{{ blog.Description|safe|truncatewords:"9"|linebreaks}}</p>
-                                                        <div class="read-more-date">
-                                                            <a href="../{{ blog.id}}" class="btn btn-info btn-block">Read More</a>
-                                                            <span class="date">{{ blog.Date|timesince}} ago</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            {% endfor %}
-                                               
-                                            </div>
-                                         
-                  <div class="text-center">
+        <!-- Pagination -->
+        <ul class="text-center">
                   {% if is_paginated %}
                       <ul class="pagination">
                        {% if page_obj.has_previous %}
@@ -313,58 +152,54 @@
                         {% endif %}
                     </ul>
                 {% endif %}
-                  </div>
-                      
-                                          
-                                        </div>
-                        </small>
-                           
+        </ul>
 
-      <div class="col col-md-3">
-        <div class="box box-widget widget-user-2">
-            <div class="widget-user-header bg-aqua-active"">
-              <h3 class="widget-user-username">Search</h3>
-            </div>
-            <!-- /.box-header -->
-            <!-- form start -->
-            <form method='GET' class="form-horizontal" action="{% url 'blog:search' %}">
-              <div class="box-body">
-                <div class="form-group">
-                  
+      </div>
 
-                  <div class="col-sm-12">
-                    <input  class="form-control" name="q" value="{{request.GET.q}}" placeholder="Search">
-                  </div>
-                </div>
-                
-                
-              </div>
+      <!-- Sidebar Widgets Column -->
+
+
+
+      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+
+        <!-- Search Widget -->
+        <div class="box box-info">
+        
+          <div class="box-header">
+            <h3 class="box-title">Search</h3>
+          </div>
+          <form method='GET' class="form-horizontal" action="{% url 'blog:search' %}">
+          <div class="box-body">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <input  class="form-control" name="q" value="{{request.GET.q}}" placeholder="Search">
               
-              <div class="box-footer">
-                <button type="submit" class="btn btn-info pull-right">Go</button>
-                
-              </div>
              
-            </form>
+            </div>
+          </div>
+          <div class="box-footer">
+            <span class="input-group-btn">
+              <button type="submit" class="btn btn-info pull-right">Go</button>
+            </span>
+          </div>
+        </form>
+        
         </div>
 
-        <br>
 
-            <div class="box box-widget widget-user-2">
-                <div class="widget-user-header bg-aqua-active">
-                    <h5 class="widget-user-username">Category</h5>
-                </div>
-                 
-
+        <!-- Categories Widget -->
+        <div class="box box-info">
+          <div class="box-header">
+            <h3 class="box-title">Categories</h3>
+          </div>
                  <div class="box-footer no-padding">
-                      {% for Title, blog_count in categories_count %}
+                      {% for categories in categories_list %}
 
                           <ul class="nav nav-stacked">
                                 
                               
                                 
-                                  <li><a href="categorylist/{{ categories.id }}"><strong>{{ Title }}</strong> <span class="pull-right badge bg-blue">
-                                  {{ blog_count }}</span></a></li>
+                                  <li><a href="../categorylist/{{ categories.id }}"><strong>{{ categories.Title }}</strong> <span class="pull-right badge bg-blue">
+                                  {{ categories.blogs.count }}</span></a></li>
                                  
                              
                                   
@@ -374,32 +209,35 @@
                       {% endfor %}
               </div>
 
+              <div class="box-footer no-padding">
+                      {% for categories in categories_l %}
 
-
-            </div>
-
-          </div>
-                               
-                                    
-
-
-                                 
-
-                         
-                          
-
+                          <ul class="nav nav-stacked">
+                                
                               
                                 
+                                  <li><a href="../categorylist/{{ categories.id }}">{{ categories.Title }} <span class="pull-right badge bg-blue">{{ categories.blogs.count }}</span></a></li>
+                                 
+                             
+                                  
+                                
+                          </ul>
+                      {% endfor %}
+              </div>
+        </div>
 
 
-                          
-                              
-                          
-                           
+      </div>
 
-  </div>
-                   
-               
+    </div>
+    <!-- /.row -->
+
+
+  <!-- /.container -->
+                  
+
+                    
+    
 
    
 

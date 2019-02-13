@@ -9,7 +9,11 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
-
+from todogst.models import Todo
+from django.db.models import Value, Sum, Count, F, ExpressionWrapper, Subquery, OuterRef, FloatField
+from django.db.models.functions import Coalesce
+from ecommerce_integration.models import coupon, Product, Product_review, Services, API
+from userprofile.models import Profile, Product_activation
 # Create your views here.
 
 
@@ -19,6 +23,13 @@ class consultancyListView(ListView):
 
 	def get_queryset(self):
 		return consultancy.objects.all().order_by('-id')
+
+	def get_context_data(self, **kwargs):
+		context = super(consultancyListView, self).get_context_data(**kwargs)
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum']
+		context['Products'] = Product_activation.objects.filter(User=self.request.user,product__id = 1, activate=True)
+		return context
 
 
 
@@ -37,13 +48,20 @@ class myconsultancyListView(LoginRequiredMixin,ListView):
 		else:
 			return ['consultancy/consultancy_list.html']
 
+	def get_context_data(self, **kwargs):
+		context = super(myconsultancyListView, self).get_context_data(**kwargs)
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
+		context['Products'] = Product_activation.objects.filter(User=self.request.user,product__id = 1, activate=True)
+		return context
+
 
 
 
 @login_required
 def consultancy_detail(request, pk):
 	consultancy_details = get_object_or_404(consultancy, pk=pk)
-	comments = Answer.objects.filter(Questions=consultancy_details).order_by('-id')
+	comments = Answer.objects.filter(Questions=consultancy_details.pk).order_by('-id')
 
 	is_liked = False
 	if consultancy_details.like.filter(pk=request.user.id).exists():
@@ -65,6 +83,9 @@ def consultancy_detail(request, pk):
 		'is_liked' : is_liked,
 		'total_like' : consultancy_details.total_like(),
 		'Answer_form' : Answer_form,
+		'Products'	: Product_activation.objects.filter(User=self.request.user,product__id = 1, activate=True),
+		'Todos'					  : Todo.objects.filter(User=request.user, complete=False),
+		'Todos_total' 			  : Todo.objects.filter(User=request.user, complete=False).aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
 
 	}
 
@@ -102,14 +123,74 @@ class consultancycreate(LoginRequiredMixin,CreateView):
 		form.instance.User = self.request.user
 		return super(consultancycreate, self).form_valid(form)
 
+	def get_context_data(self, **kwargs):
+		context = super(consultancycreate, self).get_context_data(**kwargs)
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
+		context['Products'] = Product_activation.objects.filter(User=self.request.user,product__id = 1, activate=True)
+		return context
+
 class consultancyupdate(LoginRequiredMixin,UpdateView):
 	model = consultancy
 	form_class  = consultancyform
 	template_name = "consultancy/consultancy_form.html"
 
+	def get_context_data(self, **kwargs):
+		context = super(consultancyupdate, self).get_context_data(**kwargs)
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum'] 
+		context['Products'] = Product_activation.objects.filter(User=self.request.user,product__id = 1, activate=True)
+		return context
+
 
 class consultancydelete(LoginRequiredMixin,DeleteView):
 	model = consultancy
 	success_url = reverse_lazy("consultancy:consultancylist")
+
+
+	def get_context_data(self, **kwargs):
+		context = super(consultancydelete, self).get_context_data(**kwargs)
+		context['Todos'] = Todo.objects.filter(User=self.request.user, complete=False)
+		context['Todos_total'] = context['Todos'].aggregate(the_sum=Coalesce(Count('id'), Value(0)))['the_sum']
+		context['Products'] = Product_activation.objects.filter(User=self.request.user,product__id = 1, activate=True)
+		return context
+
+def save_all(request,form,template_name):
+	data = dict()
+	if request.method == 'POST':
+		if form.is_valid():
+			form.save()
+			data['form_is_valid'] = True
+			answers = Answer.objects.all().order_by('-id')
+			data['comments'] = render_to_string('consultancy/answers.html',{'answers':answers})
+		else:
+			data['form_is_valid'] = False
+	context = {
+	'form':form
+	}
+	data['html_form'] = render_to_string(template_name,context,request=request)
+	return JsonResponse(data)
+
+def answer_update(request,id):
+	answer = get_object_or_404(Answer,id=id)
+	if request.method == 'POST':
+		form = Answerform(request.POST,instance=answer)
+	else:
+		form = Answerform(instance=answer)
+	return save_all(request,form,'consultancy/answer_update.html')
+
+def answer_delete(request,id):
+	data = dict()
+	answer = get_object_or_404(Answer,id=id)
+	if request.method == "POST":
+		answer.delete()
+		data['form_is_valid'] = True
+		answers = Answer.objects.all().order_by('-id')
+		data['comments'] = render_to_string('consultancy/answers.html',{'answers':answers})
+	else:
+		context = {'answer':answer}
+		data['html_form'] = render_to_string('consultancy/answer_delete.html',context,request=request)
+
+	return JsonResponse(data)
 
 

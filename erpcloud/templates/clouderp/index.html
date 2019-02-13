@@ -34,7 +34,7 @@
         <div class="row">
             <div id="head1">
                 <div class="col-md-5">           
-                        <span class="fa" id="mailID"><i class="fa fa-envelope-o"></i>info@bracketline.com</span>
+                        <span class="fa" id="mailID"><i class="fa fa-envelope-o"></i>bracketlinelimited@gmail.com</span>
                         <span class="fa" id="phone">
                             <i class="fa fa-phone"></i>
                             +91 9733025982
@@ -57,11 +57,12 @@
                     <!-- <a href="#">
                         <i class="fa fa-twitter socials-link"></i>
                     </a> -->
-                    <a href="#">
-                        <i class="fa fa-google-plus socials-link"></i>
-                    </a>
-                    <a href="#">
+                    <a href="https://www.facebook.com/Bracketline-Pvt-Ltd-526501204526396/" target="_blank">
                         <i class="fa fa-facebook socials-link"></i>
+                    </a>
+                    <a href="https://www.google.com/search?source=hp&ei=ZSNdXPygC4f-rQGphp7oDQ&q=bracketline+private+limited&oq=bracketline+&gs_l=psy-ab.1.0.35i39j0i13l2j0i13i30l7.1018.3038..4597...0.0..0.350.2440.0j10j2j1......0....1..gws-wiz.....0..0i131j0j0i10j38.08mugOZIras" target="_blank">
+                        
+                        <i class="fa fa-google-plus socials-link"></i>
                     </a>
                </div> 
             </div> 
@@ -359,7 +360,7 @@
               <i class="fa fa-smile-o"></i>
             </div>
             <h3>Business Users</h3>
-            <h2 class="counter" data-from="0" data-to="13500" data-speed="2000"></h2>          
+            <h2 class="counter" data-from="0" data-to="{{ Bussiness_users }}" data-speed="2000"></h2>          
           </div>
         </div>
 
@@ -369,7 +370,7 @@
               <i class="fa fa-rocket"></i>
             </div>
             <h3>Professionals </h3>
-            <h2 class="counter" data-from="0" data-to="2500" data-speed="2500"></h2>           
+            <h2 class="counter" data-from="0" data-to="{{ Professional_users }}" data-speed="2500"></h2>           
           </div>
         </div>
 
@@ -379,8 +380,8 @@
             <div class="icons_introimg image-icon">
               <i class="fa fa-trophy"></i>
             </div>
-            <h3>Motnhly Invoices Scanned</h3>
-            <h2 class="counter" data-from="0" data-to="780556" data-speed="3500"></h2>          
+            <h3>Products</h3>
+            <h2 class="counter" data-from="0" data-to="{{ Products_count }}" data-speed="3500"></h2>          
           </div>
         </div>
 
@@ -390,7 +391,7 @@
               <i class="fa fa-pencil"></i>
             </div>
             <h3>Consultancies provided</h3>
-            <h2 class="counter" data-from="0" data-to="1400" data-speed="2100"></h2>          
+            <h2 class="counter" data-from="0" data-to="{{ total_consultancies }}" data-speed="2100"></h2>          
           </div>
         </div>
       </div>
@@ -398,82 +399,216 @@
     </div>
 </section> 
 
-<section id="service" class="">
+
+<!-- <section id="service" class="">
     <div class="container">
         <div class="row ">
             <div class="col-sm-6 col-sm-offset-3">   
-             <h3 class="head-title text-center to_animate" data-animation="slideDown">Pricing Table</h3>
-              <p class="head-desc text-center to_animate" data-animation="fadeInUp">Our plans include</p>
-                <hr class="title-border">
+             <h3 class="head-title text-center to_animate" data-animation="slideDown">Products</h3> -->
+              <!-- <p class="head-desc text-center to_animate" data-animation="fadeInUp">Our plans include</p> -->
+                <!-- <hr class="title-border">
             </div>
          </div>
 
          <div class="row">
+
+              {% for products in Products %}
                 <div class="col-sm-6 col-md-3 pricing-table text-center to_animate" data-animation="fadeIn">
                     <div class="single-table" >
-                        <h2>Starter</h2>                           
-                        <p class="price"><span class="dollar-icon"></span><span>Free</span></p>
+                        <h2>{{ products.title}}</h2>                           
+                         <p class="price"><span class="dollar-icon">₹​</span><span>{{ products.price }}</span></p>
                         <ul>
-                            <li>1 Company unit</li>
-                            <li>1 year free Bill Scanner App</li>
-                            <li>3 month Return filing</li>
-                            <li>200 bills per month</li>
-                            <li>-------</li>
-                            <li>-------</li>
+                            <li>{{ products.summary|safe|truncatewords:"45" }}</li>
+                           
                         </ul>
-                        <a class="btn-signup" href="#">Subscribe Now</a>
+                        <a class="btn-signup" href="#">Details</a>
                     </div>
                 </div>
-                <div class="col-sm-6 col-md-3 pricing-table text-center to_animate" data-animation="fadeIn">
-                    <div class="single-table" >
-                        <h2>Business</h2>                           
-                         <p class="price"><span class="dollar-icon">₹​</span><span>8000</span></p>
-                        <ul>
-                            <li>Unlimited Company unit</li>
-                            <li>Unlimited Bill Scanner App</li>
-                            <li>Annual Return filing </li>
-                            <li>Unlimited bills per month</li>
-                            <li></li>
-                            <li>-------</li>
-                            <li>24/7 Support</li>
-                        </ul>
-                        <a class="btn-signup" href="#">Subscribe Now</a>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-3 pricing-table text-center to_animate" data-animation="fadeIn">
-                    <div class="single-table" >
-                        <h2>Professional</h2>                           
-                         <p class="price"><span class="dollar-icon">₹​</span><span>6000</span></p>
-                        <ul>
-                            <li>Unlimited Company unit</li>
-                            <li>Unlimited Bill Scanner App</li>
-                            <li>Annual Return filing </li>
-                            <li>Unlimited bills per month</li>
-                            <li>-------</li>
-                            <li>24/7 Support</li>
-                        </ul>
-                        <a class="btn-signup" href="#">Subscribe Now</a>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-3 pricing-table text-center to_animate" data-animation="fadeIn">
-                   <div class="single-table" >
-                        <h2>Corporate</h2>                           
-                          <p class="price"><span class="dollar-icon">₹​</span><span>12000</span></p>
-                        <ul>
-                            <li>Unlimited Company unit</li>
-                            <li>Unlimited Bill Scanner App</li>
-                            <li>Annual Return filing </li>
-                            <li>Unlimited bills per month</li>
-                            <li>-------</li>
-                            <li>24/7 Support</li>
-                        </ul>
-                        <a class="btn-signup" href="#">Subscribe Now</a>
-                    </div>
-                </div>
+              {% endfor %}
+
+
             </div>
         
   </div>
-</section> 
+</section>  -->
+
+<style type="text/css">
+
+.tcb-product-slider .carousel-control {
+  width: 5%;
+}
+.tcb-product-item a {
+  color: #147196;
+}
+.tcb-product-item a:hover {
+  text-decoration: none;
+}
+.tcb-product-item .tcb-hline {
+  margin: 10px 0;
+  height: 1px;
+  background: #ccc;
+}
+@media all and (max-width: 768px) {
+  .tcb-product-item {
+    margin-bottom: 30px;
+  }
+}
+.tcb-product-photo {
+  text-align: center;
+  height: 180px;
+  background: #fff;
+}
+.tcb-product-photo img {
+  height: 100%;
+  display: inline-block;
+}
+.tcb-product-info {
+  background: #f0f0f0;
+  padding: 15px;
+}
+.tcb-product-title h4 {
+  margin-top: 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.tcb-product-rating {
+  color: #acacac;
+}
+.tcb-product-rating .active {
+  color: #FFB500;
+}
+.tcb-product-price {
+  color: firebrick;
+  font-size: 18px;
+}
+
+
+
+.details {
+    margin: 50px 0; }
+ .details h1 {
+      font-size: 32px;
+      text-align: center;
+      margin-bottom: 3px; }
+    .details .back-link {
+      text-align: center; }
+      .details .back-link a {
+        display: inline-block;
+        margin: 20px 0;
+        padding: 15px 30px;
+        background: #333;
+        color: #fff;
+        border-radius: 24px; }
+        .details .back-link a svg {
+          margin-right: 10px;
+          vertical-align: text-top;
+          display: inline-block; }
+
+
+
+
+</style>
+
+<section id="service" class="">
+    <div class="container">
+        <div class="row ">
+
+
+            <div class="tcb-product-slider">
+        <div class="container">
+            <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner" role="listbox">
+
+                  {% for products in Products %}
+
+                      {% if forloop.counter == 1 %}
+                        <div class="item active">
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-3">
+                                    <div class="tcb-product-item">
+                                        <div class="tcb-product-photo">
+                                          {% if products.image %}
+                                            <img src="{{ products.image.url }}/" class="img-responsive" alt="a" />
+                                          {% else %}
+                                            <img src="{% static 'userprofile/comming soon.jpg' %}" class="img-responsive" alt="a" />
+                                          {% endif %}
+                                        </div>
+                                        <div class="tcb-product-info">
+                                            <div class="tcb-product-title">
+                                                <h4><a href="#">{{ products.title}} </a></h4></div>
+                                            <div class="tcb-product-rating">
+                                                <i class="active glyphicon glyphicon-star"></i><i class="active glyphicon glyphicon-star"></i><i class="active glyphicon glyphicon-star"></i><i class="active glyphicon glyphicon-star"></i><i class="glyphicon glyphicon-star"></i>
+                                                <a href="#">(4,585 ratings)</a>
+                                            </div>
+                                            <div class="tcb-hline"></div>
+                                            <div class="tcb-product-price">
+                                                 &#8377; {{ products.price }}/-</strong>   annually.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                      {% else %}
+
+                          <div class="item">
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-3">
+                                    <div class="tcb-product-item">
+                                        <div class="tcb-product-photo">
+                                          {% if products.image %}
+                                            <img src="{{ products.image.url }}/" class="img-responsive" alt="a" />
+                                          {% else %}
+                                            <img src="{% static 'userprofile/comming soon.jpg' %}" class="img-responsive" alt="a" />
+                                          {% endif %}
+                                        </div>
+                                        <div class="tcb-product-info">
+                                            <div class="tcb-product-title">
+                                                <h4><a href="#">{{ products.title}} </a></h4></div>
+                                            <div class="tcb-product-rating">
+                                                <i class="active glyphicon glyphicon-star"></i><i class="active glyphicon glyphicon-star"></i><i class="active glyphicon glyphicon-star"></i><i class="active glyphicon glyphicon-star"></i><i class="glyphicon glyphicon-star"></i>
+                                                <a href="#">(4,585 ratings)</a>
+                                            </div>
+                                            <div class="tcb-hline"></div>
+                                            <div class="tcb-product-price">
+                                                 &#8377; {{ products.price }}/-</strong>   annually.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                      {% endif %}
+                    {% endfor %}
+                </div>
+                <!-- Controls -->
+                <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    <button class="btn-info">Previous</button>
+                    
+                </a>
+                <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                    <button class="btn-info">Next</button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
+        
+  </div>
+</section>
+
+
+
+
+
+
 <!-- 
 <section id="team" class="grey_section">
         <div class="container">
@@ -756,11 +891,7 @@
                           <img src="{{ blog.Blog_image.url }}/" alt="" class="blogimg">
                       {% endif %}
                       <div class="likes-n-comments text-center">
-                        {% for Blog_title,likes in likes %}
-                          {% if Blog_title == blog.Blog_title %}
-                            <p class="likes">{{ likes }} likes</p>
-                          {% endif %}
-                        {% endfor %}
+                            <p class="likes">{{ blog.likes.count }} like{{ blog.likes.count|pluralize }}</p>
 
                           <a href="blog/{{ blog.id}}" class="more-btn btn">READ MORE</a>
                       </div>
@@ -779,29 +910,7 @@
           </article>
         {% endfor %}
 
-              <div class="text-center">
-                  {% if is_paginated %}
-                      <ul class="pagination">
-                       {% if page_obj.has_previous %}
-                          <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
-                        {% else %}
-                          <li class="disabled"><span>&laquo;</span></li>
-                        {% endif %}
-                        {% for i in paginator.page_range %}
-                            {% if page_obj.number == i %}
-                               <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
-                            {% else %}
-                                <li><a href="?page={{ i }}">{{ i }}</a></li>
-                            {% endif %}
-                        {% endfor %}
-                        {% if page_obj.has_next %}
-                            <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
-                        {% else %}
-                            <li class="disabled"><span>&raquo;</span></li>
-                        {% endif %}
-                    </ul>
-                {% endif %}
-                  </div>
+
 
  
 

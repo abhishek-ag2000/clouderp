@@ -54,8 +54,6 @@ INSTALLED_APPS = [
     'pagedown',                                 #pip install django-pagedown                               
     'ckeditor',                                 #pip install django-ckeditor
     'ckeditor_uploader',                        #pip install django-ckeditor
-    'django_select2',                           #pip install django_select2
-    'select2',                                  #pip install django-select2-forms
     'sorl.thumbnail',                           #pip install sorl-thumbnail
     'import_export',                            #pip install django-import-export
 
@@ -86,6 +84,8 @@ INSTALLED_APPS = [
     'consultancy',
     'stockkeeping',
     'pdf',
+    'ecommerce_integration',
+    'ecommerce_cart',
 
 ]
 
@@ -106,6 +106,7 @@ CKEDITOR_CONFIGS = {
         ],
     }
 }
+
 
 
 
@@ -241,7 +242,7 @@ MEDIA_ROOT = MEDIA_DIR
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
-LOGIN_REDIRECT_URL = "company:list"
+LOGIN_REDIRECT_URL = "ecommerce_integration:productlist"
 LOGOUT_REDIRECT_URL = "home"
 
 
